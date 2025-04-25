@@ -1,0 +1,90 @@
+
+.bar {
+    width: 3px;
+    background: #e5e7eb;
+    display: block;
+    margin: 0 1px;
+    border-radius: 2px;
+    transition: all 0.1s ease;
+}
+.bar.in-range {
+    background: linear-gradient(to top, #3b82f6, #93c5fd);
+}
+.knob {
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: absolute;
+    top: -8px;
+    cursor: grab;
+    z-index: 10;
+    transition: transform 0.1s ease;
+}
+.knob:active {
+    cursor: grabbing;
+    transform: scale(1.1);
+}
+.knob.left {
+    border: 2px solid #1e40af;
+    top: 86%;
+}
+.knob.right {
+    border: 2px solid #1e40af;
+    right: 0;
+    top: 86%;
+}
+.range-line {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #e5e7eb;
+    z-index: 1;
+}
+.range-highlight {
+    position: absolute;
+    bottom: 0;
+    height: 2px;
+    background: #3b82f6;
+    z-index: 2;
+    left: 0;
+    right: 0;
+}
+.tooltip {
+    position: absolute;
+    top: -35px;
+    background: #1e40af;
+    color: white;
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+    white-space: nowrap;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+.knob:hover .tooltip {
+    opacity: 1;
+}
+@media (min-width: 640px) {
+    .bar {
+        width: 4px;
+        margin: 0 1px;
+    }
+    .knob {
+        width: 24px;
+        height: 24px;
+        top: -10px;
+    }
+    .knob.left, .knob.right {
+        border-width: 3px;
+    }
+    .tooltip {
+        top: -40px;
+        padding: 4px 8px;
+        font-size: 12px;
+    }
+}
