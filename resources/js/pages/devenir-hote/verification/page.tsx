@@ -1,9 +1,7 @@
-"use client"
 
 import type React from "react"
 
 import { useState } from "react"
-import { Header } from "@/components/header"
 import { Button } from "@/components/ui/button"
 import {
   ArrowLeft,
@@ -51,14 +49,14 @@ import {
   SquareIcon,
   Banknote,
 } from "lucide-react"
-import Link from "next/link"
+import { Link } from "@inertiajs/react"
 import { motion } from "framer-motion"
 import { useAuth } from "@/contexts/auth-context"
-import { useRouter } from "next/navigation" // Importation de useRouter au lieu de redirect
+import { router } from '@inertiajs/react';
+
 
 export default function VerificationPage() {
   const { isAuthenticated } = useAuth()
-  const router = useRouter() // Utilisation de useRouter pour les redirections côté client
   const [currentStep, setCurrentStep] = useState(1)
   const [uploadedFiles, setUploadedFiles] = useState({
     identity: false,
@@ -79,7 +77,7 @@ export default function VerificationPage() {
   // Redirection si non authentifié
   if (!isAuthenticated) {
     // Utiliser router.push au lieu de redirect
-    router.push("/devenir-hote")
+    router.visit("/devenir-hote")
     return null // Retourner null pour éviter de rendre le composant pendant la redirection
   }
 
@@ -89,7 +87,7 @@ export default function VerificationPage() {
       window.scrollTo({ top: 0, behavior: "smooth" })
     } else {
       // Utiliser router.push au lieu de redirect pour la redirection finale
-      router.push("/devenir-hote/success")
+      router.visit("/devenir-hote/success")
     }
   }
 
@@ -135,8 +133,6 @@ export default function VerificationPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
-      <Header />
-
       <main className="flex-1 py-12">
         <div className="container mx-auto px-4 md:px-6 max-w-4xl">
           <div className="bg-white rounded-xl shadow-sm p-8">
@@ -170,7 +166,7 @@ export default function VerificationPage() {
               <div className="flex flex-col items-center">
                 <div
                   className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                    currentStep >= 1 ? "bg-primary text-white" : "bg-gray-200 text-gray-500"
+                    currentStep >= 1 ? "bg-[#485aa8]  text-white" : "bg-gray-200 text-gray-500"
                   }`}
                 >
                   1
@@ -178,12 +174,12 @@ export default function VerificationPage() {
                 <span className="text-xs mt-1">Type</span>
               </div>
               <div className="flex-1 flex items-center">
-                <div className={`h-1 w-full ${currentStep >= 2 ? "bg-primary" : "bg-gray-200"}`}></div>
+                <div className={`h-1 w-full ${currentStep >= 2 ? "bg-[#485aa8] " : "bg-gray-200"}`}></div>
               </div>
               <div className="flex flex-col items-center">
                 <div
                   className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                    currentStep >= 2 ? "bg-primary text-white" : "bg-gray-200 text-gray-500"
+                    currentStep >= 2 ? "bg-[#485aa8]  text-white" : "bg-gray-200 text-gray-500"
                   }`}
                 >
                   2
@@ -191,12 +187,12 @@ export default function VerificationPage() {
                 <span className="text-xs mt-1">Chambres</span>
               </div>
               <div className="flex-1 flex items-center">
-                <div className={`h-1 w-full ${currentStep >= 3 ? "bg-primary" : "bg-gray-200"}`}></div>
+                <div className={`h-1 w-full ${currentStep >= 3 ? "bg-[#485aa8] " : "bg-gray-200"}`}></div>
               </div>
               <div className="flex flex-col items-center">
                 <div
                   className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                    currentStep >= 3 ? "bg-primary text-white" : "bg-gray-200 text-gray-500"
+                    currentStep >= 3 ? "bg-[#485aa8]  text-white" : "bg-gray-200 text-gray-500"
                   }`}
                 >
                   3
@@ -204,12 +200,12 @@ export default function VerificationPage() {
                 <span className="text-xs mt-1">Locataire</span>
               </div>
               <div className="flex-1 flex items-center">
-                <div className={`h-1 w-full ${currentStep >= 4 ? "bg-primary" : "bg-gray-200"}`}></div>
+                <div className={`h-1 w-full ${currentStep >= 4 ? "bg-[#485aa8] " : "bg-gray-200"}`}></div>
               </div>
               <div className="flex flex-col items-center">
                 <div
                   className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                    currentStep >= 4 ? "bg-primary text-white" : "bg-gray-200 text-gray-500"
+                    currentStep >= 4 ? "bg-[#485aa8]  text-white" : "bg-gray-200 text-gray-500"
                   }`}
                 >
                   4
@@ -217,12 +213,12 @@ export default function VerificationPage() {
                 <span className="text-xs mt-1">Photos</span>
               </div>
               <div className="flex-1 flex items-center">
-                <div className={`h-1 w-full ${currentStep >= 5 ? "bg-primary" : "bg-gray-200"}`}></div>
+                <div className={`h-1 w-full ${currentStep >= 5 ? "bg-[#485aa8] " : "bg-gray-200"}`}></div>
               </div>
               <div className="flex flex-col items-center">
                 <div
                   className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                    currentStep >= 5 ? "bg-primary text-white" : "bg-gray-200 text-gray-500"
+                    currentStep >= 5 ? "bg-[#485aa8]  text-white" : "bg-gray-200 text-gray-500"
                   }`}
                 >
                   5
@@ -230,12 +226,12 @@ export default function VerificationPage() {
                 <span className="text-xs mt-1">Surface</span>
               </div>
               <div className="flex-1 flex items-center">
-                <div className={`h-1 w-full ${currentStep >= 6 ? "bg-primary" : "bg-gray-200"}`}></div>
+                <div className={`h-1 w-full ${currentStep >= 6 ? "bg-[#485aa8] " : "bg-gray-200"}`}></div>
               </div>
               <div className="flex flex-col items-center">
                 <div
                   className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                    currentStep >= 6 ? "bg-primary text-white" : "bg-gray-200 text-gray-500"
+                    currentStep >= 6 ? "bg-[#485aa8]  text-white" : "bg-gray-200 text-gray-500"
                   }`}
                 >
                   6
@@ -243,12 +239,12 @@ export default function VerificationPage() {
                 <span className="text-xs mt-1">Identité</span>
               </div>
               <div className="flex-1 flex items-center">
-                <div className={`h-1 w-full ${currentStep >= 7 ? "bg-primary" : "bg-gray-200"}`}></div>
+                <div className={`h-1 w-full ${currentStep >= 7 ? "bg-[#485aa8] " : "bg-gray-200"}`}></div>
               </div>
               <div className="flex flex-col items-center">
                 <div
                   className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                    currentStep >= 7 ? "bg-primary text-white" : "bg-gray-200 text-gray-500"
+                    currentStep >= 7 ? "bg-[#485aa8]  text-white" : "bg-gray-200 text-gray-500"
                   }`}
                 >
                   7
@@ -256,12 +252,12 @@ export default function VerificationPage() {
                 <span className="text-xs mt-1">Factures</span>
               </div>
               <div className="flex-1 flex items-center">
-                <div className={`h-1 w-full ${currentStep >= 8 ? "bg-primary" : "bg-gray-200"}`}></div>
+                <div className={`h-1 w-full ${currentStep >= 8 ? "bg-[#485aa8] " : "bg-gray-200"}`}></div>
               </div>
               <div className="flex flex-col items-center">
                 <div
                   className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                    currentStep >= 8 ? "bg-primary text-white" : "bg-gray-200 text-gray-500"
+                    currentStep >= 8 ? "bg-[#485aa8]  text-white" : "bg-gray-200 text-gray-500"
                   }`}
                 >
                   8
@@ -288,10 +284,10 @@ export default function VerificationPage() {
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div
-                      className={`border rounded-lg p-6 hover:bg-gray-50 transition-colors cursor-pointer ${propertyType === "appartement" ? "border-primary bg-primary/5" : "border-gray-200"}`}
+                      className={`border rounded-lg p-6 hover:bg-gray-50 transition-colors cursor-pointer ${propertyType === "appartement" ? "border-[#485aa8] bg-[#485aa8]/5" : "border-gray-200"}`}
                       onClick={() => setPropertyType("appartement")}
                     >
-                      <Building className="h-10 w-10 mb-3 text-primary" />
+                      <Building className="h-10 w-10 mb-3 text-[#485aa8] " />
                       <h3 className="text-lg font-medium mb-2">Appartement</h3>
                       <p className="text-sm text-gray-500">
                         Logement situé dans un immeuble collectif, avec ou sans balcon/terrasse.
@@ -299,10 +295,10 @@ export default function VerificationPage() {
                     </div>
 
                     <div
-                      className={`border rounded-lg p-6 hover:bg-gray-50 transition-colors cursor-pointer ${propertyType === "garconniere" ? "border-primary bg-primary/5" : "border-gray-200"}`}
+                      className={`border rounded-lg p-6 hover:bg-gray-50 transition-colors cursor-pointer ${propertyType === "garconniere" ? "border-[#485aa8] bg-[#485aa8]/5" : "border-gray-200"}`}
                       onClick={() => setPropertyType("garconniere")}
                     >
-                      <Building className="h-10 w-10 mb-3 text-primary" />
+                      <Building className="h-10 w-10 mb-3 text-[#485aa8] " />
                       <h3 className="text-lg font-medium mb-2">Garçonnière</h3>
                       <p className="text-sm text-gray-500">
                         Petit appartement destiné à une personne seule, généralement composé d'une pièce principale.
@@ -310,10 +306,10 @@ export default function VerificationPage() {
                     </div>
 
                     <div
-                      className={`border rounded-lg p-6 hover:bg-gray-50 transition-colors cursor-pointer ${propertyType === "maison" ? "border-primary bg-primary/5" : "border-gray-200"}`}
+                      className={`border rounded-lg p-6 hover:bg-gray-50 transition-colors cursor-pointer ${propertyType === "maison" ? "border-[#485aa8] bg-[#485aa8]/5" : "border-gray-200"}`}
                       onClick={() => setPropertyType("maison")}
                     >
-                      <Home className="h-10 w-10 mb-3 text-primary" />
+                      <Home className="h-10 w-10 mb-3 text-[#485aa8] " />
                       <h3 className="text-lg font-medium mb-2">Maison</h3>
                       <p className="text-sm text-gray-500">
                         Logement individuel avec un ou plusieurs étages, généralement avec jardin.
@@ -321,10 +317,10 @@ export default function VerificationPage() {
                     </div>
 
                     <div
-                      className={`border rounded-lg p-6 hover:bg-gray-50 transition-colors cursor-pointer ${propertyType === "villa" ? "border-primary bg-primary/5" : "border-gray-200"}`}
+                      className={`border rounded-lg p-6 hover:bg-gray-50 transition-colors cursor-pointer ${propertyType === "villa" ? "border-[#485aa8] bg-[#485aa8]/5" : "border-gray-200"}`}
                       onClick={() => setPropertyType("villa")}
                     >
-                      <Castle className="h-10 w-10 mb-3 text-primary" />
+                      <Castle className="h-10 w-10 mb-3 text-[#485aa8] " />
                       <h3 className="text-lg font-medium mb-2">Villa</h3>
                       <p className="text-sm text-gray-500">
                         Maison de luxe avec jardin, souvent avec piscine ou autres équipements premium.
@@ -332,10 +328,10 @@ export default function VerificationPage() {
                     </div>
 
                     <div
-                      className={`border rounded-lg p-6 hover:bg-gray-50 transition-colors cursor-pointer ${propertyType === "riad" ? "border-primary bg-primary/5" : "border-gray-200"}`}
+                      className={`border rounded-lg p-6 hover:bg-gray-50 transition-colors cursor-pointer ${propertyType === "riad" ? "border-[#485aa8] bg-[#485aa8]/5" : "border-gray-200"}`}
                       onClick={() => setPropertyType("riad")}
                     >
-                      <Hotel className="h-10 w-10 mb-3 text-primary" />
+                      <Hotel className="h-10 w-10 mb-3 text-[#485aa8] " />
                       <h3 className="text-lg font-medium mb-2">Riad</h3>
                       <p className="text-sm text-gray-500">
                         Maison traditionnelle marocaine avec patio intérieur, généralement dans la médina.
@@ -343,10 +339,10 @@ export default function VerificationPage() {
                     </div>
 
                     <div
-                      className={`border rounded-lg p-6 hover:bg-gray-50 transition-colors cursor-pointer ${propertyType === "studio" ? "border-primary bg-primary/5" : "border-gray-200"}`}
+                      className={`border rounded-lg p-6 hover:bg-gray-50 transition-colors cursor-pointer ${propertyType === "studio" ? "border-[#485aa8] bg-[#485aa8]/5" : "border-gray-200"}`}
                       onClick={() => setPropertyType("studio")}
                     >
-                      <Warehouse className="h-10 w-10 mb-3 text-primary" />
+                      <Warehouse className="h-10 w-10 mb-3 text-[#485aa8] " />
                       <h3 className="text-lg font-medium mb-2">Studio</h3>
                       <p className="text-sm text-gray-500">
                         Petit logement d'une seule pièce principale avec coin cuisine et salle de bain.
@@ -354,10 +350,10 @@ export default function VerificationPage() {
                     </div>
 
                     <div
-                      className={`border rounded-lg p-6 hover:bg-gray-50 transition-colors cursor-pointer ${propertyType === "bureau" ? "border-primary bg-primary/5" : "border-gray-200"}`}
+                      className={`border rounded-lg p-6 hover:bg-gray-50 transition-colors cursor-pointer ${propertyType === "bureau" ? "border-[#485aa8] bg-[#485aa8]/5" : "border-gray-200"}`}
                       onClick={() => setPropertyType("bureau")}
                     >
-                      <BriefcaseIcon className="h-10 w-10 mb-3 text-primary" />
+                      <BriefcaseIcon className="h-10 w-10 mb-3 text-[#485aa8] " />
                       <h3 className="text-lg font-medium mb-2">Bureau</h3>
                       <p className="text-sm text-gray-500">
                         Espace professionnel destiné à des activités commerciales ou administratives.
@@ -365,10 +361,10 @@ export default function VerificationPage() {
                     </div>
 
                     <div
-                      className={`border rounded-lg p-6 hover:bg-gray-50 transition-colors cursor-pointer ${propertyType === "chalet" ? "border-primary bg-primary/5" : "border-gray-200"}`}
+                      className={`border rounded-lg p-6 hover:bg-gray-50 transition-colors cursor-pointer ${propertyType === "chalet" ? "border-[#485aa8] bg-[#485aa8]/5" : "border-gray-200"}`}
                       onClick={() => setPropertyType("chalet")}
                     >
-                      <Home className="h-10 w-10 mb-3 text-primary" />
+                      <Home className="h-10 w-10 mb-3 text-[#485aa8] " />
                       <h3 className="text-lg font-medium mb-2">Chalet</h3>
                       <p className="text-sm text-gray-500">
                         Maison en bois typique des régions montagneuses, idéale pour les séjours en montagne.
@@ -376,10 +372,10 @@ export default function VerificationPage() {
                     </div>
 
                     <div
-                      className={`border rounded-lg p-6 hover:bg-gray-50 transition-colors cursor-pointer ${propertyType === "ferme" ? "border-primary bg-primary/5" : "border-gray-200"}`}
+                      className={`border rounded-lg p-6 hover:bg-gray-50 transition-colors cursor-pointer ${propertyType === "ferme" ? "border-[#485aa8] bg-[#485aa8]/5" : "border-gray-200"}`}
                       onClick={() => setPropertyType("ferme")}
                     >
-                      <Warehouse className="h-10 w-10 mb-3 text-primary" />
+                      <Warehouse className="h-10 w-10 mb-3 text-[#485aa8] " />
                       <h3 className="text-lg font-medium mb-2">Ferme</h3>
                       <p className="text-sm text-gray-500">
                         Propriété rurale avec terrain agricole, idéale pour les séjours à la campagne.
@@ -399,8 +395,8 @@ export default function VerificationPage() {
               {currentStep === 2 && (
                 <div className="space-y-6">
                   <div className="flex items-center gap-3 mb-4">
-                    <Bed className="h-6 w-6 text-primary" />
-                    <h2 className="text-xl font-semibold text-primary">Chambres</h2>
+                    <Bed className="h-6 w-6 text-[#485aa8] " />
+                    <h2 className="text-xl font-semibold text-[#485aa8] ">Chambres</h2>
                     {(propertyType === "bureau" || propertyType === "ferme" || propertyType === "studio") && (
                       <span className="text-sm text-gray-500 ml-2">(Optionnel pour ce type de logement)</span>
                     )}
@@ -475,8 +471,8 @@ export default function VerificationPage() {
 
                   <div className="mt-8">
                     <div className="flex items-center gap-3 mb-4">
-                      <Settings className="h-6 w-6 text-primary" />
-                      <h2 className="text-xl font-semibold text-primary">Caractéristiques</h2>
+                      <Settings className="h-6 w-6 text-[#485aa8] " />
+                      <h2 className="text-xl font-semibold text-[#485aa8] ">Caractéristiques</h2>
                       <span className="text-sm text-gray-500 ml-2">(Optionnel)</span>
                     </div>
 
@@ -488,7 +484,7 @@ export default function VerificationPage() {
                           className={`flex items-center gap-3 border rounded-lg p-4 cursor-pointer transition-all ${amenities.includes("balcony") ? "bg-blue-50 border-blue-200" : "bg-white border-gray-200 hover:border-gray-300"}`}
                           onClick={() => toggleAmenity("balcony")}
                         >
-                          <Wind className="h-5 w-5 text-primary" />
+                          <Wind className="h-5 w-5 text-[#485aa8] " />
                           <span>Balcon</span>
                           {amenities.includes("balcony") && (
                             <div className="ml-auto w-3 h-3 rounded-full bg-blue-600"></div>
@@ -499,7 +495,7 @@ export default function VerificationPage() {
                           className={`flex items-center gap-3 border rounded-lg p-4 cursor-pointer transition-all ${amenities.includes("modern_toilet") ? "bg-blue-50 border-blue-200" : "bg-white border-gray-200 hover:border-gray-300"}`}
                           onClick={() => toggleAmenity("modern_toilet")}
                         >
-                          <Bath className="h-5 w-5 text-primary" />
+                          <Bath className="h-5 w-5 text-[#485aa8] " />
                           <span>Toilette moderne</span>
                           {amenities.includes("modern_toilet") && (
                             <div className="ml-auto w-3 h-3 rounded-full bg-blue-600"></div>
@@ -510,7 +506,7 @@ export default function VerificationPage() {
                           className={`flex items-center gap-3 border rounded-lg p-4 cursor-pointer transition-all ${amenities.includes("traditional_toilet") ? "bg-blue-50 border-blue-200" : "bg-white border-gray-200 hover:border-gray-300"}`}
                           onClick={() => toggleAmenity("traditional_toilet")}
                         >
-                          <Bath className="h-5 w-5 text-primary" />
+                          <Bath className="h-5 w-5 text-[#485aa8] " />
                           <span>Toilette traditionnelle</span>
                           {amenities.includes("traditional_toilet") && (
                             <div className="ml-auto w-3 h-3 rounded-full bg-blue-600"></div>
@@ -521,7 +517,7 @@ export default function VerificationPage() {
                           className={`flex items-center gap-3 border rounded-lg p-4 cursor-pointer transition-all ${amenities.includes("water_supply") ? "bg-blue-50 border-blue-200" : "bg-white border-gray-200 hover:border-gray-300"}`}
                           onClick={() => toggleAmenity("water_supply")}
                         >
-                          <Droplets className="h-5 w-5 text-primary" />
+                          <Droplets className="h-5 w-5 text-[#485aa8] " />
                           <span>Alimentation en eau</span>
                           {amenities.includes("water_supply") && (
                             <div className="ml-auto w-3 h-3 rounded-full bg-blue-600"></div>
@@ -532,7 +528,7 @@ export default function VerificationPage() {
                           className={`flex items-center gap-3 border rounded-lg p-4 cursor-pointer transition-all ${amenities.includes("furnished") ? "bg-blue-50 border-blue-200" : "bg-white border-gray-200 hover:border-gray-300"}`}
                           onClick={() => toggleAmenity("furnished")}
                         >
-                          <Armchair className="h-5 w-5 text-primary" />
+                          <Armchair className="h-5 w-5 text-[#485aa8] " />
                           <span>Meublé</span>
                           {amenities.includes("furnished") && (
                             <div className="ml-auto w-3 h-3 rounded-full bg-blue-600"></div>
@@ -543,7 +539,7 @@ export default function VerificationPage() {
                           className={`flex items-center gap-3 border rounded-lg p-4 cursor-pointer transition-all ${amenities.includes("heating") ? "bg-blue-50 border-blue-200" : "bg-white border-gray-200 hover:border-gray-300"}`}
                           onClick={() => toggleAmenity("heating")}
                         >
-                          <Zap className="h-5 w-5 text-primary" />
+                          <Zap className="h-5 w-5 text-[#485aa8] " />
                           <span>Chauffage</span>
                           {amenities.includes("heating") && (
                             <div className="ml-auto w-3 h-3 rounded-full bg-blue-600"></div>
@@ -560,7 +556,7 @@ export default function VerificationPage() {
                           className={`flex items-center gap-3 border rounded-lg p-4 cursor-pointer transition-all ${amenities.includes("garden") ? "bg-blue-50 border-blue-200" : "bg-white border-gray-200 hover:border-gray-300"}`}
                           onClick={() => toggleAmenity("garden")}
                         >
-                          <Flower2 className="h-5 w-5 text-primary" />
+                          <Flower2 className="h-5 w-5 text-[#485aa8] " />
                           <span>Jardin</span>
                           {amenities.includes("garden") && (
                             <div className="ml-auto w-3 h-3 rounded-full bg-blue-600"></div>
@@ -571,7 +567,7 @@ export default function VerificationPage() {
                           className={`flex items-center gap-3 border rounded-lg p-4 cursor-pointer transition-all ${amenities.includes("parking") ? "bg-blue-50 border-blue-200" : "bg-white border-gray-200 hover:border-gray-300"}`}
                           onClick={() => toggleAmenity("parking")}
                         >
-                          <Car className="h-5 w-5 text-primary" />
+                          <Car className="h-5 w-5 text-[#485aa8] " />
                           <span>Parking</span>
                           {amenities.includes("parking") && (
                             <div className="ml-auto w-3 h-3 rounded-full bg-blue-600"></div>
@@ -582,7 +578,7 @@ export default function VerificationPage() {
                           className={`flex items-center gap-3 border rounded-lg p-4 cursor-pointer transition-all ${amenities.includes("terrace") ? "bg-blue-50 border-blue-200" : "bg-white border-gray-200 hover:border-gray-300"}`}
                           onClick={() => toggleAmenity("terrace")}
                         >
-                          <Trees className="h-5 w-5 text-primary" />
+                          <Trees className="h-5 w-5 text-[#485aa8] " />
                           <span>Terrasse</span>
                           {amenities.includes("terrace") && (
                             <div className="ml-auto w-3 h-3 rounded-full bg-blue-600"></div>
@@ -593,7 +589,7 @@ export default function VerificationPage() {
                           className={`flex items-center gap-3 border rounded-lg p-4 cursor-pointer transition-all ${amenities.includes("pool") ? "bg-blue-50 border-blue-200" : "bg-white border-gray-200 hover:border-gray-300"}`}
                           onClick={() => toggleAmenity("pool")}
                         >
-                          <SwimmingPool className="h-5 w-5 text-primary" />
+                          <SwimmingPool className="h-5 w-5 text-[#485aa8] " />
                           <span>Piscine</span>
                           {amenities.includes("pool") && (
                             <div className="ml-auto w-3 h-3 rounded-full bg-blue-600"></div>
@@ -604,7 +600,7 @@ export default function VerificationPage() {
                           className={`flex items-center gap-3 border rounded-lg p-4 cursor-pointer transition-all ${amenities.includes("security") ? "bg-blue-50 border-blue-200" : "bg-white border-gray-200 hover:border-gray-300"}`}
                           onClick={() => toggleAmenity("security")}
                         >
-                          <Lock className="h-5 w-5 text-primary" />
+                          <Lock className="h-5 w-5 text-[#485aa8] " />
                           <span>Sécurité</span>
                           {amenities.includes("security") && (
                             <div className="ml-auto w-3 h-3 rounded-full bg-blue-600"></div>
@@ -615,7 +611,7 @@ export default function VerificationPage() {
                           className={`flex items-center gap-3 border rounded-lg p-4 cursor-pointer transition-all ${amenities.includes("trash_disposal") ? "bg-blue-50 border-blue-200" : "bg-white border-gray-200 hover:border-gray-300"}`}
                           onClick={() => toggleAmenity("trash_disposal")}
                         >
-                          <Trash2 className="h-5 w-5 text-primary" />
+                          <Trash2 className="h-5 w-5 text-[#485aa8] " />
                           <span>Vide-ordures</span>
                           {amenities.includes("trash_disposal") && (
                             <div className="ml-auto w-3 h-3 rounded-full bg-blue-600"></div>
@@ -632,7 +628,7 @@ export default function VerificationPage() {
                           className={`flex items-center gap-3 border rounded-lg p-4 cursor-pointer transition-all ${amenities.includes("mosque") ? "bg-blue-50 border-blue-200" : "bg-white border-gray-200 hover:border-gray-300"}`}
                           onClick={() => toggleAmenity("mosque")}
                         >
-                          <Mosque className="h-5 w-5 text-primary" />
+                          <Mosque className="h-5 w-5 text-[#485aa8] " />
                           <span>Mosquée</span>
                           {amenities.includes("mosque") && (
                             <div className="ml-auto w-3 h-3 rounded-full bg-blue-600"></div>
@@ -643,7 +639,7 @@ export default function VerificationPage() {
                           className={`flex items-center gap-3 border rounded-lg p-4 cursor-pointer transition-all ${amenities.includes("kindergarten") ? "bg-blue-50 border-blue-200" : "bg-white border-gray-200 hover:border-gray-300"}`}
                           onClick={() => toggleAmenity("kindergarten")}
                         >
-                          <Footprints className="h-5 w-5 text-primary" />
+                          <Footprints className="h-5 w-5 text-[#485aa8] " />
                           <span>Maternelle</span>
                           {amenities.includes("kindergarten") && (
                             <div className="ml-auto w-3 h-3 rounded-full bg-blue-600"></div>
@@ -651,12 +647,12 @@ export default function VerificationPage() {
                         </div>
 
                         <div
-                          className={`flex items-center gap-3 border rounded-lg p-4 cursor-pointer transition-all ${amenities.includes("primary_school") ? "bg-blue-50 border-blue-200" : "bg-white border-gray-200 hover:border-gray-300"}`}
-                          onClick={() => toggleAmenity("primary_school")}
+                          className={`flex items-center gap-3 border rounded-lg p-4 cursor-pointer transition-all ${amenities.includes("[#485aa8]_school") ? "bg-blue-50 border-blue-200" : "bg-white border-gray-200 hover:border-gray-300"}`}
+                          onClick={() => toggleAmenity("[#485aa8]_school")}
                         >
-                          <School className="h-5 w-5 text-primary" />
+                          <School className="h-5 w-5 text-[#485aa8] " />
                           <span>École primaire</span>
-                          {amenities.includes("primary_school") && (
+                          {amenities.includes("[#485aa8]_school") && (
                             <div className="ml-auto w-3 h-3 rounded-full bg-blue-600"></div>
                           )}
                         </div>
@@ -665,7 +661,7 @@ export default function VerificationPage() {
                           className={`flex items-center gap-3 border rounded-lg p-4 cursor-pointer transition-all ${amenities.includes("middle_school") ? "bg-blue-50 border-blue-200" : "bg-white border-gray-200 hover:border-gray-300"}`}
                           onClick={() => toggleAmenity("middle_school")}
                         >
-                          <BookOpen className="h-5 w-5 text-primary" />
+                          <BookOpen className="h-5 w-5 text-[#485aa8] " />
                           <span>Collège</span>
                           {amenities.includes("middle_school") && (
                             <div className="ml-auto w-3 h-3 rounded-full bg-blue-600"></div>
@@ -676,7 +672,7 @@ export default function VerificationPage() {
                           className={`flex items-center gap-3 border rounded-lg p-4 cursor-pointer transition-all ${amenities.includes("high_school") ? "bg-blue-50 border-blue-200" : "bg-white border-gray-200 hover:border-gray-300"}`}
                           onClick={() => toggleAmenity("high_school")}
                         >
-                          <BookOpen className="h-5 w-5 text-primary" />
+                          <BookOpen className="h-5 w-5 text-[#485aa8] " />
                           <span>Lycée</span>
                           {amenities.includes("high_school") && (
                             <div className="ml-auto w-3 h-3 rounded-full bg-blue-600"></div>
@@ -687,7 +683,7 @@ export default function VerificationPage() {
                           className={`flex items-center gap-3 border rounded-lg p-4 cursor-pointer transition-all ${amenities.includes("university") ? "bg-blue-50 border-blue-200" : "bg-white border-gray-200 hover:border-gray-300"}`}
                           onClick={() => toggleAmenity("university")}
                         >
-                          <GraduationCap className="h-5 w-5 text-primary" />
+                          <GraduationCap className="h-5 w-5 text-[#485aa8] " />
                           <span>Université</span>
                           {amenities.includes("university") && (
                             <div className="ml-auto w-3 h-3 rounded-full bg-blue-600"></div>
@@ -698,7 +694,7 @@ export default function VerificationPage() {
                           className={`flex items-center gap-3 border rounded-lg p-4 cursor-pointer transition-all ${amenities.includes("pharmacy") ? "bg-blue-50 border-blue-200" : "bg-white border-gray-200 hover:border-gray-300"}`}
                           onClick={() => toggleAmenity("pharmacy")}
                         >
-                          <Pill className="h-5 w-5 text-primary" />
+                          <Pill className="h-5 w-5 text-[#485aa8] " />
                           <span>Pharmacie</span>
                           {amenities.includes("pharmacy") && (
                             <div className="ml-auto w-3 h-3 rounded-full bg-blue-600"></div>
@@ -709,7 +705,7 @@ export default function VerificationPage() {
                           className={`flex items-center gap-3 border rounded-lg p-4 cursor-pointer transition-all ${amenities.includes("souk") ? "bg-blue-50 border-blue-200" : "bg-white border-gray-200 hover:border-gray-300"}`}
                           onClick={() => toggleAmenity("souk")}
                         >
-                          <ShoppingBag className="h-5 w-5 text-primary" />
+                          <ShoppingBag className="h-5 w-5 text-[#485aa8] " />
                           <span>Souk</span>
                           {amenities.includes("souk") && (
                             <div className="ml-auto w-3 h-3 rounded-full bg-blue-600"></div>
@@ -720,7 +716,7 @@ export default function VerificationPage() {
                           className={`flex items-center gap-3 border rounded-lg p-4 cursor-pointer transition-all ${amenities.includes("hammam") ? "bg-blue-50 border-blue-200" : "bg-white border-gray-200 hover:border-gray-300"}`}
                           onClick={() => toggleAmenity("hammam")}
                         >
-                          <Waves className="h-5 w-5 text-primary" />
+                          <Waves className="h-5 w-5 text-[#485aa8] " />
                           <span>Hammam</span>
                           {amenities.includes("hammam") && (
                             <div className="ml-auto w-3 h-3 rounded-full bg-blue-600"></div>
@@ -731,7 +727,7 @@ export default function VerificationPage() {
                           className={`flex items-center gap-3 border rounded-lg p-4 cursor-pointer transition-all ${amenities.includes("restaurant") ? "bg-blue-50 border-blue-200" : "bg-white border-gray-200 hover:border-gray-300"}`}
                           onClick={() => toggleAmenity("restaurant")}
                         >
-                          <Utensils className="h-5 w-5 text-primary" />
+                          <Utensils className="h-5 w-5 text-[#485aa8] " />
                           <span>Restaurant</span>
                           {amenities.includes("restaurant") && (
                             <div className="ml-auto w-3 h-3 rounded-full bg-blue-600"></div>
@@ -742,7 +738,7 @@ export default function VerificationPage() {
                           className={`flex items-center gap-3 border rounded-lg p-4 cursor-pointer transition-all ${amenities.includes("cafe") ? "bg-blue-50 border-blue-200" : "bg-white border-gray-200 hover:border-gray-300"}`}
                           onClick={() => toggleAmenity("cafe")}
                         >
-                          <Coffee className="h-5 w-5 text-primary" />
+                          <Coffee className="h-5 w-5 text-[#485aa8] " />
                           <span>Café</span>
                           {amenities.includes("cafe") && (
                             <div className="ml-auto w-3 h-3 rounded-full bg-blue-600"></div>
@@ -753,7 +749,7 @@ export default function VerificationPage() {
                           className={`flex items-center gap-3 border rounded-lg p-4 cursor-pointer transition-all ${amenities.includes("supermarket") ? "bg-blue-50 border-blue-200" : "bg-white border-gray-200 hover:border-gray-300"}`}
                           onClick={() => toggleAmenity("supermarket")}
                         >
-                          <ShoppingCart className="h-5 w-5 text-primary" />
+                          <ShoppingCart className="h-5 w-5 text-[#485aa8] " />
                           <span>Supermarché</span>
                           {amenities.includes("supermarket") && (
                             <div className="ml-auto w-3 h-3 rounded-full bg-blue-600"></div>
@@ -764,7 +760,7 @@ export default function VerificationPage() {
                           className={`flex items-center gap-3 border rounded-lg p-4 cursor-pointer transition-all ${amenities.includes("public_transport") ? "bg-blue-50 border-blue-200" : "bg-white border-gray-200 hover:border-gray-300"}`}
                           onClick={() => toggleAmenity("public_transport")}
                         >
-                          <Bus className="h-5 w-5 text-primary" />
+                          <Bus className="h-5 w-5 text-[#485aa8] " />
                           <span>Transport public</span>
                           {amenities.includes("public_transport") && (
                             <div className="ml-auto w-3 h-3 rounded-full bg-blue-600"></div>
@@ -775,7 +771,7 @@ export default function VerificationPage() {
                           className={`flex items-center gap-3 border rounded-lg p-4 cursor-pointer transition-all ${amenities.includes("gym") ? "bg-blue-50 border-blue-200" : "bg-white border-gray-200 hover:border-gray-300"}`}
                           onClick={() => toggleAmenity("gym")}
                         >
-                          <Dumbbell className="h-5 w-5 text-primary" />
+                          <Dumbbell className="h-5 w-5 text-[#485aa8] " />
                           <span>Salle de sport</span>
                           {amenities.includes("gym") && (
                             <div className="ml-auto w-3 h-3 rounded-full bg-blue-600"></div>
@@ -786,7 +782,7 @@ export default function VerificationPage() {
                           className={`flex items-center gap-3 border rounded-lg p-4 cursor-pointer transition-all ${amenities.includes("shopping") ? "bg-blue-50 border-blue-200" : "bg-white border-gray-200 hover:border-gray-300"}`}
                           onClick={() => toggleAmenity("shopping")}
                         >
-                          <Store className="h-5 w-5 text-primary" />
+                          <Store className="h-5 w-5 text-[#485aa8] " />
                           <span>Centre commercial</span>
                           {amenities.includes("shopping") && (
                             <div className="ml-auto w-3 h-3 rounded-full bg-blue-600"></div>
@@ -808,8 +804,8 @@ export default function VerificationPage() {
               {currentStep === 3 && (
                 <div className="space-y-6">
                   <div className="flex items-center gap-3 mb-4">
-                    <Users className="h-6 w-6 text-primary" />
-                    <h2 className="text-xl font-semibold text-primary">Type de locataire</h2>
+                    <Users className="h-6 w-6 text-[#485aa8] " />
+                    <h2 className="text-xl font-semibold text-[#485aa8] ">Type de locataire</h2>
                   </div>
 
                   <p className="text-gray-600 mb-4">
@@ -818,10 +814,10 @@ export default function VerificationPage() {
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div
-                      className={`border rounded-lg p-6 hover:bg-gray-50 transition-colors cursor-pointer ${tenantType === "famille" ? "border-primary bg-primary/5" : "border-gray-200"}`}
+                      className={`border rounded-lg p-6 hover:bg-gray-50 transition-colors cursor-pointer ${tenantType === "famille" ? "border-[#485aa8] bg-[#485aa8]/5" : "border-gray-200"}`}
                       onClick={() => setTenantType("famille")}
                     >
-                      <Users className="h-10 w-10 mb-3 text-primary" />
+                      <Users className="h-10 w-10 mb-3 text-[#485aa8] " />
                       <h3 className="text-lg font-medium mb-2">Famille</h3>
                       <p className="text-sm text-gray-500">
                         Idéal pour les familles avec enfants cherchant un logement stable.
@@ -829,10 +825,10 @@ export default function VerificationPage() {
                     </div>
 
                     <div
-                      className={`border rounded-lg p-6 hover:bg-gray-50 transition-colors cursor-pointer ${tenantType === "couple" ? "border-primary bg-primary/5" : "border-gray-200"}`}
+                      className={`border rounded-lg p-6 hover:bg-gray-50 transition-colors cursor-pointer ${tenantType === "couple" ? "border-[#485aa8] bg-[#485aa8]/5" : "border-gray-200"}`}
                       onClick={() => setTenantType("couple")}
                     >
-                      <Heart className="h-10 w-10 mb-3 text-primary" />
+                      <Heart className="h-10 w-10 mb-3 text-[#485aa8] " />
                       <h3 className="text-lg font-medium mb-2">Couple</h3>
                       <p className="text-sm text-gray-500">
                         Parfait pour les couples à la recherche d'un espace confortable.
@@ -840,19 +836,19 @@ export default function VerificationPage() {
                     </div>
 
                     <div
-                      className={`border rounded-lg p-6 hover:bg-gray-50 transition-colors cursor-pointer ${tenantType === "celibataire" ? "border-primary bg-primary/5" : "border-gray-200"}`}
+                      className={`border rounded-lg p-6 hover:bg-gray-50 transition-colors cursor-pointer ${tenantType === "celibataire" ? "border-[#485aa8] bg-[#485aa8]/5" : "border-gray-200"}`}
                       onClick={() => setTenantType("celibataire")}
                     >
-                      <User className="h-10 w-10 mb-3 text-primary" />
+                      <User className="h-10 w-10 mb-3 text-[#485aa8] " />
                       <h3 className="text-lg font-medium mb-2">Célibataire</h3>
                       <p className="text-sm text-gray-500">Adapté pour une personne seule cherchant un logement.</p>
                     </div>
 
                     <div
-                      className={`border rounded-lg p-6 hover:bg-gray-50 transition-colors cursor-pointer ${tenantType === "etudiant" ? "border-primary bg-primary/5" : "border-gray-200"}`}
+                      className={`border rounded-lg p-6 hover:bg-gray-50 transition-colors cursor-pointer ${tenantType === "etudiant" ? "border-[#485aa8] bg-[#485aa8]/5" : "border-gray-200"}`}
                       onClick={() => setTenantType("etudiant")}
                     >
-                      <GraduationCap className="h-10 w-10 mb-3 text-primary" />
+                      <GraduationCap className="h-10 w-10 mb-3 text-[#485aa8] " />
                       <h3 className="text-lg font-medium mb-2">Étudiant</h3>
                       <p className="text-sm text-gray-500">
                         Pour les étudiants cherchant un logement près de leur établissement.
@@ -860,10 +856,10 @@ export default function VerificationPage() {
                     </div>
 
                     <div
-                      className={`border rounded-lg p-6 hover:bg-gray-50 transition-colors cursor-pointer ${tenantType === "professionnel" ? "border-primary bg-primary/5" : "border-gray-200"}`}
+                      className={`border rounded-lg p-6 hover:bg-gray-50 transition-colors cursor-pointer ${tenantType === "professionnel" ? "border-[#485aa8] bg-[#485aa8]/5" : "border-gray-200"}`}
                       onClick={() => setTenantType("professionnel")}
                     >
-                      <Briefcase className="h-10 w-10 mb-3 text-primary" />
+                      <Briefcase className="h-10 w-10 mb-3 text-[#485aa8] " />
                       <h3 className="text-lg font-medium mb-2">Professionnel</h3>
                       <p className="text-sm text-gray-500">
                         Pour les professionnels en déplacement ou en mission temporaire.
@@ -871,10 +867,10 @@ export default function VerificationPage() {
                     </div>
 
                     <div
-                      className={`border rounded-lg p-6 hover:bg-gray-50 transition-colors cursor-pointer ${tenantType === "tous" ? "border-primary bg-primary/5" : "border-gray-200"}`}
+                      className={`border rounded-lg p-6 hover:bg-gray-50 transition-colors cursor-pointer ${tenantType === "tous" ? "border-[#485aa8] bg-[#485aa8]/5" : "border-gray-200"}`}
                       onClick={() => setTenantType("tous")}
                     >
-                      <Check className="h-10 w-10 mb-3 text-primary" />
+                      <Check className="h-10 w-10 mb-3 text-[#485aa8] " />
                       <h3 className="text-lg font-medium mb-2">Tous types</h3>
                       <p className="text-sm text-gray-500">
                         Ouvert à tous les types de locataires sans préférence particulière.
@@ -990,8 +986,8 @@ export default function VerificationPage() {
               {currentStep === 5 && (
                 <div className="space-y-6">
                   <div className="flex items-center gap-3 mb-4">
-                    <SquareIcon className="h-6 w-6 text-primary" />
-                    <h2 className="text-xl font-semibold text-primary">Surface et Prix</h2>
+                    <SquareIcon className="h-6 w-6 text-[#485aa8] " />
+                    <h2 className="text-xl font-semibold text-[#485aa8] ">Surface et Prix</h2>
                   </div>
 
                   <p className="text-gray-600 mb-4">
@@ -1001,7 +997,7 @@ export default function VerificationPage() {
                   {/* Surface */}
                   <div className="mb-8">
                     <div className="flex items-center gap-3 mb-3">
-                      <SquareIcon className="h-5 w-5 text-primary" />
+                      <SquareIcon className="h-5 w-5 text-[#485aa8] " />
                       <h3 className="text-md font-medium text-gray-700">Surface (m²)</h3>
                     </div>
 
@@ -1214,7 +1210,7 @@ export default function VerificationPage() {
                                 setSurfaceRange(null)
                               }
                             }}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#485aa8] focus:border-transparent"
                           />
                           <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center bg-gray-100 px-2 py-1 rounded-md">
                             <svg
@@ -1250,7 +1246,7 @@ export default function VerificationPage() {
                                 setSurfaceRange(null)
                               }
                             }}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#485aa8] focus:border-transparent"
                           />
                           <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center bg-gray-100 px-2 py-1 rounded-md">
                             <svg
@@ -1278,7 +1274,7 @@ export default function VerificationPage() {
                   {/* Prix par mois */}
                   <div>
                     <div className="flex items-center gap-3 mb-3">
-                      <Banknote className="h-5 w-5 text-primary" />
+                      <Banknote className="h-5 w-5 text-[#485aa8] " />
                       <h3 className="text-md font-medium text-gray-700">Prix par mois (MAD)</h3>
                     </div>
 
@@ -1291,7 +1287,7 @@ export default function VerificationPage() {
                           value={pricePerMonth || ""}
                           onChange={(e) => setPricePerMonth(e.target.value ? Number.parseInt(e.target.value) : null)}
                           placeholder="Entrez le prix mensuel"
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#485aa8] focus:border-transparent"
                         />
                         <span className="ml-2 text-gray-600">MAD/mois</span>
                       </div>
@@ -1304,7 +1300,7 @@ export default function VerificationPage() {
                             onClick={() => setPricePerMonth(price)}
                             className={`px-3 py-1 text-sm rounded-full border ${
                               pricePerMonth === price
-                                ? "bg-primary text-white border-primary"
+                                ? "bg-[#485aa8]  text-white border-[#485aa8]"
                                 : "bg-white text-gray-700 border-gray-300 hover:border-gray-400"
                             } transition-colors`}
                           >
@@ -1484,7 +1480,7 @@ export default function VerificationPage() {
               <Button
                 onClick={handleNextStep}
                 disabled={!isStepComplete()}
-                className={!isStepComplete() ? "opacity-50 cursor-not-allowed" : ""}
+                className={!isStepComplete() ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
               >
                 {currentStep < 8 ? "Étape suivante" : "Terminer la vérification"}
               </Button>

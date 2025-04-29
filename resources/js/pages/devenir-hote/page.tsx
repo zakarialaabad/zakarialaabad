@@ -1,11 +1,8 @@
-"use client"
 
 import { useState } from "react"
-import { Header } from "@/components/header"
 import { Button } from "@/components/ui/button"
 import { Shield, Wallet, Star, ArrowRight } from "lucide-react"
-import Image from "next/image"
-import Link from "next/link"
+import { Link } from "@inertiajs/react"
 import { motion } from "framer-motion"
 import { useAuth } from "@/contexts/auth-context"
 import { AuthModal } from "@/components/auth/auth-modal"
@@ -49,17 +46,16 @@ export default function DevenirHotePage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      <Header />
 
       <main className="flex-1">
         {/* Hero Section */}
         <section className="relative h-[70vh] overflow-hidden">
-          <Image
+          <img
             src="/riad-courtyard-oasis.png"
             alt="Magnifique riad marocain"
-            fill
+            
             className="object-cover"
-            priority
+            
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-black/30 flex items-center">
             <div className="container mx-auto px-4 md:px-6 relative pt-3">
@@ -127,7 +123,7 @@ export default function DevenirHotePage() {
               viewport={{ once: true }}
             >
               <motion.div className="bg-white p-8 rounded-xl shadow-sm" variants={itemVariants}>
-                <Wallet className="h-12 w-12 text-primary mb-4" />
+                <Wallet className="h-12 w-12 text-[#485aa8] mb-4" />
                 <h3 className="text-xl font-semibold mb-3">Revenus supplémentaires</h3>
                 <p className="text-gray-600">
                   Gagnez de l'argent en louant votre logement lorsque vous ne l'utilisez pas. Fixez vos propres tarifs
@@ -136,7 +132,7 @@ export default function DevenirHotePage() {
               </motion.div>
 
               <motion.div className="bg-white p-8 rounded-xl shadow-sm" variants={itemVariants}>
-                <Shield className="h-12 w-12 text-primary mb-4" />
+                <Shield className="h-12 w-12 text-[#485aa8] mb-4" />
                 <h3 className="text-xl font-semibold mb-3">Sécurité et confiance</h3>
                 <p className="text-gray-600">
                   Notre processus de vérification et notre système d'évaluation garantissent des transactions sécurisées
@@ -145,7 +141,7 @@ export default function DevenirHotePage() {
               </motion.div>
 
               <motion.div className="bg-white p-8 rounded-xl shadow-sm" variants={itemVariants}>
-                <Star className="h-12 w-12 text-primary mb-4" />
+                <Star className="h-12 w-12 text-[#485aa8] mb-4" />
                 <h3 className="text-xl font-semibold mb-3">Support dédié</h3>
                 <p className="text-gray-600">
                   Notre équipe est disponible 24/7 pour vous aider à chaque étape, de la création de votre annonce à la
@@ -176,8 +172,8 @@ export default function DevenirHotePage() {
               viewport={{ once: true }}
             >
               <motion.div className="text-center" variants={itemVariants}>
-                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl font-bold text-primary">1</span>
+                <div className="w-16 h-16 bg-[#485aa8]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl font-bold text-[#485aa8]">1</span>
                 </div>
                 <h3 className="text-xl font-semibold mb-3">Vérifiez votre identité</h3>
                 <p className="text-gray-600">
@@ -186,8 +182,8 @@ export default function DevenirHotePage() {
               </motion.div>
 
               <motion.div className="text-center" variants={itemVariants}>
-                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl font-bold text-primary">2</span>
+                <div className="w-16 h-16 bg-[#485aa8]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl font-bold text-[#485aa8]">2</span>
                 </div>
                 <h3 className="text-xl font-semibold mb-3">Créez votre annonce</h3>
                 <p className="text-gray-600">
@@ -196,8 +192,8 @@ export default function DevenirHotePage() {
               </motion.div>
 
               <motion.div className="text-center" variants={itemVariants}>
-                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl font-bold text-primary">3</span>
+                <div className="w-16 h-16 bg-[#485aa8]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl font-bold text-[#485aa8]">3</span>
                 </div>
                 <h3 className="text-xl font-semibold mb-3">Accueillez vos locataires</h3>
                 <p className="text-gray-600">
@@ -215,7 +211,7 @@ export default function DevenirHotePage() {
               {isAuthenticated ? (
                 <Button
                   size="lg"
-                  className="bg-primary hover:bg-primary/90 text-white rounded-full text-lg px-8 py-6 h-auto"
+                  className="bg-[#485aa8] hover:bg-[#485aa8]/90 text-white rounded-full text-lg px-8 py-6 h-auto"
                   asChild
                 >
                   <Link href="/devenir-hote/verification">
@@ -225,7 +221,7 @@ export default function DevenirHotePage() {
               ) : (
                 <Button
                   size="lg"
-                  className="bg-primary hover:bg-primary/90 text-white rounded-full text-lg px-8 py-6 h-auto"
+                  className="bg-[#485aa8] hover:bg-[#485aa8]/90 text-white rounded-full text-lg px-8 py-6 h-auto"
                   onClick={handleOpenAuthModal}
                 >
                   Commencer la vérification <ArrowRight className="ml-2 h-5 w-5" />
@@ -257,7 +253,7 @@ export default function DevenirHotePage() {
               <motion.div className="bg-white p-6 rounded-xl shadow-sm" variants={itemVariants}>
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 rounded-full overflow-hidden mr-4">
-                    <Image
+                    <img
                       src="/moroccan-businessman.png"
                       alt="Karim"
                       width={48}
@@ -279,7 +275,7 @@ export default function DevenirHotePage() {
               <motion.div className="bg-white p-6 rounded-xl shadow-sm" variants={itemVariants}>
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 rounded-full overflow-hidden mr-4">
-                    <Image
+                    <img
                       src="/moroccan-woman-professional.png"
                       alt="Leila"
                       width={48}
@@ -301,7 +297,7 @@ export default function DevenirHotePage() {
               <motion.div className="bg-white p-6 rounded-xl shadow-sm" variants={itemVariants}>
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 rounded-full overflow-hidden mr-4">
-                    <Image
+                    <img
                       src="/moroccan-architect.png"
                       alt="Youssef"
                       width={48}
@@ -324,7 +320,7 @@ export default function DevenirHotePage() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-16 bg-primary text-white">
+        <section className="py-16 bg-[#485aa8] text-white">
           <div className="container mx-auto px-4 md:px-6 text-center">
             <motion.h2
               className="text-3xl md:text-4xl font-bold mb-6"
@@ -347,7 +343,7 @@ export default function DevenirHotePage() {
               <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
                 <Button
                   size="lg"
-                  className="bg-white text-primary hover:bg-gray-100 rounded-full text-lg px-8 py-6 h-auto"
+                  className="bg-white text-[#485aa8] hover:bg-gray-100 rounded-full text-lg px-8 py-6 h-auto"
                   asChild
                 >
                   <Link href="/devenir-hote/verification">
@@ -359,7 +355,7 @@ export default function DevenirHotePage() {
               <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
                 <Button
                   size="lg"
-                  className="bg-white text-primary hover:bg-gray-100 rounded-full text-lg px-8 py-6 h-auto"
+                  className="bg-white text-[#485aa8] hover:bg-gray-100 rounded-full text-lg px-8 py-6 h-auto"
                   onClick={handleOpenAuthModal}
                 >
                   Commencer maintenant <ArrowRight className="ml-2 h-5 w-5" />

@@ -5,10 +5,9 @@ import { Label } from "@/components/ui/label"
 import { CheckCircle2, AlertCircle, ArrowRight, X, Eye, EyeOff, Mail, Lock, Calendar, User } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { format, isValid, differenceInYears, subYears } from "date-fns"
-import { useAuth } from "@/contexts/auth-context"
 import { motion, AnimatePresence } from "framer-motion"
 import React from "react"
-import { Link } from "@inertiajs/react"
+
 // Créer un DialogContent personnalisé sans bouton de fermeture
 const CustomDialogContent = React.forwardRef<React.ElementRef<"div">, React.ComponentPropsWithoutRef<"div">>(
   ({ className, children, ...props }, ref) => (
@@ -45,7 +44,6 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const [passwordStrength, setPasswordStrength] = useState(0)
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-  const { login } = useAuth()
 
   // Date minimale (18 ans à partir d'aujourd'hui)
   const maxDate = subYears(new Date(), 18)
@@ -132,7 +130,6 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
     try {
       // Simuler un délai de chargement
       await new Promise((resolve) => setTimeout(resolve, 800))
-      login()
       onClose()
     } catch (error) {
       console.error("Erreur de connexion:", error)
@@ -163,8 +160,6 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
       // Dans un cas réel, on enverrait toutes les données, y compris la date de naissance
       console.log("Date de naissance:", date ? format(date, "yyyy-MM-dd") : "Non définie")
-
-      login() // Dans un cas réel, on appellerait une fonction register
       onClose()
     } catch (error) {
       console.error("Erreur d'inscription:", error)
@@ -180,10 +175,9 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
       console.log(`Login with ${provider}`)
       // Simuler un délai de chargement
       await new Promise((resolve) => setTimeout(resolve, 800))
-      login()
       onClose()
     } catch (error) {
-      console.error("Erreur de connexion avec ${provider}:", error)
+      console.error(`Erreur de connexion avec ${provider}:`, error)
     } finally {
       setIsSubmitting(false)
     }
@@ -214,11 +208,10 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
               <img
                 src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Groupe%2041487-D00PfGvpoxs0QR8JpISSTUxDZvMWKJ.png"
                 alt="Background"
-                
                 className="object-cover"
-                
               />
-            </div>    
+            </div>
+
             {/* Contenu centré avec espacement vertical */}
             <div className="relative z-10 flex flex-col items-center justify-between h-full w-full px-6 py-12">
               {/* Logo et titre avec centrage vertical */}
@@ -233,11 +226,12 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                   <img
                     src="/ejar-logo.png"
                     alt="E-JAR Logo"
-                    className="object-contain drop-shadow-sm w-full h-full"                    
-                  />
-                </div>
-                <h2 className="text-lg font-bold mb-3" style={{  color:"#485aa8"}}>Bienvenue sur E-JAR</h2>
+                    className="object-contain drop-shadow-sm w-full h-full"
 
+/>
+                </div>
+                <h2 className="text-xl font-bold mb-3" style={{  color:"#485aa8"}}>Bienvenue sur E-JAR</h2>
+                
                 <p className="text-gray-600 text-sm max-w-xs text-center">
                   Votre plateforme de location immobilière au Maroc sans intermédiaire
                 </p>
@@ -365,10 +359,10 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                     </div>
 
                     <div className="grid grid-cols-2 gap-4 pt-2">
-                     
                       <button
                         type="button"
-                        onClick={() => window.location.href = '/auth/google'}   disabled={isSubmitting}
+                        onClick={() => handleSocialLogin("google")}
+                        disabled={isSubmitting}
                         className="flex items-center justify-center gap-3 h-11 px-4 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 transition-all duration-200 shadow-sm hover:shadow disabled:opacity-70 disabled:cursor-not-allowed disabled:shadow-none group"
                       >
                         <div className="flex-shrink-0 w-5 h-5 relative">
@@ -428,13 +422,13 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
                     <button
                       type="submit"
-                      disabled={isSubmitting}
-                        className={cn(
-                                      "w-full relative overflow-hidden group",
-                                      "bg-gradient-to-r from-[#485aa8] to-[#485aa8] hover:from-[#485aa8] hover:to-[#485aa8]",
-                                      "h-11 px-6 rounded-lg text-white font-medium transition-all duration-300 shadow-md hover:shadow-lg",
-                                      "disabled:opacity-70 disabled:cursor-not-allowed disabled:shadow-none",
-                                            )}
+                      disabled={isSubmitting || !!passwordError || !!dateError}
+                      className={cn(
+                        "w-full relative overflow-hidden group",
+                        "bg-gradient-to-r from-[#485aa8] to-[#485aa8] hover:from-[#485aa8] hover:to-[#485aa8]",
+                        "h-11 px-6 rounded-lg text-white font-medium transition-all duration-300 shadow-md hover:shadow-lg",
+                        "disabled:opacity-70 disabled:cursor-not-allowed disabled:shadow-none",
+                      )}
                     >
                       {/* Effet de brillance au survol */}
                       <span className="absolute top-0 left-0 w-full h-full bg-white/20 transform -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
@@ -463,16 +457,17 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                               ></path>
                             </svg>
-                            Connexion en cours...
+                            Inscription en cours...
                           </>
                         ) : (
                           <>
-                            Se connecter
+                  Se connecter
                             <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                           </>
                         )}
                       </span>
                     </button>
+
                   </form>
                 </motion.div>
               )}
@@ -860,12 +855,12 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                     <button
                       type="submit"
                       disabled={isSubmitting || !!passwordError || !!dateError}
-                            className={cn(
-                                        "w-full relative overflow-hidden group",
-                                        "bg-gradient-to-r from-[#485aa8] to-[#485aa8] hover:from-[#485aa8] hover:to-[#485aa8]",
-                                        "h-11 px-6 rounded-lg text-white font-medium transition-all duration-300 shadow-md hover:shadow-lg",
-                                        "disabled:opacity-70 disabled:cursor-not-allowed disabled:shadow-none",
-                                            )}
+                      className={cn(
+                        "w-full relative overflow-hidden group",
+                        "bg-gradient-to-r from-[#485aa8] to-[#485aa8] hover:from-[#485aa8] hover:to-[#485aa8]",
+                        "h-11 px-6 rounded-lg text-white font-medium transition-all duration-300 shadow-md hover:shadow-lg",
+                        "disabled:opacity-70 disabled:cursor-not-allowed disabled:shadow-none",
+                      )}
                     >
                       {/* Effet de brillance au survol */}
                       <span className="absolute top-0 left-0 w-full h-full bg-white/20 transform -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
@@ -913,4 +908,4 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
       </CustomDialogContent>
     </>
   )
-} 
+}

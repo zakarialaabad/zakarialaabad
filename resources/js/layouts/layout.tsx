@@ -2,27 +2,30 @@ import React, { ReactNode } from "react";
 import { Link } from "@inertiajs/react";
 import img from "./img/E-JAR.jpg";
 import { Header } from "@/components/header";
+import { BrowserRouter as Router } from 'react-router-dom';
+
 import { Footer } from "@/components/footer";
 import { MobileNavigation } from "@/components/mobile-navigation";
 import { AuthProvider } from "@/contexts/auth-context";
 import { FavoritesProvider } from "@/contexts/favorites-context";
 type LayoutProps = {
     children: ReactNode;
+    
   };
- export default function Layout({ children }: LayoutProps){
-   return (
-    <main className="min-h-screen bg-white flex flex-col">
-
-    <AuthProvider>
-      <FavoritesProvider>
-        <Header />
-        {/* باقي المكونات */}
-      </FavoritesProvider>
-    </AuthProvider>
-
-        {children}
-        <Footer />
-        <MobileNavigation />
-</main>      
-  );
- }
+  export default function Layout({ children, layout = 'default' }: LayoutProps) {
+    console.log('Layout children:', children);
+    console.log('Layout layout:', layout);
+    return (
+      <main className="min-h-screen bg-white flex flex-col">
+        <AuthProvider>
+          <FavoritesProvider>
+            <Header />
+            {children}
+            <Footer />
+            <MobileNavigation />
+          </FavoritesProvider>
+        </AuthProvider>
+      </main>
+    );
+  }
+  

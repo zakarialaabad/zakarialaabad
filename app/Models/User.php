@@ -28,6 +28,8 @@ class User extends Authenticatable
         'genre',
         'photo', 
         'villeChoisie',
+        "social_type",
+        "social_id"
 
     ];
 

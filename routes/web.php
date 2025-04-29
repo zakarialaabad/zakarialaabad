@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-
+use App\Http\Controllers\SocialiteController;
 
 Route::get('/', function () {
     return Inertia::render('property/property-listings');
@@ -26,13 +26,26 @@ Route::get("/discussions",function(){
 Route::get("/notification",function(){
     return Inertia::render("not");
 });
-
+Route::get("/connexion",function(){
+    return Inertia::render("auth-modal");
+})->name('connexion');
 Route::get('/property/{id}', function ($id) {
     return Inertia::render('property/[id]/page', [
         'id' => $id,
         // يمكنك تمرير بيانات إضافية من قاعدة البيانات هنا
     ]);
 });
+Route::get("/devenir-hote",function(){
+    return Inertia::render("devenir-hote/page");
+});
+Route::get("/devenir-hote/verification",function(){
+    return Inertia::render("devenir-hote/verification/page");
+});
+Route::get("/devenir-hote/success",function(){
+    return Inertia::render("devenir-hote/success/page");
+});
+Route::get("auth/google",[SocialiteController::class,"redirectToGoogle"]);
+Route::get("auth/google/callback",[SocialiteController::class,"handleGoogleCallback"]);
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');

@@ -1,24 +1,23 @@
-"use client"
 
 import { Header } from "@/components/header"
 import { Button } from "@/components/ui/button"
 import { CheckCircle, ArrowRight } from "lucide-react"
-import Link from "next/link"
+import { Link } from "@inertiajs/react"
 import { motion } from "framer-motion"
 import { useAuth } from "@/contexts/auth-context"
-import { redirect } from "next/navigation"
+import { router } from '@inertiajs/react';
 
 export default function SuccessPage() {
   const { isAuthenticated } = useAuth()
 
   // Redirect if not authenticated
   if (!isAuthenticated) {
-    redirect("/devenir-hote")
+    router.visit('/devenir-hote');
+    return null
   }
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
-      <Header />
 
       <main className="flex-1 py-12 flex items-center justify-center">
         <div className="container mx-auto px-4 md:px-6 max-w-2xl">

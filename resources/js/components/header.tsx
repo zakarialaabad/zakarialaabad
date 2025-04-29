@@ -45,10 +45,10 @@ export function Header() {
       setShowAuthAlert(true)
     }
   }
-
   return (
     <>
-      <header className="sticky top-0 z-50 w-full border-b bg-white">
+  
+  <header className="sticky top-0 z-50 w-full border-b bg-white">
         <div className="container flex h-16 items-center justify-between px-4 md:px-6">
           <div className="flex items-center gap-4">
             <Logo />
@@ -204,7 +204,7 @@ export function Header() {
               // Bouton de connexion pour utilisateurs non connectés
               <Button
                 onClick={handleOpenAuthModal}
-                className="bg-primary hover:bg-primary/90 text-white rounded-full px-4 py-2 h-auto"
+                className="bg-[#485aa8] hover:bg-[#485aa8]/90 cursor-pointer  text-white rounded-full px-4 py-2 h-auto"
               >
                 <LogIn className="h-5 w-5 mr-2" />
                 <span>Connexion</span>

@@ -1,4 +1,3 @@
-"use client"
 
 import { useState } from "react"
 import { ArrowLeft, Bell, Calendar, MessageCircle, Info, Tag, CreditCard } from "lucide-react"
@@ -6,7 +5,7 @@ import { Header } from "@/components/header"
 import { StickyHeaderEffect } from "@/components/sticky-header-effect"
 import { useAuth } from "@/contexts/auth-context"
 import { Button } from "@/components/ui/button"
-import Link from "next/link"
+import { Link } from "@inertiajs/react"
 import { motion } from "framer-motion"
 
 export default function NotificationsPage() {
