@@ -24,25 +24,38 @@ export const PropertyCard = memo(function PropertyCard({
   area,
   owner,
   rating,
-}: Property){
+}: Property) {
   // Assurons-nous d'avoir au moins une image
   const propertyImages = images.length > 0 ? images : ["/placeholder.svg"]
   const { isAuthenticated } = useAuth()
   const { isFavorite, toggleFavorite } = useFavorites()
   const [showAuthAlert, setShowAuthAlert] = useState(false)
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
+  const [isHeartAnimating, setIsHeartAnimating] = useState(false)
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
 
     if (isAuthenticated) {
+      setIsHeartAnimating(true)
       toggleFavorite(id)
+      // Réinitialiser l'animation après un court délai
+      setTimeout(() => setIsHeartAnimating(false), 1000)
     } else {
       setShowAuthAlert(true)
     }
   }
 
   const isFav = isFavorite(id)
+
+  const heartVariants = {
+    initial: { scale: 1 },
+    animate: {
+      scale: [1, 1.3, 1],
+      transition: { duration: 0.5 },
+    },
+  }
 
   return (
     <>
@@ -70,11 +83,13 @@ export const PropertyCard = memo(function PropertyCard({
               className={`absolute right-3 top-3 z-20 h-9 w-9 rounded-full backdrop-blur-sm shadow-sm transition-all duration-300 ${
                 isFav
                   ? "bg-white/90 text-rose-500 hover:bg-white hover:text-rose-600 hover:scale-110"
-                  : "bg-white/90 text-gray-500 hover:text-rose-500 hover:scale-110"
+                  : "bg-white/90 text-gray-500 hover:text-gray-700 hover:bg-gray-100 hover:scale-110"
               }`}
               aria-label={isFav ? "Retirer des favoris" : "Ajouter aux favoris"}
             >
-              <Heart className={`h-5 w-5 ${isFav ? "fill-current" : ""}`} />
+              <motion.div variants={heartVariants} animate={isHeartAnimating ? "animate" : "initial"}>
+                <Heart className={`h-5 w-5 ${isFav ? "fill-current" : ""}`} />
+              </motion.div>
             </Button>
 
             <div className="absolute bottom-3 left-3 z-20 flex flex-wrap gap-1.5">
@@ -137,6 +152,8 @@ export const PropertyCard = memo(function PropertyCard({
         isOpen={showAuthAlert}
         onClose={() => setShowAuthAlert(false)}
         message="Vous devez être connecté pour ajouter ce logement à vos favoris."
+        onAutoClose={() => setIsAuthModalOpen(true)}
+        autoCloseDelay={3000}
       />
     </>
   )

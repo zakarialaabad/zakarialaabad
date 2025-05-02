@@ -1,7 +1,4 @@
-
 import { useEffect, useState } from "react"
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
 import { MobileNavigation } from "@/components/mobile-navigation"
 import { StickyHeaderEffect } from "@/components/sticky-header-effect"
 import { useFavorites } from "@/contexts/favorites-context"
@@ -9,11 +6,10 @@ import { useAuth } from "@/contexts/auth-context"
 import { PropertyCard } from "@/components/property-card"
 import type { Property } from "@/data/properties"
 import { allProperties } from "@/data/properties"
-import { Heart, ArrowLeft } from "lucide-react"
+import { Heart,ChevronLeft    } from "lucide-react"
 import { AuthModal } from "@/components/auth/auth-modal"
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
-
 export default function FavoritesPage() {
   const { favorites } = useFavorites()
   const { isAuthenticated } = useAuth()
@@ -42,19 +38,24 @@ export default function FavoritesPage() {
   }
 
   return (
-    <main className="min-h-screen bg-white flex flex-col">
-      <Header />
+    <main className="min-h-screen bg-white flex flex-col px-4 ">
+          <div className="container py-4 ">
+            <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3 }}>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="mb-4 flex items-center text-?gray-600  hover:text-gray-900 hover:bg-gray-100 transition-all duration-200 cursor-pointer"
+                onClick={() => window.history.back()}
+>
+                <ChevronLeft className="mr-1 h-4 w-4" />
+                Retour aux résultats
+              </Button>
+            </motion.div>
+          </div>
       <StickyHeaderEffect />
 
       <div className="container mx-auto px-4 py-8 flex-1">
         <div className="flex items-center mb-8">
-          <button
-            onClick={() => window.history.back()}
-            className="mr-3 p-2 rounded-full hover:bg-gray-100 transition-colors"
-            aria-label="Retour"
-          >
-            <ArrowLeft className="h-5 w-5 text-gray-600" />
-          </button>
           <Heart className="h-6 w-6 text-primary mr-3" />
           <h1 className="text-2xl font-bold text-gray-900">Mes Favoris</h1>
         </div>
@@ -106,7 +107,6 @@ export default function FavoritesPage() {
         )}
       </div>
 
-      <Footer />
       <MobileNavigation />
       <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
     </main>

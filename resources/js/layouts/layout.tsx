@@ -12,9 +12,8 @@ type LayoutProps = {
     children: ReactNode;
     
   };
-  export default function Layout({ children, layout = 'default' }: LayoutProps) {
+  export default function Layout({ children}: LayoutProps) {
     console.log('Layout children:', children);
-    console.log('Layout layout:', layout);
     return (
       <main className="min-h-screen bg-white flex flex-col">
         <AuthProvider>

@@ -9,7 +9,7 @@ Route::get('/', function () {
 });
 
 Route::get("/favoris",function(){
-    return Inertia::render("listFavorite");
+    return Inertia::render("favoris/page");
 });
 Route::get("/property ",function(){
     return Inertia::render("EDarProperty");
