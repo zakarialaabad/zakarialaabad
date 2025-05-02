@@ -1,4 +1,3 @@
-"use client"
 
 import { useState, useEffect, useRef } from "react"
 import { useWindowSize, isMobileView } from "@/utils/responsive-utils"
@@ -9,7 +8,7 @@ import { AnimatedCounter } from "./animated-counter"
 import { useAuth } from "@/contexts/auth-context"
 import { cn } from "@/lib/utils"
 
-export function Hero(): JSX.Element {
+export function Hero(){
   const { width } = useWindowSize()
   const isMobile = isMobileView(width)
   const [searchQuery, setSearchQuery] = useState("")
@@ -207,7 +206,7 @@ export function Hero(): JSX.Element {
                   className="w-full py-3 px-6 rounded-full"
                 >
                   <motion.h1
-                    className="text-3xl font-bold tracking-tighter text-primary sm:text-4xl md:text-5xl"
+                    className="text-3xl font-bold tracking-tighter text-[#485aa8] sm:text-4xl md:text-5xl"
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.5 }}
@@ -244,7 +243,7 @@ export function Hero(): JSX.Element {
                       <div key={index} className="flex flex-col items-center">
                         <div className="flex items-center gap-1.5 mb-1">
                           {stat.icon}
-                          <span className="text-lg md:text-xl font-bold text-primary">
+                          <span className="text-lg md:text-xl font-bold text-[#485aa8]">
                             <AnimatedCounter value={stat.value} suffix={stat.suffix} />
                           </span>
                         </div>

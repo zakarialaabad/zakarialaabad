@@ -10,6 +10,8 @@ import { Heart,ChevronLeft    } from "lucide-react"
 import { AuthModal } from "@/components/auth/auth-modal"
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
+import { Header } from "@/components/header"
+import { Footer } from "@/components/footer"
 export default function FavoritesPage() {
   const { favorites } = useFavorites()
   const { isAuthenticated } = useAuth()
@@ -39,6 +41,7 @@ export default function FavoritesPage() {
 
   return (
     <main className="min-h-screen bg-white flex flex-col px-4 ">
+    <Header/>
           <div className="container py-4 ">
             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3 }}>
               <Button
@@ -106,7 +109,7 @@ export default function FavoritesPage() {
           </div>
         )}
       </div>
-
+  <Footer/>
       <MobileNavigation />
       <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
     </main>

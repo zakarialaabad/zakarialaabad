@@ -7,6 +7,8 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { Footer } from "@/components/footer";
 import { MobileNavigation } from "@/components/mobile-navigation";
 import { AuthProvider } from "@/contexts/auth-context";
+import { NotificationsProvider } from "@/contexts/notifications-context";
+
 import { FavoritesProvider } from "@/contexts/favorites-context";
 type LayoutProps = {
     children: ReactNode;
@@ -18,8 +20,12 @@ type LayoutProps = {
       <main className="min-h-screen bg-white flex flex-col">
         <AuthProvider>
           <FavoritesProvider>
+            
             <Header />
-            {children}
+            <NotificationsProvider>
+          {children}     
+            </NotificationsProvider>
+           
             <Footer />
             <MobileNavigation />
           </FavoritesProvider>

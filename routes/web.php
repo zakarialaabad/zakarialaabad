@@ -5,15 +5,13 @@ use Inertia\Inertia;
 use App\Http\Controllers\SocialiteController;
 
 Route::get('/', function () {
-    return Inertia::render('property/property-listings');
+    return Inertia::render('app/property/page');
 });
 
 Route::get("/favoris",function(){
-    return Inertia::render("favoris/page");
+    return Inertia::render("app/favoris/page");
 });
-Route::get("/property ",function(){
-    return Inertia::render("EDarProperty");
-});
+
 Route::get("/profil",function(){
     return Inertia::render("Profil");
 });
@@ -30,19 +28,19 @@ Route::get("/connexion",function(){
     return Inertia::render("auth-modal");
 })->name('connexion');
 Route::get('/property/{id}', function ($id) {
-    return Inertia::render('property/[id]/page', [
+    return Inertia::render('app/property/[id]/page', [
         'id' => $id,
         // يمكنك تمرير بيانات إضافية من قاعدة البيانات هنا
     ]);
 });
 Route::get("/devenir-hote",function(){
-    return Inertia::render("devenir-hote/page");
+    return Inertia::render("app/devenir-hote/page");
 });
 Route::get("/devenir-hote/verification",function(){
-    return Inertia::render("devenir-hote/verification/page");
+    return Inertia::render("app/devenir-hote/verification/page");
 });
 Route::get("/devenir-hote/success",function(){
-    return Inertia::render("devenir-hote/success/page");
+    return Inertia::render("app/devenir-hote/success/page");
 });
 Route::get("auth/google",[SocialiteController::class,"redirectToGoogle"]);
 Route::get("auth/google/callback",[SocialiteController::class,"handleGoogleCallback"]);

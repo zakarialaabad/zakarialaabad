@@ -1,4 +1,3 @@
-"use client"
 
 import { useState, useEffect } from "react"
 import { MapPin, Star, Heart, Share2, ChevronLeft, Info } from "lucide-react"
@@ -11,7 +10,8 @@ import { PropertyReservationForm } from "@/components/property-reservation-form"
 import { PropertyGallery } from "@/components/property-gallery"
 import { PropertyOwner } from "@/components/property-owner"
 import { motion, AnimatePresence } from "framer-motion"
-import { router } from '@inertiajs/react';
+import { Header } from "@/components/header"
+import { Footer } from "@/components/footer"
 export default function PropertyDetails() {
   const [isFavorite, setIsFavorite] = useState(false)
   const [isLoaded, setIsLoaded] = useState(false)
@@ -114,6 +114,7 @@ export default function PropertyDetails() {
 
   return (
     <AnimatePresence>
+    <Header/>
       {isLoaded && (
         <motion.main
           initial={{ opacity: 0 }}
@@ -308,6 +309,7 @@ export default function PropertyDetails() {
           </motion.div>
         </motion.main>
       )}
+      <Footer/>
     </AnimatePresence>
   )
 }

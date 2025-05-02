@@ -15,7 +15,6 @@ createInertiaApp({
     resolve: async (name) => {
         const pages = import.meta.glob('./pages/**/*.tsx');
         const page = await resolvePageComponent(`./pages/${name}.tsx`, pages);
-
         // 🟢 إضافة Layout افتراضي إذا الصفحة ما حددت Layout خاص
         // حل الخطأ: تعريف نوع page بشكل صريح
     const typedPage = page as { default: any };
