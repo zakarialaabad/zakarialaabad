@@ -18,7 +18,7 @@ return new class extends Migration
             $table->json('imgs'); // تخزين الصور كمصفوفة JSON
             $table->text('description')->nullable();
             $table->boolean('disponibilite')->default(true);
-            $table->enum('type', ['Appartement', 'Villa', 'Maison', 'Studio', 'Bureau', 'Magasin', 'Entrepôt', 'Centre Commercial']);
+            $table->enum('type', ['Appartement', 'Villa', 'Maison', 'Studio', 'Bureau', 'Magasin', 'Dépôt', 'Garage',"Boutique"]);
             $table->text('caracteristiques')->nullable();
             $table->string('condition')->nullable();
             $table->string('adresse');

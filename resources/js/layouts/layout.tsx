@@ -1,36 +1,29 @@
-import React, { ReactNode } from "react";
-import { Link } from "@inertiajs/react";
-import img from "./img/E-JAR.jpg";
-import { Header } from "@/components/header";
-import { BrowserRouter as Router } from 'react-router-dom';
+import React,{ReactNode} from "react"
+import { ThemeProvider } from "next-themes"
+import { AuthProvider } from "@/contexts/auth-context"
+import { FavoritesProvider } from "@/contexts/favorites-context"
+import { NotificationsProvider } from "@/contexts/notifications-context"
 
-import { Footer } from "@/components/footer";
-import { MobileNavigation } from "@/components/mobile-navigation";
-import { AuthProvider } from "@/contexts/auth-context";
-import { NotificationsProvider } from "@/contexts/notifications-context";
-
-import { FavoritesProvider } from "@/contexts/favorites-context";
+// إذا كنت تستخدم Google Fonts عبر npm أو CDN، يمكن استيراد الخط هنا
+// أو عبر <link> في public/index.html
+// مثال باستخدام className: "inter-font" بعد تعريفها في CSS
 type LayoutProps = {
     children: ReactNode;
-    
   };
-  export default function Layout({ children}: LayoutProps) {
-    console.log('Layout children:', children);
-    return (
-      <main className="min-h-screen bg-white flex flex-col">
+function App({ children}:LayoutProps) {
+  return (
+    <div lang="fr" className="inter-font">
+      <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
         <AuthProvider>
           <FavoritesProvider>
-            
-            <Header />
             <NotificationsProvider>
-          {children}     
+              {children}
             </NotificationsProvider>
-           
-            <Footer />
-            <MobileNavigation />
           </FavoritesProvider>
         </AuthProvider>
-      </main>
-    );
-  }
-  
+      </ThemeProvider>
+    </div>
+  )
+}
+
+export default App

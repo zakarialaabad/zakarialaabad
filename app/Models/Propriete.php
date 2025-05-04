@@ -24,5 +24,7 @@ class Propriete extends Model
     {
         return $this->belongsTo(Admin::class);
     }
-
+    public function commodite(){
+        return $this->hasMany(Commodite::class);
+    }
 }

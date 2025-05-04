@@ -23,10 +23,10 @@ class PackSeeder extends Seeder
                 $cinqconstraint=Caracteristique::create(['constraint' => "Notre agence gère votre logement"]);
                 $sixconstraint=Caracteristique::create(['constraint' => 'Assurance E-JAR']);
                 // إنشاء الباقات وربطها بالقيود
+  
                 $premium = Pake::create(['name' => 'Pack Premium', 'prix' => 0]);
                 $basique = Pake::create(['name' => 'Pack Basique', 'prix' => 200]);
                 $standard = Pake::create(['name' => 'Pack Standard', 'prix' => 300]);
-        
                 // ربط الباقات بالقيود
                 $premium->caracteristiques()->attach([$Preconstraint->id,$deuconstraint->id]);
                 $basique->caracteristiques()->attach([$Preconstraint->id,$deuconstraint->id, $trconstraint->id]);
