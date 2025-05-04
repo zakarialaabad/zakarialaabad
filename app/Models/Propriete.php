@@ -27,4 +27,7 @@ class Propriete extends Model
     public function commodite(){
         return $this->hasMany(Commodite::class);
     }
+    public function loueur(){
+        return $this->belongsTo(Loueur::class);
+    }
 }

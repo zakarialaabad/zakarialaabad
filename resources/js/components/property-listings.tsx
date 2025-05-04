@@ -13,8 +13,24 @@ import type { SearchFilters } from "./search-filters"
 import { generateText, openai } from "@/lib/openai"
 import { HorizontalFilterBar } from "@/components/horizontal-filter-bar"
 import { allProperties } from "@/data/properties" // Importation depuis le fichier séparé
-
-export function PropertyListings() {
+type Propriete = {
+  id: number;
+  loueur_id:number,
+  titre:string;
+  localisation:string;
+  prixParMois:number;
+  imgs: string[]; // ✅ مصفوفة من الروابط أو أسماء الصور
+  description:Text,
+  disponibilite:boolean,
+  type:string,
+  adresse:string,
+  admin_id:number
+  // أضف أي خصائص أخرى حسب حاجتك
+};
+type HomeProps = {
+  proprietes: Propriete[];
+};
+export function PropertyListings({proprietes}:HomeProps) {
   const isMobile = useMediaQuery("(max-width: 768px)")
   const [currentPage, setCurrentPage] = useState(1)
   const [gridView, setGridView] = useState<"grid3" | "grid2">("grid3")
@@ -700,7 +716,7 @@ export function PropertyListings() {
                   gridView === "grid3" ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1 md:grid-cols-2",
                 )}
               >
-                {currentProperties.map((property, index) => (
+                {proprietes.map((property, index) => (
                   <motion.div
                     key={property.id}
                     initial={{ opacity: 0, y: 20 }}

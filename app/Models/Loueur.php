@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Loueur extends Model
 {
-        protected $fillable = ['user_id'];
+        protected $fillable = ["id",'user_id'];
     //
     public function user()
     {
@@ -15,5 +15,8 @@ class Loueur extends Model
     public function Notations()
     {
         return $this->hasMany(Notation::class);
+    }
+    public function proprietes(){
+        return $this->belongsTo(Propriete::class);
     }
 }

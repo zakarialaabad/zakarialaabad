@@ -5,25 +5,32 @@ import { createContext, useContext, useState, useEffect } from "react"
 import { useAuth } from "@/contexts/auth-context"
 
 interface FavoritesContextType {
-  favorites: string[]
-  addFavorite: (propertyId: string) => void
-  removeFavorite: (propertyId: string) => void
-  isFavorite: (propertyId: string) => boolean
-  toggleFavorite: (propertyId: string) => void
+  favorites: number[]
+  addFavorite: (propertyId: number) => void
+  removeFavorite: (propertyId: number) => void
+  isFavorite: (propertyId: number) => boolean
+  toggleFavorite: (propertyId: number) => void
 }
 
 const FavoritesContext = createContext<FavoritesContextType | undefined>(undefined)
 
 export function FavoritesProvider({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuth()
-  const [favorites, setFavorites] = useState<string[]>([])
+  const [favorites, setFavorites] = useState<number[]>([])
 
   // Charger les favoris depuis le localStorage au démarrage
   useEffect(() => {
     if (isAuthenticated) {
-      const savedFavorites = localStorage.getItem("favorites")
-      if (savedFavorites) {
-        setFavorites(JSON.parse(savedFavorites))
+      const storedFavorites = localStorage.getItem("favorites")
+      if (storedFavorites) {
+        try {
+          const parsed = JSON.parse(storedFavorites)
+          if (Array.isArray(parsed)) {
+            setFavorites(parsed.map((id: any) => Number(id)))
+          }
+        } catch (error) {
+          console.error("Error parsing favorites from localStorage:", error)
+        }
       }
     } else {
       // Réinitialiser les favoris si l'utilisateur n'est pas connecté
@@ -38,21 +45,21 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
     }
   }, [favorites, isAuthenticated])
 
-  const addFavorite = (propertyId: string) => {
+  const addFavorite = (propertyId: number) => {
     if (!favorites.includes(propertyId)) {
       setFavorites((prev) => [...prev, propertyId])
     }
   }
 
-  const removeFavorite = (propertyId: string) => {
+  const removeFavorite = (propertyId: number) => {
     setFavorites((prev) => prev.filter((id) => id !== propertyId))
   }
 
-  const isFavorite = (propertyId: string) => {
+  const isFavorite = (propertyId: number) => {
     return favorites.includes(propertyId)
   }
 
-  const toggleFavorite = (propertyId: string) => {
+  const toggleFavorite = (propertyId: number) => {
     if (isFavorite(propertyId)) {
       removeFavorite(propertyId)
     } else {

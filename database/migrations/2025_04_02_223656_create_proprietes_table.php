@@ -6,7 +6,7 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     */
+    */
     public function up(): void
     {
         Schema::create('proprietes', function (Blueprint $table) {
@@ -19,7 +19,6 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->boolean('disponibilite')->default(true);
             $table->enum('type', ['Appartement', 'Villa', 'Maison', 'Studio', 'Bureau', 'Magasin', 'Dépôt', 'Garage',"Boutique"]);
-            $table->text('caracteristiques')->nullable();
             $table->string('condition')->nullable();
             $table->string('adresse');
             $table->unsignedBigInteger('admin_id')->nullable();

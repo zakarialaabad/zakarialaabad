@@ -35,7 +35,7 @@ public function getRandomImages($folderPath, $count = 5)
         $posts = [
             // Appartement
             [
-                'loueur_id' => 1,
+                'loueur_id' => rand(31, 60),
                 'titre' => 'Appartement moderne à Casablanca',
                 'localisation' => 'Casablanca, Hay Riad',
                 'prixParMois' => 6000,
@@ -45,10 +45,12 @@ public function getRandomImages($folderPath, $count = 5)
                 'type' => 'Appartement',
                 'condition' => 'Loyer mensuel de 6000 MAD, 1 mois de caution.',
                 'adresse' => 'Casablanca, Hay Riad, Rue Mohammed VI',
-                'admin_id' => 1
+                'admin_id' => 1,
+                'surface' => rand(40, 300), // أو حسب نوع العقار
+                'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
             ],
             [
-                'loueur_id' => 2,
+                'loueur_id' => rand(31, 60),
                 'titre' => 'Appartement de luxe à Marrakech',
                 'localisation' => 'Marrakech, Gueliz',
                 'prixParMois' => 12000,
@@ -58,10 +60,12 @@ public function getRandomImages($folderPath, $count = 5)
                 'type' => 'Appartement',
                 'condition' => 'Loyer mensuel de 12000 MAD, contrat de 1 an.',
                 'adresse' => 'Marrakech, Gueliz, Rue de la Liberté',
-                'admin_id' => 2
+                'admin_id' => 2,
+                'surface' => rand(40, 300), // أو حسب نوع العقار
+                'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
             ],
             [
-                'loueur_id' => 3,
+                'loueur_id' => rand(31, 60),
                 'titre' => 'Appartement au centre de Rabat',
                 'localisation' => 'Rabat, Centre-ville',
                 'prixParMois' => 4500,
@@ -71,10 +75,12 @@ public function getRandomImages($folderPath, $count = 5)
                 'type' => 'Appartement',
                 'condition' => 'Loyer mensuel de 4500 MAD, 1 mois de caution.',
                 'adresse' => 'Rabat, Centre-ville, Avenue Hassan II',
-                'admin_id' => 3
+                'admin_id' => 3,
+                'surface' => rand(40, 300), // أو حسب نوع العقار
+                'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
             ],
             [
-                'loueur_id' => 4,
+                'loueur_id' => rand(31, 60),
                 'titre' => 'Appartement à Tanger, plage',
                 'localisation' => 'Tanger, Plage',
                 'prixParMois' => 7000,
@@ -84,12 +90,14 @@ public function getRandomImages($folderPath, $count = 5)
                 'type' => 'Appartement',
                 'condition' => 'Loyer mensuel de 7000 MAD, 1 mois de caution.',
                 'adresse' => 'Tanger, Plage, Rue de la Mer',
-                'admin_id' => 4
+                'admin_id' => 4,
+                'surface' => rand(40, 300), // أو حسب نوع العقار
+                'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
             ],
 
             // Villa
             [
-                'loueur_id' => 5,
+                'loueur_id' => rand(31, 60),
                 'titre' => 'Villa de luxe à Marrakech',
                 'localisation' => 'Marrakech, Palmeraie',
                 'prixParMois' => 15000,
@@ -99,10 +107,12 @@ public function getRandomImages($folderPath, $count = 5)
                 'type' => 'Villa',
                 'condition' => 'Loyer mensuel de 15000 MAD, 2 mois de caution.',
                 'adresse' => 'Marrakech, Palmeraie, Route de l\'Ourika',
-                'admin_id' => 1
+                'admin_id' => 1,
+                'surface' => rand(40, 300), // أو حسب نوع العقار
+                'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
             ],
             [
-                'loueur_id' => 6,
+                'loueur_id' => rand(31, 60),
                 'titre' => 'Villa avec jardin à Fès',
                 'localisation' => 'Fès, Ville Nouvelle',
                 'prixParMois' => 12000,
@@ -112,10 +122,12 @@ public function getRandomImages($folderPath, $count = 5)
                 'type' => 'Villa',
                 'condition' => 'Loyer mensuel de 12000 MAD, contrat de 1 an.',
                 'adresse' => 'Fès, Ville Nouvelle, Rue des Roses',
-                'admin_id' => 2
+                'admin_id' => 2,
+                'surface' => rand(40, 300), // أو حسب نوع العقار
+                'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
             ],
             [
-                'loueur_id' => 7,
+                'loueur_id' => rand(31, 60),
                 'titre' => 'Villa avec piscine à Agadir',
                 'localisation' => 'Agadir, Tamraght',
                 'prixParMois' => 14000,
@@ -125,10 +137,12 @@ public function getRandomImages($folderPath, $count = 5)
                 'type' => 'Villa',
                 'condition' => 'Loyer mensuel de 14000 MAD, 1 mois de caution.',
                 'adresse' => 'Agadir, Tamraght, Avenue de la Plage',
-                'admin_id' => 3
+                'admin_id' => 3,
+                'surface' => rand(40, 300), // أو حسب نوع العقار
+                'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
             ],
             [
-                'loueur_id' => 8,
+                'loueur_id' => rand(31, 60),
                 'titre' => 'Villa moderne à Essaouira',
                 'localisation' => 'Essaouira, Centre-ville',
                 'prixParMois' => 10000,
@@ -138,12 +152,14 @@ public function getRandomImages($folderPath, $count = 5)
                 'type' => 'Villa',
                 'condition' => 'Loyer mensuel de 10000 MAD, 1 mois de caution.',
                 'adresse' => 'Essaouira, Centre-ville, Rue des Mouettes',
-                'admin_id' => 4
+                'admin_id' => 4,
+                'surface' => rand(40, 300), // أو حسب نوع العقار
+                'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
             ],
 
             // Bureau
             [
-                'loueur_id' => 9,
+                'loueur_id' => rand(31, 60),
                 'titre' => 'Bureau moderne à Rabat, centre-ville',
                 'localisation' => 'Rabat, Agdal',
                 'prixParMois' => 8000,
@@ -153,10 +169,12 @@ public function getRandomImages($folderPath, $count = 5)
                 'type' => 'Bureau',
                 'condition' => 'Loyer mensuel de 8000 MAD, dépôt de garantie de 1 mois.',
                 'adresse' => 'Rabat, Agdal, Avenue Mohammed V',
-                'admin_id' => 5
+                'admin_id' => 5,
+                'surface' => rand(40, 300), // أو حسب نوع العقار
+                'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
             ],
             [
-                'loueur_id' => 10,
+                'loueur_id' => rand(31, 60),
                 'titre' => 'Bureau spacieux à Casablanca, Maarif',
                 'localisation' => 'Casablanca, Maarif',
                 'prixParMois' => 10000,
@@ -166,10 +184,12 @@ public function getRandomImages($folderPath, $count = 5)
                 'type' => 'Bureau',
                 'condition' => 'Loyer mensuel de 10000 MAD, 1 mois de caution.',
                 'adresse' => 'Casablanca, Maarif, Rue Al Massira',
-                'admin_id' => 6
+                'admin_id' => 6,
+                'surface' => rand(40, 300), // أو حسب نوع العقار
+                'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
             ],
             [
-                'loueur_id' => 11,
+                'loueur_id' => rand(31, 60),
                 'titre' => 'Bureau à Tanger, centre commercial',
                 'localisation' => 'Tanger, Centre-ville',
                 'prixParMois' => 12000,
@@ -179,10 +199,12 @@ public function getRandomImages($folderPath, $count = 5)
                 'type' => 'Bureau',
                 'condition' => 'Loyer mensuel de 12000 MAD, dépôt de garantie.',
                 'adresse' => 'Tanger, Centre-ville, Boulevard Mohamed V',
-                'admin_id' => 7
+                'admin_id' => 7,
+                'surface' => rand(40, 300), // أو حسب نوع العقار
+                'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
             ],
             [
-                'loueur_id' => 12,
+                'loueur_id' => rand(31, 60),
                 'titre' => 'Bureau à Marrakech, Hivernage',
                 'localisation' => 'Marrakech, Hivernage',
                 'prixParMois' => 15000,
@@ -192,12 +214,14 @@ public function getRandomImages($folderPath, $count = 5)
                 'type' => 'Bureau',
                 'condition' => 'Loyer mensuel de 15000 MAD, contrat de 1 an.',
                 'adresse' => 'Marrakech, Hivernage, Avenue Mohammed VI',
-                'admin_id' => 8
+                'admin_id' => 8,
+                'surface' => rand(40, 300), // أو حسب نوع العقار
+                'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
             ],
             
             // Magasin
             [
-                'loueur_id' => 14,
+                'loueur_id' => rand(31, 60),
                 'titre' => 'Magasin commercial à Tanger',
                 'localisation' => 'Tanger, Centre-ville',
                 'prixParMois' => 10000,
@@ -207,11 +231,13 @@ public function getRandomImages($folderPath, $count = 5)
                 'type' => 'Magasin',
                 'condition' => 'Loyer mensuel de 10000 MAD, 1 mois de caution.',
                 'adresse' => 'Tanger, Centre-ville, Rue Hassan II',
-                'admin_id' => 2
+                'admin_id' => 2,
+                'surface' => rand(40, 300), // أو حسب نوع العقار
+                'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
             ],
             // Entrepôt
             [
-                'loueur_id' => 15,
+                'loueur_id' => rand(31, 60),
                 'titre' => 'Dépôt à Casablanca, zone industrielle',
                 'localisation' => 'Casablanca, Zone Industrielle',
                 'prixParMois' => 25000,
@@ -221,11 +247,13 @@ public function getRandomImages($folderPath, $count = 5)
                 'type' => 'Dépôt',
                 'condition' => 'Loyer mensuel de 25000 MAD, 2 mois de caution.',
                 'adresse' => 'Casablanca, Zone Industrielle, Rue des Usines',
-                'admin_id' => 3
+                'admin_id' => 3,
+                'surface' => rand(40, 300), // أو حسب نوع العقار
+                'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
             ],
             //Boutique
             [
-                'loueur_id' => 16,
+                'loueur_id' => rand(31, 60),
                 'titre' => 'Boutique à Marrakech',
                 'localisation' => 'Marrakech, Hivernage',
                 'prixParMois' => 50000,
@@ -235,456 +263,250 @@ public function getRandomImages($folderPath, $count = 5)
                 'type' => 'Boutique',
                 'condition' => 'Loyer mensuel de 50000 MAD, 3 mois de caution.',
                 'adresse' => 'Marrakech, Hivernage, Avenue Mohammed VI',
-                'admin_id' => 3
+                'admin_id' => 3,
+                'surface' => rand(40, 300), // أو حسب نوع العقار
+                'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
             ],
             [
-                'loueur_id' => 5, 
-                'titre' => 'Bureau à Casablanca, Quartier des affaires', 
-                'localisation' => 'Casablanca, Quartier des affaires', 
-                'prixParMois' => 12000, 
-                'imgs' => json_encode($this->getRandomImages('Bureau')), 
-                'description' => 'Bureau moderne de 80 m² dans le quartier des affaires de Casablanca, idéal pour une startup ou une entreprise de services.', 
-                'disponibilite' => true, 
-                'type' => 'Bureau', 
-                'condition' => 'Loyer mensuel de 12000 MAD, 1 mois de caution.', 
-                'adresse' => 'Casablanca, Quartier des affaires', 
-                'admin_id' => 2
+                'loueur_id' => rand(31, 60),
+                'titre' => 'Boutique  à Casablanca, Maarif',
+                'localisation' => 'Casablanca, Maarif',
+                'prixParMois' => 70000,
+                'imgs' =>json_encode($this->getRandomImages('Boutique')),
+                'description' => 'Boutique  moderne de 3000 m² dans le quartier Maarif à Casablanca. Parfait pour des enseignes internationales.',
+                'disponibilite' => true,
+                'type' => 'Boutique ',
+                'condition' => 'Loyer mensuel de 70000 MAD, 3 mois de caution.',
+                'adresse' => 'Casablanca, Maarif',
+                'admin_id' => 2,
+                'surface' => rand(40, 300), // أو حسب نوع العقار
+                'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
             ],
-            
             [
-                'loueur_id' => 5, 
-                'titre' => 'Bureau à Rabat, Centre-ville', 
-                'localisation' => 'Rabat, Centre-ville', 
-                'prixParMois' => 15000, 
-                'imgs' => json_encode($this->getRandomImages('Bureau')), 
-                'description' => 'Bureau de 100 m² situé dans le centre-ville de Rabat, parfait pour des entreprises ayant besoin de visibilité et de proximité avec les administrations.', 
-                'disponibilite' => true, 
-                'type' => 'Bureau', 
-                'condition' => 'Loyer mensuel de 15000 MAD, 1 mois de caution.', 
-                'adresse' => 'Rabat, Centre-ville', 
-                'admin_id' => 3
+                'loueur_id' => rand(31, 60),
+                'titre' => 'Boutique  à Rabat, Agdal',
+                'localisation' => 'Rabat, Agdal',
+                'prixParMois' => 80000,
+                'imgs' =>json_encode($this->getRandomImages('Boutique')),
+                'description' => 'Boutique  haut de gamme à Agdal, Rabat, avec des espaces de luxe et de nombreuses marques internationales.',
+                'disponibilite' => true,
+                'type' => 'Boutique ',
+                'condition' => 'Loyer mensuel de 80000 MAD, 3 mois de caution.',
+                'adresse' => 'Rabat, Agdal, Avenue Mohammed V',
+                'admin_id' => 1,
+                'surface' => rand(40, 300), // أو حسب نوع العقار
+                'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
             ],
-            
             [
-                'loueur_id' => 5, 
-                'titre' => 'Bureau à Marrakech, Zone Industrielle', 
-                'localisation' => 'Marrakech, Zone Industrielle', 
-                'prixParMois' => 20000, 
-                'imgs' => json_encode($this->getRandomImages('Bureau')), 
-                'description' => 'Bureau spacieux de 150 m² dans la zone industrielle de Marrakech, avec des accès pour camions et un entrepôt adjacent.', 
-                'disponibilite' => true, 
-                'type' => 'Bureau', 
-                'condition' => 'Loyer mensuel de 20000 MAD, 2 mois de caution.', 
-                'adresse' => 'Marrakech, Zone Industrielle', 
-                'admin_id' => 2
-            ],
-            
-            [
-                'loueur_id' => 5, 
-                'titre' => 'Bureau à Fès, Quartier El Jdid', 
-                'localisation' => 'Fès, El Jdid', 
-                'prixParMois' => 8000, 
-                'imgs' => json_encode($this->getRandomImages('Bureau')), 
-                'description' => 'Bureau de 60 m² dans le quartier El Jdid de Fès, adapté pour un petit cabinet ou un bureau administratif.', 
-                'disponibilite' => true, 
-                'type' => 'Bureau', 
-                'condition' => 'Loyer mensuel de 8000 MAD, 1 mois de caution.', 
-                'adresse' => 'Fès, El Jdid', 
-                'admin_id' => 1
+                'loueur_id' => rand(31, 60),
+                'titre' => 'Boutique  à Tanger, Zone touristique',
+                'localisation' => 'Tanger, Zone Touristique',
+                'prixParMois' => 60000,
+                'imgs' => json_encode($this->getRandomImages('Boutique')),
+                'description' => 'Boutique  de 1500 m², parfait pour les marques de luxe et les grandes enseignes touristiques.',
+                'disponibilite' => true,
+                'type' => 'Boutique ',
+                'condition' => 'Loyer mensuel de 60000 MAD, 3 mois de caution.',
+                'adresse' => 'Tanger, Zone Touristique',
+                'admin_id' => 3,
+                'surface' => rand(40, 300), // أو حسب نوع العقار
+                'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
             ]
 ,
 [
-    'loueur_id' => 4, 
-    'titre' => 'Magasin commercial à Tanger', 
-    'localisation' => 'Tanger, Centre-ville', 
-    'prixParMois' => 10000, 
-    'imgs' => json_encode($this->getRandomImages('Magasin')), 
-    'description' => 'Magasin de 120 m² en plein centre de Tanger, idéal pour un commerce ou une boutique. L\'emplacement est stratégique avec une forte affluence.', 
-    'disponibilite' => true, 
-    'type' => 'Magasin', 
-    'condition' => 'Loyer mensuel de 10000 MAD, 1 mois de caution.', 
-    'adresse' => 'Tanger, Centre-ville, Rue Hassan II', 
-    'admin_id' => 2
-],
-
-[
-    'loueur_id' => 4, 
-    'titre' => 'Magasin à Casablanca, Rue Mohammed V', 
-    'localisation' => 'Casablanca, Centre-ville', 
-    'prixParMois' => 15000, 
-    'imgs' => json_encode($this->getRandomImages('Magasin')), 
-    'description' => 'Magasin spacieux de 150 m² dans le centre de Casablanca, idéal pour une boutique de mode ou de téléphonie. Emplacement avec beaucoup de passage.', 
-    'disponibilite' => true, 
-    'type' => 'Magasin', 
-    'condition' => 'Loyer mensuel de 15000 MAD, 2 mois de caution.', 
-    'adresse' => 'Casablanca, Rue Mohammed V', 
-    'admin_id' => 3
-],
-
-[
-    'loueur_id' => 4, 
-    'titre' => 'Magasin à Marrakech, Avenue Mohammed VI', 
-    'localisation' => 'Marrakech, Guéliz', 
-    'prixParMois' => 12000, 
-    'imgs' => json_encode($this->getRandomImages('Magasin')), 
-    'description' => 'Magasin de 80 m² situé dans le quartier Guéliz de Marrakech, parfait pour un commerce de détail ou un café. La zone est très fréquentée par les touristes.', 
-    'disponibilite' => true, 
-    'type' => 'Magasin', 
-    'condition' => 'Loyer mensuel de 12000 MAD, 1 mois de caution.', 
-    'adresse' => 'Marrakech, Avenue Mohammed VI', 
-    'admin_id' => 2
-],
-
-[
-    'loueur_id' => 4, 
-    'titre' => 'Magasin de luxe à Rabat', 
-    'localisation' => 'Rabat, Agdal', 
-    'prixParMois' => 25000, 
-    'imgs' =>json_encode($this->getRandomImages('Magasin')), 
-    'description' => 'Magasin de 200 m² situé dans un quartier commerçant d\'Agdal à Rabat. Idéal pour une marque de luxe avec de nombreuses boutiques et restaurants autour.', 
-    'disponibilite' => true, 
-    'type' => 'Magasin', 
-    'condition' => 'Loyer mensuel de 25000 MAD, 2 mois de caution.', 
-    'adresse' => 'Rabat, Agdal', 
-    'admin_id' => 1
-]
-,
-[
-    'loueur_id' => 5, 
-    'titre' => 'Bureau à Casablanca, Quartier des affaires', 
-    'localisation' => 'Casablanca, Quartier des affaires', 
-    'prixParMois' => 12000, 
-    'imgs' => json_encode($this->getRandomImages('Bureau')), 
-    'description' => 'Bureau moderne de 80 m² dans le quartier des affaires de Casablanca, idéal pour une startup ou une entreprise de services.', 
-    'disponibilite' => true, 
-    'type' => 'Bureau', 
-    'condition' => 'Loyer mensuel de 12000 MAD, 1 mois de caution.', 
-    'adresse' => 'Casablanca, Quartier des affaires', 
-    'admin_id' => 2
-],
-
-[
-    'loueur_id' => 5, 
-    'titre' => 'Bureau à Rabat, Centre-ville', 
-    'localisation' => 'Rabat, Centre-ville', 
-    'prixParMois' => 15000, 
-    'imgs' =>json_encode($this->getRandomImages('Bureau')), 
-    'description' => 'Bureau de 100 m² situé dans le centre-ville de Rabat, parfait pour des entreprises ayant besoin de visibilité et de proximité avec les administrations.', 
-    'disponibilite' => true, 
-    'type' => 'Bureau', 
-    'condition' => 'Loyer mensuel de 15000 MAD, 1 mois de caution.', 
-    'adresse' => 'Rabat, Centre-ville', 
-    'admin_id' => 3
-],
-
-[
-    'loueur_id' => 5, 
-    'titre' => 'Bureau à Marrakech, Zone Industrielle', 
-    'localisation' => 'Marrakech, Zone Industrielle', 
-    'prixParMois' => 20000, 
-    'imgs' => json_encode($this->getRandomImages('Bureau')), 
-    'description' => 'Bureau spacieux de 150 m² dans la zone industrielle de Marrakech, avec des accès pour camions et un entrepôt adjacent.', 
-    'disponibilite' => true, 
-    'type' => 'Bureau', 
-    'condition' => 'Loyer mensuel de 20000 MAD, 2 mois de caution.', 
-    'adresse' => 'Marrakech, Zone Industrielle', 
-    'admin_id' => 2
-],
-
-[
-    'loueur_id' => 5, 
-    'titre' => 'Bureau à Fès, Quartier El Jdid', 
-    'localisation' => 'Fès, El Jdid', 
-    'prixParMois' => 8000, 
-    'imgs' => json_encode($this->getRandomImages('Bureau')), 
-    'description' => 'Bureau de 60 m² dans le quartier El Jdid de Fès, adapté pour un petit cabinet ou un bureau administratif.', 
-    'disponibilite' => true, 
-    'type' => 'Bureau', 
-    'condition' => 'Loyer mensuel de 8000 MAD, 1 mois de caution.', 
-    'adresse' => 'Fès, El Jdid', 
-    'admin_id' => 1
-],
-[
-    'loueur_id' => 6, 
-    'titre' => 'Dépôt à Casablanca, Zone Industrielle', 
-    'localisation' => 'Casablanca, Zone Industrielle', 
-    'prixParMois' => 25000, 
-    'imgs' => json_encode($this->getRandomImages('Depot')), 
-    'description' => 'Dépôt spacieux de 500 m² situé dans la zone industrielle de Casablanca. Il est bien ventilé et facilement accessible aux poids lourds.', 
-    'disponibilite' => true, 
-    'type' => 'Dépôt', 
-    'condition' => 'Loyer mensuel de 25000 MAD, 2 mois de caution.', 
-    'adresse' => 'Casablanca, Zone Industrielle, Rue des Usines', 
-    'admin_id' => 3
-],
-
-[
-    'loueur_id' => 6, 
-    'titre' => 'Dépôt à Agadir, Zone industrielle', 
-    'localisation' => 'Agadir, Zone Industrielle', 
-    'prixParMois' => 22000, 
-    'imgs' =>  json_encode($this->getRandomImages('Depot')), 
-    'description' => 'Dépôt de 600 m² dans une zone industrielle d\'Agadir, avec un accès direct à la route principale et à la voie ferrée.', 
-    'disponibilite' => true, 
-    'type' => 'Dépôt', 
-    'condition' => 'Loyer mensuel de 22000 MAD, 1 mois de caution.', 
-    'adresse' => 'Agadir, Zone Industrielle', 
-    'admin_id' => 2
-],
-
-[
-    'loueur_id' => 6, 
-    'titre' => 'Dépôt à Tanger, Port de Tanger', 
-    'localisation' => 'Tanger, Zone Portuaire', 
-    'prixParMois' => 30000, 
-    'imgs' =>  json_encode($this->getRandomImages('Depot')), 
-    'description' => 'Dépôt de 800 m² à proximité immédiate du port de Tanger, idéal pour les entreprises import/export.', 
-    'disponibilite' => true, 
-    'type' => 'Dépôt', 
-    'condition' => 'Loyer mensuel de 30000 MAD, 3 mois de caution.', 
-    'adresse' => 'Tanger, Zone Portuaire', 
-    'admin_id' => 3
-],
-
-[
-    'loueur_id' => 6, 
-    'titre' => 'Dépôt à Marrakech, Zone industrielle', 
-    'localisation' => 'Marrakech, Zone industrielle', 
-    'prixParMois' => 18000, 
-    'imgs' =>  json_encode($this->getRandomImages('Depot')), 
-    'description' => 'Dépôt de 400 m² dans la zone industrielle de Marrakech, adapté pour stockage et logistique.', 
-    'disponibilite' => true, 
-    'type' => 'Dépôt', 
-    'condition' => 'Loyer mensuel de 18000 MAD, 2 mois de caution.', 
-    'adresse' => 'Marrakech, Zone Industrielle', 
-    'admin_id' => 2
-]
-,[
-    'loueur_id' => 6, 
-    'titre' => 'Boutique  à Marrakech', 
-    'localisation' => 'Marrakech, Hivernage', 
-    'prixParMois' => 50000, 
-    'imgs' => json_encode($this->getRandomImages('Boutique')), 
-    'description' => 'Grand Boutique  de 400 m² situé à Hivernage, idéal pour les grandes enseignes et les marques de luxe. Il comprend plusieurs magasins, espaces de restauration et parkings.', 
-    'disponibilite' => true, 
-    'type' => 'Boutique', 
-    'condition' => 'Loyer mensuel de 50000 MAD, 3 mois de caution.', 
-    'adresse' => 'Marrakech, Hivernage, Avenue Mohammed VI', 
-    'admin_id' => 3
-],
-
-[
-    'loueur_id' => 6, 
-    'titre' => 'Boutique  à Casablanca, Maarif', 
-    'localisation' => 'Casablanca, Maarif', 
-    'prixParMois' => 70000, 
-    'imgs' =>json_encode($this->getRandomImages('Boutique')), 
-    'description' => 'Boutique  moderne de 3000 m² dans le quartier Maarif à Casablanca. Parfait pour des enseignes internationales.', 
-    'disponibilite' => true, 
-    'type' => 'Boutique ', 
-    'condition' => 'Loyer mensuel de 70000 MAD, 3 mois de caution.', 
-    'adresse' => 'Casablanca, Maarif', 
-    'admin_id' => 2
-],
-
-[
-    'loueur_id' => 6, 
-    'titre' => 'Boutique  à Rabat, Agdal', 
-    'localisation' => 'Rabat, Agdal', 
-    'prixParMois' => 80000, 
-    'imgs' =>json_encode($this->getRandomImages('Boutique')), 
-    'description' => 'Boutique  haut de gamme à Agdal, Rabat, avec des espaces de luxe et de nombreuses marques internationales.', 
-    'disponibilite' => true, 
-    'type' => 'Boutique ', 
-    'condition' => 'Loyer mensuel de 80000 MAD, 3 mois de caution.', 
-    'adresse' => 'Rabat, Agdal, Avenue Mohammed V', 
-    'admin_id' => 1
-],
-
-[
-    'loueur_id' => 6, 
-    'titre' => 'Boutique  à Tanger, Zone touristique', 
-    'localisation' => 'Tanger, Zone Touristique', 
-    'prixParMois' => 60000, 
-    'imgs' => json_encode($this->getRandomImages('Boutique')), 
-    'description' => 'Boutique  de 1500 m², parfait pour les marques de luxe et les grandes enseignes touristiques.', 
-    'disponibilite' => true, 
-    'type' => 'Boutique ', 
-    'condition' => 'Loyer mensuel de 60000 MAD, 3 mois de caution.', 
-    'adresse' => 'Tanger, Zone Touristique', 
-    'admin_id' => 3
-]
-,
-[
-    'loueur_id' => 4, 
-    'titre' => 'Appartement à Casablanca, Ain Diab', 
-    'localisation' => 'Casablanca, Ain Diab', 
-    'prixParMois' => 15000, 
-    'imgs' =>json_encode($this->getRandomImages('Appartement--Villa--Maison')), 
+    'loueur_id' => rand(31, 60),
+    'titre' => 'Appartement à Casablanca, Ain Diab',
+    'localisation' => 'Casablanca, Ain Diab',
+    'prixParMois' => 15000,
+    'imgs' =>json_encode($this->getRandomImages('Appartement--Villa--Maison')),
     'description' => "Appartement de 120 m² à Ain Diab, avec une vue magnifique sur l'océan, 3 chambres, salon spacieux, et une terrasse privée.",
-    'disponibilite' => true, 
-    'type' => 'Appartement', 
+    'disponibilite' => true,
+    'type' => 'Appartement',
     'condition' => 'Loyer mensuel de 15000 MAD, 2 mois de caution.',
     'adresse' => 'Casablanca, Ain Diab',
-    'admin_id' => 2
+    'admin_id' => 2,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ],
 
 [
-    'loueur_id' => 5, 
-    'titre' => 'Appartement à Marrakech, Gueliz', 
-    'localisation' => 'Marrakech, Gueliz', 
-    'prixParMois' => 10000, 
-    'imgs' =>json_encode($this->getRandomImages('Appartement--Villa--Maison')), 
+    'loueur_id' => rand(31, 60),
+    'titre' => 'Appartement à Marrakech, Gueliz',
+    'localisation' => 'Marrakech, Gueliz',
+    'prixParMois' => 10000,
+    'imgs' =>json_encode($this->getRandomImages('Appartement--Villa--Maison')),
     'description' => 'Appartement de 90 m² à Gueliz, à proximité des commerces et restaurants. Il comprend 2 chambres, 2 salles de bains et un balcon.',
-    'disponibilite' => true, 
-    'type' => 'Appartement', 
+    'disponibilite' => true,
+    'type' => 'Appartement',
     'condition' => 'Loyer mensuel de 10000 MAD, 1 mois de caution.',
     'adresse' => 'Marrakech, Gueliz',
-    'admin_id' => 1
+    'admin_id' => 1,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ],
 
 [
-    'loueur_id' => 7, 
-    'titre' => 'Appartement à Rabat, Hay Riad', 
-    'localisation' => 'Rabat, Hay Riad', 
-    'prixParMois' => 12000, 
-    'imgs' =>json_encode($this->getRandomImages('Appartement--Villa--Maison')), 
+    'loueur_id' => rand(31, 60),
+    'titre' => 'Appartement à Rabat, Hay Riad',
+    'localisation' => 'Rabat, Hay Riad',
+    'prixParMois' => 12000,
+    'imgs' =>json_encode($this->getRandomImages('Appartement--Villa--Maison')),
     'description' => 'Appartement de 110 m² dans le quartier calme de Hay Riad. Il offre 3 chambres, un salon lumineux, et une cuisine équipée.',
-    'disponibilite' => true, 
-    'type' => 'Appartement', 
+    'disponibilite' => true,
+    'type' => 'Appartement',
     'condition' => 'Loyer mensuel de 12000 MAD, 2 mois de caution.',
     'adresse' => 'Rabat, Hay Riad',
-    'admin_id' => 3
+    'admin_id' => 3,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ],
 
 [
-    'loueur_id' => 8, 
-    'titre' => 'Appartement à Tanger, Centre Ville', 
-    'localisation' => 'Tanger, Centre Ville', 
-    'prixParMois' => 8000, 
-    'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')), 
+    'loueur_id' => rand(31, 60),
+    'titre' => 'Appartement à Tanger, Centre Ville',
+    'localisation' => 'Tanger, Centre Ville',
+    'prixParMois' => 8000,
+    'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')),
     'description' => 'Appartement de 70 m², 2 chambres, dans un immeuble moderne à Tanger. Très bien situé, proche des commerces et des transports.',
-    'disponibilite' => true, 
-    'type' => 'Appartement', 
+    'disponibilite' => true,
+    'type' => 'Appartement',
     'condition' => 'Loyer mensuel de 8000 MAD, 1 mois de caution.',
     'adresse' => 'Tanger, Centre Ville',
-    'admin_id' => 1
+    'admin_id' => 1,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ],
 
 [
-    'loueur_id' => 9, 
-    'titre' => 'Appartement à Fès, Ville Nouvelle', 
-    'localisation' => 'Fès, Ville Nouvelle', 
-    'prixParMois' => 9500, 
-    'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')), 
+    'loueur_id' => rand(31, 60),
+    'titre' => 'Appartement à Fès, Ville Nouvelle',
+    'localisation' => 'Fès, Ville Nouvelle',
+    'prixParMois' => 9500,
+    'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')),
     'description' => 'Appartement de 85 m² avec 2 chambres et un grand salon. Parfaitement situé dans le quartier Ville Nouvelle.',
-    'disponibilite' => true, 
-    'type' => 'Appartement', 
+    'disponibilite' => true,
+    'type' => 'Appartement',
     'condition' => 'Loyer mensuel de 9500 MAD, 2 mois de caution.',
     'adresse' => 'Fès, Ville Nouvelle',
-    'admin_id' => 2
+    'admin_id' => 2,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,[
-    'loueur_id' => 13, 
-    'titre' => 'Espace commercial à Boujdour', 
-    'localisation' => 'Boujdour', 
-    'prixParMois' => 25000, 
-    'imgs' => json_encode($this->getRandomImages('Boutique')), 
+    'loueur_id' => rand(31, 60),
+    'titre' => 'Espace commercial à Boujdour',
+    'localisation' => 'Boujdour',
+    'prixParMois' => 25000,
+    'imgs' => json_encode($this->getRandomImages('Boutique')),
     'description' => 'Espace commercial dans un Boutique avec des enseignes de renommée. Parfait pour un commerce de détail.',
-    'disponibilite' => true, 
-    'type' => 'Boutique', 
+    'disponibilite' => true,
+    'type' => 'Boutique',
     'condition' => 'Loyer mensuel de 25000 MAD, 3 mois de caution.',
     'adresse' => 'Boujdour, Boutique Al-Nour',
-    'admin_id' => 14
+    'admin_id' => 14,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 15, 
-    'titre' => 'Garage à Laâyoune, Quartier Sidi Abderrahmane', 
-    'localisation' => 'Laâyoune', 
-    'prixParMois' => 1500, 
-    'imgs' => json_encode($this->getRandomImages('Garage')), 
+    'loueur_id' => rand(31, 60),
+    'titre' => 'Garage à Laâyoune, Quartier Sidi Abderrahmane',
+    'localisation' => 'Laâyoune',
+    'prixParMois' => 1500,
+    'imgs' => json_encode($this->getRandomImages('Garage')),
     'description' => 'Garage privé de 20 m² pour un ou deux véhicules, situé dans un quartier résidentiel calme.',
-    'disponibilite' => true, 
-    'type' => 'Garage', 
+    'disponibilite' => true,
+    'type' => 'Garage',
     'condition' => 'Loyer mensuel de 1500 MAD, 1 mois de caution.',
     'adresse' => 'Laâyoune, Quartier Sidi Abderrahmane',
-    'admin_id' => 16
+    'admin_id' => 16,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 11, 
-    'titre' => 'Dépôt à Guelmim', 
-    'localisation' => 'Guelmim', 
-    'prixParMois' => 10000, 
-    'imgs' =>  json_encode($this->getRandomImages('Depot')), 
+    'loueur_id' => rand(31, 60),
+    'titre' => 'Dépôt à Guelmim',
+    'localisation' => 'Guelmim',
+    'prixParMois' => 10000,
+    'imgs' =>  json_encode($this->getRandomImages('Depot')),
     'description' => 'Dépôt de 150 m², avec un accès facile et sécurisé. Idéal pour le stockage ou une petite entreprise industrielle.',
-    'disponibilite' => true, 
-    'type' => 'Dépôt', 
+    'disponibilite' => true,
+    'type' => 'Dépôt',
     'condition' => 'Loyer mensuel de 10000 MAD, 1 mois de caution.',
     'adresse' => 'Guelmim, Zone Industrielle',
-    'admin_id' => 12
+    'admin_id' => 12,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 9, 
-    'titre' => 'Magasin à Dakhla, centre-ville', 
-    'localisation' => 'Dakhla', 
-    'prixParMois' => 15000, 
-    'imgs' => json_encode($this->getRandomImages('Magasin')), 
+    'loueur_id' => rand(31, 60),
+    'titre' => 'Magasin à Dakhla, centre-ville',
+    'localisation' => 'Dakhla',
+    'prixParMois' => 15000,
+    'imgs' => json_encode($this->getRandomImages('Magasin')),
     'description' => 'Magasin de 80 m² avec vitrine et emplacement stratégique dans le centre-ville de Dakhla.',
-    'disponibilite' => true, 
-    'type' => 'Magasin', 
+    'disponibilite' => true,
+    'type' => 'Magasin',
     'condition' => 'Loyer mensuel de 15000 MAD, 2 mois de caution.',
     'adresse' => 'Dakhla, Avenue Mohammed V',
-    'admin_id' => 10
+    'admin_id' => 10,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 7, 
-    'titre' => 'Bureau spacieux à Tantan', 
-    'localisation' => 'Tantan', 
-    'prixParMois' => 7000, 
-    'imgs' => json_encode($this->getRandomImages('Bureau')), 
+    'loueur_id' => rand(31, 60),
+    'titre' => 'Bureau spacieux à Tantan',
+    'localisation' => 'Tantan',
+    'prixParMois' => 7000,
+    'imgs' => json_encode($this->getRandomImages('Bureau')),
     'description' => 'Bureau de 50 m² avec plusieurs postes de travail, idéal pour une petite entreprise ou une startup.',
-    'disponibilite' => true, 
-    'type' => 'Bureau', 
+    'disponibilite' => true,
+    'type' => 'Bureau',
     'condition' => 'Loyer mensuel de 7000 MAD, 1 mois de caution.',
     'adresse' => 'Tantan, Centre Ville',
-    'admin_id' => 8
+    'admin_id' => 8,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 5, 
-    'titre' => 'Studio moderne à Laâyoune', 
-    'localisation' => 'Laâyoune', 
-    'prixParMois' => 3500, 
-    'imgs' => json_encode($this->getRandomImages('Studio')), 
+    'loueur_id' => rand(31, 60),
+    'titre' => 'Studio moderne à Laâyoune',
+    'localisation' => 'Laâyoune',
+    'prixParMois' => 3500,
+    'imgs' => json_encode($this->getRandomImages('Studio')),
     'description' => 'Studio de 30 m² avec une vue magnifique sur la ville. Idéal pour un étudiant ou un jeune professionnel.',
-    'disponibilite' => true, 
-    'type' => 'Studio', 
+    'disponibilite' => true,
+    'type' => 'Studio',
     'condition' => 'Loyer mensuel de 3500 MAD, 1 mois de caution.',
     'adresse' => 'Laâyoune, Quartier Al-Matar',
-    'admin_id' => 6
+    'admin_id' => 6,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 
 [
-    'loueur_id' => 3, 
-    'titre' => 'Maison avec jardin à Boujdour', 
-    'localisation' => 'Boujdour', 
-    'prixParMois' => 12000, 
-    'imgs' => json_encode($this->getRandomImages('Garage')), 
+    'loueur_id' => rand(31, 60),
+    'titre' => 'Maison avec jardin à Boujdour',
+    'localisation' => 'Boujdour',
+    'prixParMois' => 12000,
+    'imgs' => json_encode($this->getRandomImages('Garage')),
     'description' => 'Maison spacieuse avec 3 chambres, un grand jardin et un garage. Idéale pour une famille. Située à Boujdour.',
-    'disponibilite' => true, 
-    'type' => 'Maison', 
+    'disponibilite' => true,
+    'type' => 'Maison',
     'condition' => 'Loyer mensuel de 12000 MAD, 2 mois de caution.',
     'adresse' => 'Boujdour, Quartier Al-Wahda',
-    'admin_id' => 4
+    'admin_id' => 4,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 2,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Villa luxueuse à Boujdour',
     'localisation' => 'Boujdour, Plage Oum Lajoul',
     'prixParMois' => 15000,
@@ -695,9 +517,11 @@ public function getRandomImages($folderPath, $count = 5)
     'condition' => 'Loyer mensuel de 15000 MAD, 3 mois de caution.',
     'adresse' => 'Boujdour, Plage Oum Lajoul',
     'admin_id' => 1,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ],
 [
-    'loueur_id' => 5,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Villa avec jardin à Laayoun',
     'localisation' => 'Laayoun, Quartier Al Fajr',
     'prixParMois' => 13000,
@@ -708,9 +532,11 @@ public function getRandomImages($folderPath, $count = 5)
     'condition' => 'Loyer mensuel de 13000 MAD, 2 mois de caution.',
     'adresse' => 'Laayoun, Quartier Al Fajr',
     'admin_id' => 2,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ],
 [
-    'loueur_id' => 3,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Villa moderne à Tantan',
     'localisation' => 'Tantan, Avenue Hassan II',
     'prixParMois' => 14000,
@@ -721,9 +547,11 @@ public function getRandomImages($folderPath, $count = 5)
     'condition' => 'Loyer mensuel de 14000 MAD, 2 mois de caution.',
     'adresse' => 'Tantan, Avenue Hassan II',
     'admin_id' => 3,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ],
 [
-    'loueur_id' => 6,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Villa familiale à Dhakla',
     'localisation' => 'Dhakla, Quartier Hassan II',
     'prixParMois' => 12000,
@@ -734,9 +562,11 @@ public function getRandomImages($folderPath, $count = 5)
     'condition' => 'Loyer mensuel de 12000 MAD, 2 mois de caution.',
     'adresse' => 'Dhakla, Quartier Hassan II',
     'admin_id' => 4,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ],
 [
-    'loueur_id' => 4,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Villa avec vue sur mer à Glemim',
     'localisation' => 'Glemim, Quartier de la Mer',
     'prixParMois' => 16000,
@@ -747,9 +577,11 @@ public function getRandomImages($folderPath, $count = 5)
     'condition' => 'Loyer mensuel de 16000 MAD, 3 mois de caution.',
     'adresse' => 'Glemim, Quartier de la Mer',
     'admin_id' => 5,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ],
 [
-    'loueur_id' => 9,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Appartement moderne à Boujdour',
     'localisation' => 'Boujdour, Quartier Plage',
     'prixParMois' => 8500,
@@ -760,9 +592,11 @@ public function getRandomImages($folderPath, $count = 5)
     'condition' => 'Loyer mensuel de 8500 MAD, 2 mois de caution.',
     'adresse' => 'Boujdour, Quartier Plage',
     'admin_id' => 1,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ],
 [
-    'loueur_id' => 7,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Appartement spacieux à Laayoun',
     'localisation' => 'Laayoun, Centre Ville',
     'prixParMois' => 7500,
@@ -773,9 +607,11 @@ public function getRandomImages($folderPath, $count = 5)
     'condition' => 'Loyer mensuel de 7500 MAD, 2 mois de caution.',
     'adresse' => 'Laayoun, Centre Ville',
     'admin_id' => 2,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ],
 [
-    'loueur_id' => 6,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Appartement de luxe à Tantan',
     'localisation' => 'Tantan, Avenue Mohamed V',
     'prixParMois' => 10000,
@@ -786,9 +622,11 @@ public function getRandomImages($folderPath, $count = 5)
     'condition' => 'Loyer mensuel de 10000 MAD, 3 mois de caution.',
     'adresse' => 'Tantan, Avenue Mohamed V',
     'admin_id' => 3,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ],
 [
-    'loueur_id' => 8,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Appartement cosy à Dhakla',
     'localisation' => 'Dhakla, Quartier Touristique',
     'prixParMois' => 9500,
@@ -799,9 +637,11 @@ public function getRandomImages($folderPath, $count = 5)
     'condition' => 'Loyer mensuel de 9500 MAD, 2 mois de caution.',
     'adresse' => 'Dhakla, Quartier Touristique',
     'admin_id' => 4,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ],
 [
-    'loueur_id' => 7,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Appartement à Glemim',
     'localisation' => 'Glemim, Rue de la Liberté',
     'prixParMois' => 7000,
@@ -812,226 +652,260 @@ public function getRandomImages($folderPath, $count = 5)
     'condition' => 'Loyer mensuel de 7000 MAD, 1 mois de caution.',
     'adresse' => 'Glemim, Rue de la Liberté',
     'admin_id' => 5,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ],
 [
-    'loueur_id' => 1, 
-    'titre' => 'Maison à Boujdour, Quartier Al-Madina', 
-    'localisation' => 'Boujdour', 
-    'prixParMois' => 8000, 
-    'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')), 
+    'loueur_id' => rand(31, 60),
+    'titre' => 'Maison à Boujdour, Quartier Al-Madina',
+    'localisation' => 'Boujdour',
+    'prixParMois' => 8000,
+    'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')),
     'description' => 'Maison spacieuse de 130 m² avec 3 chambres, un grand salon, une cuisine équipée, et un jardin. Idéale pour une famille.',
-    'disponibilite' => true, 
-    'type' => 'Maison', 
+    'disponibilite' => true,
+    'type' => 'Maison',
     'condition' => 'Loyer mensuel de 8000 MAD, 1 mois de caution.',
     'adresse' => 'Boujdour, Quartier Al-Madina',
-    'admin_id' => 2
+    'admin_id' => 2,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,[
-    'loueur_id' => 13, 
-    'titre' => 'Maison à Laâyoune, proche du centre-ville', 
-    'localisation' => 'Laâyoune', 
-    'prixParMois' => 8500, 
-    'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')), 
+    'loueur_id' => rand(31, 60),
+    'titre' => 'Maison à Laâyoune, proche du centre-ville',
+    'localisation' => 'Laâyoune',
+    'prixParMois' => 8500,
+    'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')),
     'description' => 'Maison moderne de 145 m² avec 4 chambres, une terrasse, un salon spacieux et une cuisine équipée.',
-    'disponibilite' => true, 
-    'type' => 'Maison', 
+    'disponibilite' => true,
+    'type' => 'Maison',
     'condition' => 'Loyer mensuel de 8500 MAD, 2 mois de caution.',
     'adresse' => 'Laâyoune, Quartier Hay Riad',
-    'admin_id' => 14
+    'admin_id' => 14,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,[
-    'loueur_id' => 11, 
-    'titre' => 'Maison familiale à Boujdour', 
-    'localisation' => 'Boujdour', 
-    'prixParMois' => 7800, 
-    'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')), 
+    'loueur_id' => rand(31, 60),
+    'titre' => 'Maison familiale à Boujdour',
+    'localisation' => 'Boujdour',
+    'prixParMois' => 7800,
+    'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')),
     'description' => 'Maison de 130 m² avec 3 chambres à coucher, un grand salon, un balcon, et un garage. Située à proximité des écoles et des magasins.',
-    'disponibilite' => true, 
-    'type' => 'Maison', 
+    'disponibilite' => true,
+    'type' => 'Maison',
     'condition' => 'Loyer mensuel de 7800 MAD, 1 mois de caution.',
     'adresse' => 'Boujdour, Quartier Al-Moulay Ismail',
-    'admin_id' => 12
+    'admin_id' => 12,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,[
-    'loueur_id' => 9, 
-    'titre' => 'Maison moderne à Dakhla', 
-    'localisation' => 'Dakhla', 
-    'prixParMois' => 9500, 
-    'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')), 
+    'loueur_id' => rand(31, 60),
+    'titre' => 'Maison moderne à Dakhla',
+    'localisation' => 'Dakhla',
+    'prixParMois' => 9500,
+    'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')),
     'description' => 'Maison de 160 m² avec 5 chambres, un grand salon lumineux, une cuisine moderne, un jardin et un garage privé.',
-    'disponibilite' => true, 
-    'type' => 'Maison', 
+    'disponibilite' => true,
+    'type' => 'Maison',
     'condition' => 'Loyer mensuel de 9500 MAD, 1 mois de caution.',
     'adresse' => 'Dakhla, Quartier Al-Nour',
-    'admin_id' => 10
+    'admin_id' => 10,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 7, 
-    'titre' => 'Maison de campagne à Guelmim', 
-    'localisation' => 'Guelmim', 
-    'prixParMois' => 6500, 
-    'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')), 
+    'loueur_id' => rand(31, 60),
+    'titre' => 'Maison de campagne à Guelmim',
+    'localisation' => 'Guelmim',
+    'prixParMois' => 6500,
+    'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')),
     'description' => 'Maison de campagne de 140 m² avec 4 chambres, un salon traditionnel marocain, un grand jardin, et une vue magnifique sur la nature.',
-    'disponibilite' => true, 
-    'type' => 'Maison', 
+    'disponibilite' => true,
+    'type' => 'Maison',
     'condition' => 'Loyer mensuel de 6500 MAD, 1 mois de caution.',
     'adresse' => 'Guelmim, Zone rurale',
-    'admin_id' => 8
+    'admin_id' => 8,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 5, 
-    'titre' => 'Maison à Tantan, zone résidentielle', 
-    'localisation' => 'Tantan', 
-    'prixParMois' => 7500, 
-    'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')), 
+    'loueur_id' => rand(31, 60),
+    'titre' => 'Maison à Tantan, zone résidentielle',
+    'localisation' => 'Tantan',
+    'prixParMois' => 7500,
+    'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')),
     'description' => 'Maison moderne de 120 m² avec 3 chambres, 2 salles de bain, un grand salon, et un petit jardin. Quartier sécurisé.',
-    'disponibilite' => true, 
-    'type' => 'Maison', 
+    'disponibilite' => true,
+    'type' => 'Maison',
     'condition' => 'Loyer mensuel de 7500 MAD, 2 mois de caution.',
     'adresse' => 'Tantan, Quartier Al-Nassim',
-    'admin_id' => 6
+    'admin_id' => 6,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 3, 
-    'titre' => 'Maison à Laâyoune, Quartier Al-Fath', 
-    'localisation' => 'Laâyoune', 
-    'prixParMois' => 10000, 
-    'imgs' =>json_encode($this->getRandomImages('Appartement--Villa--Maison')), 
+    'loueur_id' => rand(31, 60),
+    'titre' => 'Maison à Laâyoune, Quartier Al-Fath',
+    'localisation' => 'Laâyoune',
+    'prixParMois' => 10000,
+    'imgs' =>json_encode($this->getRandomImages('Appartement--Villa--Maison')),
     'description' => 'Maison de 150 m² avec 4 chambres, un salon spacieux, un garage, et un grand jardin. Très bien située dans un quartier calme.',
-    'disponibilite' => true, 
-    'type' => 'Maison', 
+    'disponibilite' => true,
+    'type' => 'Maison',
     'condition' => 'Loyer mensuel de 10000 MAD, 1 mois de caution.',
     'adresse' => 'Laâyoune, Quartier Al-Fath',
-    'admin_id' => 4
+    'admin_id' => 4,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 1, 
-    'titre' => 'Maison à Boujdour, Quartier Al-Madina', 
-    'localisation' => 'Boujdour', 
-    'prixParMois' => 8000, 
-    'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')), 
+    'loueur_id' => rand(31, 60),
+    'titre' => 'Maison à Boujdour, Quartier Al-Madina',
+    'localisation' => 'Boujdour',
+    'prixParMois' => 8000,
+    'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')),
     'description' => 'Maison spacieuse de 130 m² avec 3 chambres, un grand salon, une cuisine équipée, et un jardin. Idéale pour une famille.',
-    'disponibilite' => true, 
-    'type' => 'Maison', 
+    'disponibilite' => true,
+    'type' => 'Maison',
     'condition' => 'Loyer mensuel de 8000 MAD, 1 mois de caution.',
     'adresse' => 'Boujdour, Quartier Al-Madina',
-    'admin_id' => 2
+    'admin_id' => 2,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ],
 [
-    'loueur_id' => 2, 
-    'titre' => 'Garage à Boujdour, Centre-ville', 
-    'localisation' => 'Boujdour', 
-    'prixParMois' => 1500, 
-    'imgs' =>json_encode($this->getRandomImages('Garage')), 
+    'loueur_id' => rand(31, 60),
+    'titre' => 'Garage à Boujdour, Centre-ville',
+    'localisation' => 'Boujdour',
+    'prixParMois' => 1500,
+    'imgs' =>json_encode($this->getRandomImages('Garage')),
     'description' => 'Garage privé de 30 m², idéal pour une voiture ou un petit espace de stockage. Situé au centre-ville.',
-    'disponibilite' => true, 
-    'type' => 'Garage', 
+    'disponibilite' => true,
+    'type' => 'Garage',
     'condition' => 'Loyer mensuel de 1500 MAD.',
     'adresse' => 'Boujdour, Centre-ville',
-    'admin_id' => 3
+    'admin_id' => 3,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,[
-    'loueur_id' => 6, 
-    'titre' => 'Garage à Tantan, Proche du Marché', 
-    'localisation' => 'Tantan', 
-    'prixParMois' => 1800, 
-    'imgs' => json_encode($this->getRandomImages('Garage')), 
+    'loueur_id' => rand(31, 60),
+    'titre' => 'Garage à Tantan, Proche du Marché',
+    'localisation' => 'Tantan',
+    'prixParMois' => 1800,
+    'imgs' => json_encode($this->getRandomImages('Garage')),
     'description' => 'Garage privé de 35 m² avec accès facile. Idéal pour stockage ou garage pour véhicule.',
-    'disponibilite' => true, 
-    'type' => 'Garage', 
+    'disponibilite' => true,
+    'type' => 'Garage',
     'condition' => 'Loyer mensuel de 1800 MAD.',
     'adresse' => 'Tantan, Proche du Marché',
-    'admin_id' => 7
+    'admin_id' => 7,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 4, 
-    'titre' => 'Garage à Laâyoune, Quartier Al-Fath', 
-    'localisation' => 'Laâyoune', 
-    'prixParMois' => 2000, 
-    'imgs' => json_encode($this->getRandomImages('Garage')), 
+    'loueur_id' => rand(31, 60),
+    'titre' => 'Garage à Laâyoune, Quartier Al-Fath',
+    'localisation' => 'Laâyoune',
+    'prixParMois' => 2000,
+    'imgs' => json_encode($this->getRandomImages('Garage')),
     'description' => 'Garage fermé de 40 m² avec porte sécurisée. Idéal pour une voiture ou des objets personnels.',
-    'disponibilite' => true, 
-    'type' => 'Garage', 
+    'disponibilite' => true,
+    'type' => 'Garage',
     'condition' => 'Loyer mensuel de 2000 MAD.',
     'adresse' => 'Laâyoune, Quartier Al-Fath',
-    'admin_id' => 5
+    'admin_id' => 5,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 16, 
-    'titre' => 'Garage à Tantan, Près du Port', 
-    'localisation' => 'Tantan', 
-    'prixParMois' => 1700, 
-    'imgs' => json_encode($this->getRandomImages('Garage')), 
+    'loueur_id' => rand(31, 60),
+    'titre' => 'Garage à Tantan, Près du Port',
+    'localisation' => 'Tantan',
+    'prixParMois' => 1700,
+    'imgs' => json_encode($this->getRandomImages('Garage')),
     'description' => 'Garage de 40 m² situé près du port de Tantan. Parfait pour un bateau ou un véhicule de grande taille.',
-    'disponibilite' => true, 
-    'type' => 'Garage', 
+    'disponibilite' => true,
+    'type' => 'Garage',
     'condition' => 'Loyer mensuel de 1700 MAD.',
     'adresse' => 'Tantan, Près du Port',
-    'admin_id' => 17
+    'admin_id' => 17,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 14, 
-    'titre' => 'Garage à Laâyoune, Près de la Plage', 
-    'localisation' => 'Laâyoune', 
-    'prixParMois' => 2500, 
-    'imgs' => json_encode($this->getRandomImages('Garage')), 
+    'loueur_id' => rand(31, 60),
+    'titre' => 'Garage à Laâyoune, Près de la Plage',
+    'localisation' => 'Laâyoune',
+    'prixParMois' => 2500,
+    'imgs' => json_encode($this->getRandomImages('Garage')),
     'description' => 'Garage fermé de 45 m², avec accès sécurisé, idéal pour une voiture de luxe ou stockage.',
-    'disponibilite' => true, 
-    'type' => 'Garage', 
+    'disponibilite' => true,
+    'type' => 'Garage',
     'condition' => 'Loyer mensuel de 2500 MAD.',
     'adresse' => 'Laâyoune, Près de la Plage',
-    'admin_id' => 15
+    'admin_id' => 15,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 12, 
-    'titre' => 'Garage à Boujdour, Zone Industrielle', 
-    'localisation' => 'Boujdour', 
-    'prixParMois' => 1300, 
-    'imgs' => json_encode($this->getRandomImages('Garage')), 
+    'loueur_id' => rand(31, 60),
+    'titre' => 'Garage à Boujdour, Zone Industrielle',
+    'localisation' => 'Boujdour',
+    'prixParMois' => 1300,
+    'imgs' => json_encode($this->getRandomImages('Garage')),
     'description' => 'Garage de 30 m², sécurisé avec porte en métal. Idéal pour véhicules ou stockage.',
-    'disponibilite' => true, 
-    'type' => 'Garage', 
+    'disponibilite' => true,
+    'type' => 'Garage',
     'condition' => 'Loyer mensuel de 1300 MAD.',
     'adresse' => 'Boujdour, Zone Industrielle',
-    'admin_id' => 13
+    'admin_id' => 13,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 10, 
-    'titre' => 'Garage à Dakhla, Quartier Al-Madina', 
-    'localisation' => 'Dakhla', 
-    'prixParMois' => 2200, 
-    'imgs' => json_encode($this->getRandomImages('Garage')), 
+    'loueur_id' => rand(31, 60),
+    'titre' => 'Garage à Dakhla, Quartier Al-Madina',
+    'localisation' => 'Dakhla',
+    'prixParMois' => 2200,
+    'imgs' => json_encode($this->getRandomImages('Garage')),
     'description' => 'Garage sécurisé de 50 m², idéal pour une voiture, une moto, ou un espace de stockage.',
-    'disponibilite' => true, 
-    'type' => 'Garage', 
+    'disponibilite' => true,
+    'type' => 'Garage',
     'condition' => 'Loyer mensuel de 2200 MAD.',
     'adresse' => 'Dakhla, Quartier Al-Madina',
-    'admin_id' => 11
+    'admin_id' => 11,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,[
-    'loueur_id' => 16, 
-    'titre' => 'Garage à Tantan, Quartier Souk Al Jumaâ', 
-    'localisation' => 'Tantan', 
-    'prixParMois' => 1700, 
-    'imgs' =>json_encode($this->getRandomImages('Garage')), 
+    'loueur_id' => rand(31, 60),
+    'titre' => 'Garage à Tantan, Quartier Souk Al Jumaâ',
+    'localisation' => 'Tantan',
+    'prixParMois' => 1700,
+    'imgs' =>json_encode($this->getRandomImages('Garage')),
     'description' => 'Garage de 40 m² situé près du souk de Tantan. Parfait pour un véhicule ou du stockage.',
-    'disponibilite' => true, 
-    'type' => 'Garage', 
+    'disponibilite' => true,
+    'type' => 'Garage',
     'condition' => 'Loyer mensuel de 1700 MAD.',
     'adresse' => 'Tantan, Quartier Souk Al Jumaâ',
-    'admin_id' => 17
+    'admin_id' => 17,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,[
-    'loueur_id' => 2,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Studio à Boujdour, Hay Al Wifaq',
     'localisation' => 'Boujdour',
     'prixParMois' => 1900,
@@ -1039,12 +913,14 @@ public function getRandomImages($folderPath, $count = 5)
     'description' => 'Charmant studio de 25 m² bien éclairé avec cuisine ouverte. Idéal pour une personne seule.',
     'disponibilite' => true,
     'type' => 'Studio',
-    'condition' => '1 mois d’avance, 1 mois de caution.',
+    'condition' => "1 mois d'avance, 1 mois de caution.",
     'adresse' => 'Boujdour, Hay Al Wifaq',
-    'admin_id' => 2
-]
-,[
-    'loueur_id' => 3,
+    'admin_id' => 2,
+    'surface' => rand(40, 300),
+    'nbrChambre' => rand(1, 6),
+],
+[
+    'loueur_id' => rand(31, 60),
     'titre' => 'Studio moderne à Laâyoune, Quartier Al Qods',
     'localisation' => 'Laâyoune',
     'prixParMois' => 2100,
@@ -1054,11 +930,13 @@ public function getRandomImages($folderPath, $count = 5)
     'type' => 'Studio',
     'condition' => '2 mois de caution requis.',
     'adresse' => 'Laâyoune, Quartier Al Qods',
-    'admin_id' => 3
+    'admin_id' => 3,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 4,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Studio à Tantan, Hay Nahda',
     'localisation' => 'Tantan',
     'prixParMois' => 1500,
@@ -1066,13 +944,15 @@ public function getRandomImages($folderPath, $count = 5)
     'description' => 'Petit studio meublé de 20 m² proche des commerces. Parfait pour étudiant.',
     'disponibilite' => true,
     'type' => 'Studio',
-    'condition' => 'Paiement mensuel exigé à l’avance.',
+    'condition' => "Paiement mensuel exigé à l'avance.",
     'adresse' => 'Tantan, Hay Nahda',
-    'admin_id' => 4
+    'admin_id' => 4,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 5,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Studio bien équipé à Guelmim, Riad Al Massira',
     'localisation' => 'Guelmim',
     'prixParMois' => 1800,
@@ -1080,13 +960,15 @@ public function getRandomImages($folderPath, $count = 5)
     'description' => 'Studio avec coin cuisine, salle de bain privée, dans un immeuble sécurisé.',
     'disponibilite' => true,
     'type' => 'Studio',
-    'condition' => '1 mois d’avance + 1 mois de garantie.',
+    'condition' => "1 mois d'avance + 1 mois de garantie.",
     'adresse' => 'Guelmim, Riad Al Massira',
-    'admin_id' => 5
+    'admin_id' => 5,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 6,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Studio à Dakhla, Quartier Al-Matar',
     'localisation' => 'Dakhla',
     'prixParMois' => 2300,
@@ -1096,11 +978,13 @@ public function getRandomImages($folderPath, $count = 5)
     'type' => 'Studio',
     'condition' => 'Loyer mensuel fixe avec 2 mois de dépôt.',
     'adresse' => 'Dakhla, Quartier Al-Matar',
-    'admin_id' => 6
+    'admin_id' => 6,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 7,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Studio simple à Boujdour, Hay Al Amal',
     'localisation' => 'Boujdour',
     'prixParMois' => 1400,
@@ -1110,11 +994,13 @@ public function getRandomImages($folderPath, $count = 5)
     'type' => 'Studio',
     'condition' => 'Loyer à verser chaque début de mois.',
     'adresse' => 'Boujdour, Hay Al Amal',
-    'admin_id' => 7
+    'admin_id' => 7,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 8,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Studio à Laâyoune, Miftah Hay Salam',
     'localisation' => 'Laâyoune',
     'prixParMois' => 2000,
@@ -1122,13 +1008,15 @@ public function getRandomImages($folderPath, $count = 5)
     'description' => 'Studio de 28 m² refait à neuf, dans un immeuble familial. Quartier vivant.',
     'disponibilite' => true,
     'type' => 'Studio',
-    'condition' => '2 mois de caution + frais d’agence.',
+    'condition' => "2 mois de caution + frais d'agence.",
     'adresse' => 'Laâyoune, Miftah Hay Salam',
-    'admin_id' => 8
+    'admin_id' => 8,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 8,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Studio à Laâyoune, Miftah Hay Salam',
     'localisation' => 'Laâyoune',
     'prixParMois' => 2000,
@@ -1136,13 +1024,15 @@ public function getRandomImages($folderPath, $count = 5)
     'description' => 'Studio de 28 m² refait à neuf, dans un immeuble familial. Quartier vivant.',
     'disponibilite' => true,
     'type' => 'Studio',
-    'condition' => '2 mois de caution + frais d’agence.',
+    'condition' => "2 mois de caution + frais d'agence.",
     'adresse' => 'Laâyoune, Miftah Hay Salam',
-    'admin_id' => 8
+    'admin_id' => 8,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 9,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Studio meublé à Guelmim, Hay Al Wahda',
     'localisation' => 'Guelmim',
     'prixParMois' => 1700,
@@ -1152,11 +1042,13 @@ public function getRandomImages($folderPath, $count = 5)
     'type' => 'Studio',
     'condition' => 'Paiement mensuel + dépôt de garantie requis.',
     'adresse' => 'Guelmim, Hay Al Wahda',
-    'admin_id' => 9
+    'admin_id' => 9,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 3,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Boutique à louer à Boujdour, Hay Nahda',
     'localisation' => 'Boujdour',
     'prixParMois' => 3200,
@@ -1166,11 +1058,13 @@ public function getRandomImages($folderPath, $count = 5)
     'type' => 'Boutique',
     'condition' => 'Contrat annuel avec 2 mois de caution.',
     'adresse' => 'Boujdour, Hay Nahda',
-    'admin_id' => 2
+    'admin_id' => 2,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 4,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Boutique à Laâyoune, Boulevard Mekka',
     'localisation' => 'Laâyoune',
     'prixParMois' => 5000,
@@ -1178,13 +1072,15 @@ public function getRandomImages($folderPath, $count = 5)
     'description' => 'Boutique de 45 m² située sur un boulevard très fréquenté, parfaite pour prêt-à-porter.',
     'disponibilite' => true,
     'type' => 'Boutique',
-    'condition' => 'Loyer payable chaque 3 mois, 1 mois d’avance.',
+    'condition' => "Loyer payable chaque 3 mois, 1 mois d'avance.",
     'adresse' => 'Laâyoune, Boulevard Mekka',
-    'admin_id' => 3
-]
-,
+    'admin_id' => 3,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+],
+
 [
-    'loueur_id' => 5,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Local commercial à Tantan, Hay Al Massira',
     'localisation' => 'Tantan',
     'prixParMois' => 2700,
@@ -1194,11 +1090,13 @@ public function getRandomImages($folderPath, $count = 5)
     'type' => 'Boutique',
     'condition' => '2 mois de garantie + loyer mensuel.',
     'adresse' => 'Tantan, Hay Al Massira',
-    'admin_id' => 3
+    'admin_id' => 3,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 6,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Boutique rénovée à Dakhla, Quartier Al Fath',
     'localisation' => 'Dakhla',
     'prixParMois' => 4500,
@@ -1208,11 +1106,13 @@ public function getRandomImages($folderPath, $count = 5)
     'type' => 'Boutique',
     'condition' => 'Bail de 1 an minimum, 2 mois de caution.',
     'adresse' => 'Dakhla, Quartier Al Fath',
-    'admin_id' => 4
+    'admin_id' => 4,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 7,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Magasin à Guelmim, Hay Al Amal',
     'localisation' => 'Guelmim',
     'prixParMois' => 3800,
@@ -1220,13 +1120,15 @@ public function getRandomImages($folderPath, $count = 5)
     'description' => 'Magasin de 35 m² dans une rue commerçante, équipé de volet métallique.',
     'disponibilite' => true,
     'type' => 'Boutique',
-    'condition' => 'Paiement mensuel + frais d’entretien partagés.',
+    'condition' => 'Paiement mensuel + frais d'entretien partagés.',
     'adresse' => 'Guelmim, Hay Al Amal',
-    'admin_id' => 5
+    'admin_id' => 5,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 8,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Boutique à Boujdour, Hay Salam',
     'localisation' => 'Boujdour',
     'prixParMois' => 2950,
@@ -1236,11 +1138,13 @@ public function getRandomImages($folderPath, $count = 5)
     'type' => 'Boutique',
     'condition' => '1 an minimum, avec dépôt de garantie.',
     'adresse' => 'Boujdour, Hay Salam',
-    'admin_id' => 6
+    'admin_id' => 6,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 9,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Local à usage commercial à Laâyoune, Hay Moulay Rachid',
     'localisation' => 'Laâyoune',
     'prixParMois' => 4300,
@@ -1248,13 +1152,15 @@ public function getRandomImages($folderPath, $count = 5)
     'description' => 'Très bon emplacement pour un commerce de proximité. Surface de 40 m².',
     'disponibilite' => true,
     'type' => 'Boutique',
-    'condition' => '2 mois d’avance, bail signé chez notaire.',
+    'condition' => '2 mois d'avance, bail signé chez notaire.',
     'adresse' => 'Laâyoune, Hay Moulay Rachid',
-    'admin_id' => 7
+    'admin_id' => 7,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 10,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Boutique fonctionnelle à Guelmim, Quartier Tantan Road',
     'localisation' => 'Guelmim',
     'prixParMois' => 3600,
@@ -1264,11 +1170,13 @@ public function getRandomImages($folderPath, $count = 5)
     'type' => 'Boutique',
     'condition' => 'Paiement anticipé chaque trimestre.',
     'adresse' => 'Guelmim, Quartier Tantan Road',
-    'admin_id' => 8
+    'admin_id' => 8,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 11,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Dépôt sécurisé à Boujdour, Zone Industrielle',
     'localisation' => 'Boujdour',
     'prixParMois' => 6500,
@@ -1278,11 +1186,13 @@ public function getRandomImages($folderPath, $count = 5)
     'type' => 'Dépôt',
     'condition' => '1 an de bail + 2 mois de caution.',
     'adresse' => 'Boujdour, Zone Industrielle',
-    'admin_id' => 3
+    'admin_id' => 3,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 12,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Grand dépôt à louer à Laâyoune, Route de Smara',
     'localisation' => 'Laâyoune',
     'prixParMois' => 8500,
@@ -1292,11 +1202,13 @@ public function getRandomImages($folderPath, $count = 5)
     'type' => 'Dépôt',
     'condition' => 'Contrat notarié, minimum 1 an.',
     'adresse' => 'Laâyoune, Route de Smara',
-    'admin_id' => 4
+    'admin_id' => 4,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 13,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Hangar de stockage à Tantan, Zone Logistique',
     'localisation' => 'Tantan',
     'prixParMois' => 4900,
@@ -1306,11 +1218,13 @@ public function getRandomImages($folderPath, $count = 5)
     'type' => 'Dépôt',
     'condition' => 'Loyer trimestriel, 1 mois de caution.',
     'adresse' => 'Tantan, Zone Logistique',
-    'admin_id' => 2
+    'admin_id' => 2,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 14,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Dépôt industriel à Dakhla, Quartier Tawarta',
     'localisation' => 'Dakhla',
     'prixParMois' => 9100,
@@ -1320,11 +1234,13 @@ public function getRandomImages($folderPath, $count = 5)
     'type' => 'Dépôt',
     'condition' => 'Bail 12 mois minimum avec garantie bancaire.',
     'adresse' => 'Dakhla, Quartier Tawarta',
-    'admin_id' => 5
+    'admin_id' => 5,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 15,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Entrepôt à Guelmim, Zone Saharienne',
     'localisation' => 'Guelmim',
     'prixParMois' => 7300,
@@ -1334,11 +1250,13 @@ public function getRandomImages($folderPath, $count = 5)
     'type' => 'Dépôt',
     'condition' => 'Contrat simple avec versement annuel.',
     'adresse' => 'Guelmim, Zone Saharienne',
-    'admin_id' => 6
+    'admin_id' => 6,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 16,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Local de dépôt à Boujdour, Hay Salam',
     'localisation' => 'Boujdour',
     'prixParMois' => 4000,
@@ -1346,13 +1264,15 @@ public function getRandomImages($folderPath, $count = 5)
     'description' => 'Petite unité de 60 m², bien sécurisée avec portail métallique.',
     'disponibilite' => true,
     'type' => 'Dépôt',
-    'condition' => '2 mois d’avance, sans engagement long terme.',
+    'condition' => '2 mois d'avance, sans engagement long terme.',
     'adresse' => 'Boujdour, Hay Salam',
-    'admin_id' => 7
+    'admin_id' => 7,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 17,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Espace industriel à Laâyoune, Avenue 24 Novembre',
     'localisation' => 'Laâyoune',
     'prixParMois' => 7800,
@@ -1362,11 +1282,13 @@ public function getRandomImages($folderPath, $count = 5)
     'type' => 'Dépôt',
     'condition' => 'Paiement semestriel.',
     'adresse' => 'Laâyoune, Avenue 24 Novembre',
-    'admin_id' => 8
+    'admin_id' => 8,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 18,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Grand entrepôt à Guelmim, Route de Tata',
     'localisation' => 'Guelmim',
     'prixParMois' => 8800,
@@ -1376,11 +1298,13 @@ public function getRandomImages($folderPath, $count = 5)
     'type' => 'Dépôt',
     'condition' => 'Engagement de 2 ans, bail notarié.',
     'adresse' => 'Guelmim, Route de Tata',
-    'admin_id' => 9
+    'admin_id' => 9,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ]
 ,
 [
-    'loueur_id' => 21,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Dépôt moderne à Rabat, Hay Ryad',
     'localisation' => 'Rabat',
     'prixParMois' => 9800,
@@ -1390,10 +1314,12 @@ public function getRandomImages($folderPath, $count = 5)
     'type' => 'Dépôt',
     'condition' => 'Loyer mensuel, 3 mois de garantie.',
     'adresse' => 'Rabat, Hay Ryad',
-    'admin_id' => 2
+    'admin_id' => 2,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ],
 [
-    'loueur_id' => 22,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Petit entrepôt à Rabat, Agdal',
     'localisation' => 'Rabat',
     'prixParMois' => 6500,
@@ -1403,10 +1329,12 @@ public function getRandomImages($folderPath, $count = 5)
     'type' => 'Dépôt',
     'condition' => 'Engagement 6 mois minimum.',
     'adresse' => 'Rabat, Agdal',
-    'admin_id' => 2
+    'admin_id' => 2,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ],
 [
-    'loueur_id' => 23,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Dépôt à louer à Rabat, Yacoub El Mansour',
     'localisation' => 'Rabat',
     'prixParMois' => 7200,
@@ -1416,10 +1344,12 @@ public function getRandomImages($folderPath, $count = 5)
     'type' => 'Dépôt',
     'condition' => 'Caution de 2 mois requise.',
     'adresse' => 'Rabat, Yacoub El Mansour',
-    'admin_id' => 3
+    'admin_id' => 3,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ],
 [
-    'loueur_id' => 24,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Espace de stockage à Rabat, Route de Zaer',
     'localisation' => 'Rabat',
     'prixParMois' => 8700,
@@ -1429,10 +1359,12 @@ public function getRandomImages($folderPath, $count = 5)
     'type' => 'Dépôt',
     'condition' => 'Paiement annuel obligatoire.',
     'adresse' => 'Rabat, Route de Zaer',
-    'admin_id' => 3
+    'admin_id' => 3,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ],
 [
-    'loueur_id' => 25,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Grand dépôt à Marrakech, Sidi Ghanem',
     'localisation' => 'Marrakech',
     'prixParMois' => 9900,
@@ -1442,10 +1374,12 @@ public function getRandomImages($folderPath, $count = 5)
     'type' => 'Dépôt',
     'condition' => 'Contrat notarié de 1 an.',
     'adresse' => 'Marrakech, Sidi Ghanem',
-    'admin_id' => 4
+    'admin_id' => 4,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ],
 [
-    'loueur_id' => 26,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Entrepôt à Marrakech, Targa',
     'localisation' => 'Marrakech',
     'prixParMois' => 6800,
@@ -1455,10 +1389,12 @@ public function getRandomImages($folderPath, $count = 5)
     'type' => 'Dépôt',
     'condition' => '2 mois de caution.',
     'adresse' => 'Marrakech, Targa',
-    'admin_id' => 4
+    'admin_id' => 4,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ],
 [
-    'loueur_id' => 27,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Local industriel à Marrakech, Massira',
     'localisation' => 'Marrakech',
     'prixParMois' => 7200,
@@ -1468,10 +1404,12 @@ public function getRandomImages($folderPath, $count = 5)
     'type' => 'Dépôt',
     'condition' => 'Loyer trimestriel exigé.',
     'adresse' => 'Marrakech, Massira',
-    'admin_id' => 4
+    'admin_id' => 4,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ],
 [
-    'loueur_id' => 28,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Dépôt à Marrakech, route de Safi',
     'localisation' => 'Marrakech',
     'prixParMois' => 8100,
@@ -1481,10 +1419,12 @@ public function getRandomImages($folderPath, $count = 5)
     'type' => 'Dépôt',
     'condition' => 'Bail 1 an minimum.',
     'adresse' => 'Marrakech, Route de Safi',
-    'admin_id' => 5
+    'admin_id' => 5,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ],
 [
-    'loueur_id' => 29,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Entrepôt à Casablanca, Ain Sebaa',
     'localisation' => 'Casablanca',
     'prixParMois' => 11000,
@@ -1494,10 +1434,12 @@ public function getRandomImages($folderPath, $count = 5)
     'type' => 'Dépôt',
     'condition' => 'Contrat annuel renouvelable.',
     'adresse' => 'Casablanca, Ain Sebaa',
-    'admin_id' => 6
+    'admin_id' => 6,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ],
 [
-    'loueur_id' => 30,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Dépôt à Casablanca, Sidi Maârouf',
     'localisation' => 'Casablanca',
     'prixParMois' => 9700,
@@ -1507,10 +1449,12 @@ public function getRandomImages($folderPath, $count = 5)
     'type' => 'Dépôt',
     'condition' => '2 mois de dépôt de garantie.',
     'adresse' => 'Casablanca, Sidi Maârouf',
-    'admin_id' => 6
+    'admin_id' => 6,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ],
 [
-    'loueur_id' => 25,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Local logistique à Casablanca, Derb Ghallef',
     'localisation' => 'Casablanca',
     'prixParMois' => 8800,
@@ -1520,10 +1464,12 @@ public function getRandomImages($folderPath, $count = 5)
     'type' => 'Dépôt',
     'condition' => 'Paiement mensuel ou annuel.',
     'adresse' => 'Casablanca, Derb Ghallef',
-    'admin_id' => 7
+    'admin_id' => 7,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ],
 [
-    'loueur_id' => 30,
+    'loueur_id' => rand(31, 60),
     'titre' => 'Hangar industriel à Casablanca, Moulay Rachid',
     'localisation' => 'Casablanca',
     'prixParMois' => 9400,
@@ -1533,7 +1479,9 @@ public function getRandomImages($folderPath, $count = 5)
     'type' => 'Dépôt',
     'condition' => 'Engagement 6 mois minimum.',
     'adresse' => 'Casablanca, Moulay Rachid',
-    'admin_id' => 7
+    'admin_id' => 7,
+    'surface' => rand(40, 300), // أو حسب نوع العقار
+    'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
 ],
 
         ];
@@ -1542,3 +1490,4 @@ public function getRandomImages($folderPath, $count = 5)
         }
     }
 }
+    

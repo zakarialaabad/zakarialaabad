@@ -1,53 +1,79 @@
+import React, { useState } from "react";
+import { Heart, MapPin, Star, Bed, Square } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Link } from "@inertiajs/react";
+import { ImageCarousel } from "@/components/image-carousel";
+import { motion } from "framer-motion";
+import { useAuth } from "@/contexts/auth-context";
+import { useFavorites } from "@/contexts/favorites-context";
+import { AuthAlert } from "@/components/auth/auth-alert";
 
-import { memo, useState } from "react"
-import { Heart, MapPin, Star, Bed, Square } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Link } from "@inertiajs/react"
-import { ImageCarousel } from "@/components/image-carousel"
-import { motion } from "framer-motion"
-import type { Property } from "@/data/properties"
-import { useAuth } from "@/contexts/auth-context"
-import { useFavorites } from "@/contexts/favorites-context"
-import { AuthAlert } from "@/components/auth/auth-alert"
-import type React from "react"
+// تعريف النوع لـ Propriete
+type Propriete = {
+  id: number;
+  loueur_id: number;
+  titre: string;
+  localisation: string;
+  prixParMois: number;
+  imgs: string[];
+  description: Text;
+  disponibilite: boolean;
+  type: string;
+  nbrchambre: number;
+  surface: number;
+  adresse: string;
+  admin_id: number;
+  loueur: {
+    id: number;
+    user: {
+      name: string;
+      email: string;
+      prenom: string;
+      genre: string;
+      telephone: string;
+      profile: string;
+    };
+  };
+};
 
-// Utilisation de memo pour éviter les re-rendus inutiles
-export const PropertyCard = memo(function PropertyCard({
-  id,
-  images,
-  title,
-  location,
-  price,
-  bedrooms,
-  propertyType,
-  area,
-  owner,
-  rating,
-}: Property) {
-  // Assurons-nous d'avoir au moins une image
-  const propertyImages = images.length > 0 ? images : ["/placeholder.svg"]
-  const { isAuthenticated } = useAuth()
-  const { isFavorite, toggleFavorite } = useFavorites()
-  const [showAuthAlert, setShowAuthAlert] = useState(false)
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
-  const [isHeartAnimating, setIsHeartAnimating] = useState(false)
+// دالة عادية بدل دالة سهمية
+function PropertyCard({ propriete }: { propriete: Propriete }) {
+  const {
+    id,
+    imgs,
+    titre,
+    localisation,
+    prixParMois,
+    disponibilite,
+    type,
+    adresse,
+    nbrchambre,
+    surface,
+    loueur,
+  } = propriete;
+
+  const propertyImages = imgs.length > 0 ? imgs : ["/placeholder.svg"];
+  const { isAuthenticated } = useAuth();
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const [showAuthAlert, setShowAuthAlert] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isHeartAnimating, setIsHeartAnimating] = useState(false);
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
+    e.preventDefault();
+    e.stopPropagation();
 
     if (isAuthenticated) {
-      setIsHeartAnimating(true)
-      toggleFavorite(id)
-      // Réinitialiser l'animation après un court délai
-      setTimeout(() => setIsHeartAnimating(false), 1000)
+      setIsHeartAnimating(true);
+      toggleFavorite(id);
+      setTimeout(() => setIsHeartAnimating(false), 1000);
     } else {
-      setShowAuthAlert(true)
+      setShowAuthAlert(true);
     }
-  }
+  };
 
-  const isFav = isFavorite(id)
+  const isFav = isFavorite(id);
 
   const heartVariants = {
     initial: { scale: 1 },
@@ -55,7 +81,7 @@ export const PropertyCard = memo(function PropertyCard({
       scale: [1, 1.3, 1],
       transition: { duration: 0.5 },
     },
-  }
+  };
 
   return (
     <>
@@ -69,13 +95,12 @@ export const PropertyCard = memo(function PropertyCard({
             <div className="w-full h-64 md:h-72 overflow-hidden">
               <ImageCarousel
                 images={propertyImages}
-                alt={title}
+                alt={titre}
                 aspectRatio="tall"
                 className="w-full h-full"
-                priority={id === "1"}
+                priority={id === 1}
               />
             </div>
-
             <Button
               variant="ghost"
               size="icon"
@@ -94,7 +119,7 @@ export const PropertyCard = memo(function PropertyCard({
 
             <div className="absolute bottom-3 left-3 z-20 flex flex-wrap gap-1.5">
               <Badge variant="secondary" className="bg-white/90 backdrop-blur-sm font-medium px-2.5 py-1">
-                {propertyType}
+                {type}
               </Badge>
             </div>
           </div>
@@ -103,28 +128,28 @@ export const PropertyCard = memo(function PropertyCard({
         <div className="p-4">
           <div className="flex flex-col space-y-2">
             <div className="flex justify-between items-start">
-              <h3 className="font-medium text-gray-900 line-clamp-1">{title}</h3>
+              <h3 className="font-medium text-gray-900 line-clamp-1">{titre}</h3>
               <div className="flex items-center">
                 <Star className="h-4 w-4 text-amber-500 fill-amber-500 mr-1" />
-                <span className="text-sm font-medium text-gray-600">{rating}</span>
+                <span className="text-sm font-medium text-gray-600">4.5</span>
               </div>
             </div>
 
             <p className="text-sm text-gray-500 flex items-center">
               <MapPin className="mr-1 h-4 w-4 inline text-gray-400 flex-shrink-0" />
-              <span className="truncate">{location}</span>
+              <span className="truncate">{localisation}</span>
             </p>
 
             <div className="flex items-center gap-3 text-sm text-gray-600 pt-1">
               <div className="flex items-center">
                 <Bed className="h-4 w-4 mr-1 text-gray-400" />
                 <span>
-                  {bedrooms} {bedrooms > 1 ? "chambres" : "chambre"}
+                  {nbrchambre} {nbrchambre > 1 ? "chambres" : "chambre"}
                 </span>
               </div>
               <div className="flex items-center">
                 <Square className="h-4 w-4 mr-1 text-gray-400" />
-                <span>{area} m²</span>
+                <span>{surface} m²</span>
               </div>
             </div>
 
@@ -132,16 +157,16 @@ export const PropertyCard = memo(function PropertyCard({
               <div className="flex items-center gap-2">
                 <div className="flex-shrink-0 w-8 h-8 relative rounded-full overflow-hidden border border-gray-200">
                   <img
-                    src={owner.image || "/placeholder.svg?height=40&width=40&query=person"}
-                    alt={owner.name}
+                    src={loueur.user.profile || "/placeholder.svg?height=40&width=40&query=person"}
+                    alt={loueur.user.name}
                     className="object-cover"
                     sizes="32px"
                   />
                 </div>
-                <span className="text-xs text-gray-500 truncate max-w-[100px]">{owner.name}</span>
+                <span className="text-xs text-gray-500 truncate max-w-[100px]">{loueur.user.name}</span>
               </div>
               <div className="text-gray-900 font-bold text-lg">
-                {price} <span className="text-sm font-medium text-gray-500">MAD/mois</span>
+                {prixParMois} <span className="text-sm font-medium text-gray-500">MAD/mois</span>
               </div>
             </div>
           </div>
@@ -156,5 +181,7 @@ export const PropertyCard = memo(function PropertyCard({
         autoCloseDelay={3000}
       />
     </>
-  )
-})
+  );
+}
+
+export { PropertyCard };
