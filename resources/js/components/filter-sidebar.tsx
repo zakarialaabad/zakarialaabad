@@ -53,23 +53,24 @@ import { cn } from "@/lib/utils"
 import { useWindowSize, isMobileView } from "../utils/responsive-utils"
 import { Square } from "lucide-react"
 import { Slider } from "@/components/ui/slider"
-import { TenantTypeIcon } from "@/components/tenant-type-icon"
 import React from "react"
 // Ajouter l'import des données de propriétés en haut du fichier
 import { allProperties } from "@/data/properties"
-
+import { TypesLocairesIcon } from "@/components/tenant-type-icon" 
 // Define the SearchFilters type
 interface SearchFilters {
-  city: string
-  district: string
-  propertyType: string
-  tenantType: string
-  bedrooms: number
+  ville: string
+  prixParMois: number
+  type: string
+  localisation: string
+  typesLocaires: string
+  nbrchambre: number
+  adresse:string
   minPrice: number
   maxPrice: number
   minArea?: number
   maxArea?: number
-  features?: string[]
+  features?: string[]; // إضافة هذه الخاصية هنا
 }
 
 interface FilterSidebarProps {
@@ -79,19 +80,50 @@ interface FilterSidebarProps {
   initialFilters: SearchFilters;
   initialTab: string;
 }
-
+type Propriete = {
+  id: number;
+  loueur_id: number;
+  titre: string;
+  localisation: string;
+  typesLocaires:string;
+  ville:string;
+  prixParMois: number;
+  imgs: string[];
+  description: Text;
+  disponibilite: boolean;
+  type: string;
+  nbrchambre: number;
+  surface: number;
+  adresse: string;
+  admin_id: number;
+  loueur: {
+    id: number;
+    user: {
+      name: string;
+      email: string;
+      prenom: string;
+      genre: string;
+      telephone: string;
+      profile: string;
+    };
+  };
+};
+type InertiaPageProps = {
+  proprietes: Propriete[];
+};
 // First, define the defaultFilters constant at the top of the file (outside the component)
 const defaultFilters: SearchFiltersType = {
-  city: "",
-  district: "",
-  propertyType: "tout",
-  tenantType: "tous",
-  bedrooms: 0,
+  ville: "",
+  adresse: "",
+  localisation: "",  // إضافة localisation هنا
+  type: "tout",
+  typesLocaires: "tous",
+  nbrchambre: 0,
   minPrice: 500,
   maxPrice: 3000,
   minArea: 20,
   maxArea: 150,
-  features: [],
+  features:[],
 }
 
 // Définir les catégories de caractéristiques
@@ -150,13 +182,17 @@ export function FilterSidebar({
   onApply,
   initialFilters,
   initialTab = "location",
-}: FilterSidebarProps){
+  proprietes,
+}: FilterSidebarProps & InertiaPageProps){
   const [filters, setFilters] = useState<SearchFilters>({
-    city: initialFilters.city || "",
-    district: initialFilters.district || "",
-    propertyType: initialFilters.propertyType || "tout",
-    tenantType: initialFilters.tenantType || "tous",
-    bedrooms: initialFilters.bedrooms || 0,
+    ville: initialFilters.ville || "",
+    adresse: initialFilters.adresse || "",
+    type: initialFilters.type || "tout",
+    typesLocaires: initialFilters.typesLocaires || "tous",
+    nbrchambre: initialFilters.nbrchambre || 0,
+    prixParMois: initialFilters.prixParMois || 0,
+    localisation: initialFilters.localisation || "",
+
     minPrice: initialFilters.minPrice || 500,
     maxPrice: initialFilters.maxPrice || 3000,
     minArea: initialFilters.minArea || 20,
@@ -178,7 +214,7 @@ export function FilterSidebar({
         value: "laayoune",
         label: "Laâyoune",
         image: "/images/cities/laayoune.png",
-        districts: [
+        adresses: [
           { id: "al-wifaq", name: "Quartier Al Wifaq" },
           { id: "al-matar", name: "Hay Al Matar" },
           { id: "al-qods", name: "Hay Al Qods" },
@@ -193,7 +229,7 @@ export function FilterSidebar({
         value: "casablanca",
         label: "Casablanca",
         image: "/images/cities/casablanca.png",
-        districts: [
+        adresses: [
           { id: "maarif", name: "Maarif" },
           { id: "ain-diab", name: "Ain Diab" },
           { id: "anfa", name: "Anfa" },
@@ -206,7 +242,7 @@ export function FilterSidebar({
         value: "rabat",
         label: "Rabat",
         image: "/images/cities/rabat.png",
-        districts: [
+        adresses: [
           { id: "agdal", name: "Agdal" },
           { id: "hay-riad", name: "Hay Riad" },
           { id: "souissi", name: "Souissi" },
@@ -219,7 +255,7 @@ export function FilterSidebar({
         value: "marrakech",
         label: "Marrakech",
         image: "/images/cities/marrakech.png",
-        districts: [
+        adresses: [
           { id: "gueliz", name: "Guéliz" },
           { id: "hivernage", name: "Hivernage" },
           { id: "palmeraie", name: "Palmeraie" },
@@ -232,20 +268,20 @@ export function FilterSidebar({
         value: "agadir",
         label: "Agadir",
         image: "/images/cities/agadir.png",
-        districts: [{ id: "marina", name: "Marina" }],
+        adresses: [{ id: "marina", name: "Marina" }],
       },
       {
         value: "fes",
         label: "Fès",
         image: "/images/cities/fes.png",
-        districts: [{ id: "medina-fes", name: "Médina de Fès" }],
+        adresses: [{ id: "medina-fes", name: "Médina de Fès" }],
       },
     ],
     [],
   )
 
   // Mémorisation des types de propriétés pour éviter des re-rendus inutiles
-  const propertyTypes = useMemo(
+  const types = useMemo(
     () => [
       { value: "tout", label: "Tout", icon: <Home className="h-5 w-5" /> },
       { value: "appartement", label: "Appartement", icon: <Building className="h-5 w-5" /> },
@@ -268,7 +304,7 @@ export function FilterSidebar({
   )
 
   // Mémorisation des types de locataires pour éviter des re-rendus inutiles
-  const tenantTypes = useMemo(
+  const typesLocairess = useMemo(
     () => [
       { value: "tous", label: "Tous types", icon: <Users className="h-5 w-5" /> },
       { value: "etudiants", label: "Étudiants", icon: <GraduationCap className="h-5 w-5" /> },
@@ -290,19 +326,20 @@ export function FilterSidebar({
       { value: 4, label: "4", description: "4 chambres" },
       { value: 5, label: "5+", description: "5 chambres ou plus" },
     ]
+    const proprietesSafe = proprietes ?? []
 
-    // Calculer le nombre de propriétés pour chaque option
     return options.map((option) => {
       let count = 0
       if (option.value === 0) {
-        count = allProperties.length
+        count = proprietesSafe.length
       } else if (option.value === 5) {
-        count = allProperties.filter((p) => p.bedrooms >= 5).length
+        count = proprietesSafe.filter((p) => p.nbrchambre >= 5).length
       } else {
-        count = allProperties.filter((p) => p.bedrooms === option.value).length
+        count = proprietesSafe.filter((p) => p.nbrchambre === option.value).length
       }
       return { ...option, count }
     })
+    
   }, [])
 
   // Mémorisation des catégories de surface
@@ -377,48 +414,48 @@ export function FilterSidebar({
   useEffect(() => {
     const active = []
 
-    if (filters.city) {
-      const cityObj = cities.find((c) => c.value === filters.city)
+    if (filters.ville) {
+      const villeObj = cities.find((c) => c.value === filters.ville)
       active.push({
-        key: "city",
-        value: filters.city,
-        label: cityObj ? cityObj.label : filters.city,
+        key: "ville",
+        value: filters.ville,
+        label: villeObj ? villeObj.label : filters.ville,
       })
     }
 
-    if (filters.district) {
-      const cityObj = cities.find((c) => c.value === filters.city)
-      const districtObj = cityObj?.districts.find((d) => d.id === filters.district)
+    if (filters.adresse) {
+      const villeObj = cities.find((c) => c.value === filters.ville)
+      const adresseObj = villeObj?.adresses.find((d) => d.id === filters.adresse)
       active.push({
-        key: "district",
-        value: filters.district,
-        label: districtObj ? districtObj.name : filters.district,
+        key: "adresse",
+        value: filters.adresse,
+        label: adresseObj ? adresseObj.name : filters.adresse,
       })
     }
 
-    if (filters.propertyType && filters.propertyType !== "tout") {
-      const typeObj = propertyTypes.find((t) => t.value === filters.propertyType)
+    if (filters.type && filters.type !== "tout") {
+      const typeObj = types.find((t) => t.value === filters.type)
       active.push({
-        key: "propertyType",
-        value: filters.propertyType,
-        label: typeObj ? typeObj.label : filters.propertyType,
+        key: "type",
+        value: filters.type,
+        label: typeObj ? typeObj.label : filters.type,
       })
     }
 
-    if (filters.tenantType && filters.tenantType !== "tous") {
-      const tenantTypeObj = tenantTypes.find((t) => t.value === filters.tenantType)
+    if (filters.typesLocaires && filters.typesLocaires !== "tous") {
+      const typesLocairesObj = typesLocairess.find((t) => t.value === filters.typesLocaires)
       active.push({
-        key: "tenantType",
-        value: filters.tenantType,
-        label: tenantTypeObj ? tenantTypeObj.label : filters.tenantType,
+        key: "typesLocaires",
+        value: filters.typesLocaires,
+        label: typesLocairesObj ? typesLocairesObj.label : filters.typesLocaires,
       })
     }
 
-    if (filters.bedrooms > 0) {
+    if (filters.nbrchambre > 0) {
       active.push({
-        key: "bedrooms",
-        value: filters.bedrooms.toString(),
-        label: `${filters.bedrooms} ${filters.bedrooms > 1 ? "chambres" : "chambre"}`,
+        key: "nbrchambre",
+        value: filters.nbrchambre.toString(),
+        label: `${filters.nbrchambre} ${filters.nbrchambre > 1 ? "chambres" : "chambre"}`,
       })
     }
 
@@ -479,7 +516,7 @@ export function FilterSidebar({
     const initialFilterValues = JSON.stringify(initialFilters)
     const currentFilterValues = JSON.stringify(filters)
     setHasChanges(initialFilterValues !== currentFilterValues)
-  }, [filters, initialFilters, cities, propertyTypes, tenantTypes, surfaceCategories])
+  }, [filters, initialFilters, cities, types, typesLocairess, surfaceCategories])
 
   // Scroll to top when changing tabs
   useEffect(() => {
@@ -501,13 +538,13 @@ export function FilterSidebar({
   }, [isOpen])
 
   // Optimisation avec useCallback
-  const handleBedroomsChange = useCallback(
+  const handlenbrchambreChange = useCallback(
     (value: number) => {
       setFilters((prev) => {
         // Mettre à jour le filtre de chambres
         const newFilters = {
           ...prev,
-          bedrooms: value,
+          nbrchambre: value,
         }
 
         // Vérifier si les filtres ont changé
@@ -596,13 +633,13 @@ export function FilterSidebar({
   )
 
   // Gestion du changement de type de locataire
-  const handleTenantTypeChange = useCallback(
+  const handletypesLocairesChange = useCallback(
     (value: string) => {
       setFilters((prev) => {
         // Mettre à jour le filtre de type de locataire
         const newFilters = {
           ...prev,
-          tenantType: value,
+          typesLocaires: value,
         }
 
         // Vérifier si les filtres ont changé
@@ -655,11 +692,14 @@ export function FilterSidebar({
   // Optimisation avec useCallback
   const handleReset = useCallback(() => {
     setFilters({
-      city: "",
-      district: "",
-      propertyType: "tout",
-      tenantType: "tous",
-      bedrooms: 0,
+      ville: "",
+      localisation:"",
+
+      prixParMois: 0,
+      adresse:"",
+      type: "tout",
+      typesLocaires: "tous",
+      nbrchambre: 0,
       minPrice: 500,
       maxPrice: 3000,
       minArea: 20,
@@ -673,17 +713,17 @@ export function FilterSidebar({
     setFilters((prev) => {
       const newFilters = { ...prev }
 
-      if (key === "city") {
-        newFilters.city = ""
-        newFilters.district = "" // Réinitialiser aussi le district si on supprime la ville
-      } else if (key === "district") {
-        newFilters.district = ""
-      } else if (key === "propertyType") {
-        newFilters.propertyType = "tout"
-      } else if (key === "tenantType") {
-        newFilters.tenantType = "tous"
-      } else if (key === "bedrooms") {
-        newFilters.bedrooms = 0
+      if (key === "ville") {
+        newFilters.ville = ""
+        newFilters.adresse = "" // Réinitialiser aussi le adresse si on supprime la ville
+      } else if (key === "adresse") {
+        newFilters.adresse = ""
+      } else if (key === "type") {
+        newFilters.type = "tout"
+      } else if (key === "typesLocaires") {
+        newFilters.typesLocaires = "tous"
+      } else if (key === "nbrchambre") {
+        newFilters.nbrchambre = 0
       } else if (key === "price") {
         newFilters.minPrice = 500
         newFilters.maxPrice = 3000
@@ -753,10 +793,10 @@ export function FilterSidebar({
                   key={filter.key}
                   className="flex items-center bg-[#f5f7ff] border border-[#e0e5ff] rounded-full px-2.5 py-1 text-xs"
                 >
-                  {filter.key === "city" && <MapPin className="h-4 w-4 mr-1 text-[#4153a4]" />}
+                  {filter.key === "ville" && <MapPin className="h-4 w-4 mr-1 text-[#4153a4]" />}
                   {filter.key === "area" && <Ruler className="h-4 w-4 mr-1 text-[#4153a4]" />}
-                  {filter.key === "tenantType" && (
-                    <TenantTypeIcon type={filter.value as any} className="h-4 w-4 mr-1 text-[#4153a4]" />
+                  {filter.key === "typesLocaires" && (
+                    <TypesLocairesIcon type={filter.value as any} className="h-4 w-4 mr-1 text-[#4153a4]" />
                   )}
                   <span className="text-gray-700">{filter.label}</span>
                   <button onClick={() => removeFilter(filter.key)} className="ml-1 text-[#4153a4] hover:text-[#2d3a7c]">
@@ -794,32 +834,32 @@ export function FilterSidebar({
               <div className="p-4 space-y-6">
                 <h3 className="text-base font-medium text-gray-900 mb-3">Ville</h3>
                 <div className="grid grid-cols-2 gap-3">
-                  {cities.map((city) => (
+                  {cities.map((ville) => (
                     <div
-                      key={city.value}
+                      key={ville.value}
                       className={cn(
                         "relative overflow-hidden rounded-lg cursor-pointer transition-all h-32",
-                        filters.city === city.value ? "ring-2 ring-[#4153a4]" : "",
+                        filters.ville === ville.value ? "ring-2 ring-[#4153a4]" : "",
                       )}
-                      onClick={() => setFilters((prev) => ({ ...prev, city: city.value, district: "" }))}
+                      onClick={() => setFilters((prev) => ({ ...prev, ville: ville.value, adresse: "" }))}
                     >
                       <div className="absolute inset-0 bg-gray-200">
                         <img
-                          src={city.image || "/placeholder.svg"}
-                          alt={city.label}
+                          src={ville.image || "/placeholder.svg"}
+                          alt={ville.label}
                           className="object-cover"
                           sizes="(max-width: 768px) 50vw, 33vw"
                           onError={(e) => {
                             // Fallback to placeholder if image fails to load
                             const target = e.target as HTMLImageElement
-                            target.src = "/vibrant-cityscape.png"
+                            target.src = "/vibrant-villescape.png"
                           }}
                         />
                       </div>
                       <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-white">
-                        <h4 className="text-lg font-bold">{city.label}</h4>
+                        <h4 className="text-lg font-bold">{ville.label}</h4>
                         <p className="text-xs mt-1">
-                          {city.districts.length} quartier{city.districts.length > 1 ? "s" : ""}
+                          {ville.adresses.length} quartier{ville.adresses.length > 1 ? "s" : ""}
                         </p>
                       </div>
                     </div>
@@ -827,51 +867,51 @@ export function FilterSidebar({
                 </div>
 
                 {/* Section des quartiers - s'affiche uniquement quand une ville est sélectionnée */}
-                {filters.city && (
+                {filters.ville && (
                   <div className="mt-6">
                     <h3 className="text-base font-medium text-gray-900 mb-3">Quartier</h3>
                     <div className="grid grid-cols-1 gap-2">
                       {cities
-                        .find((c) => c.value === filters.city)
-                        ?.districts.map((district) => {
+                        .find((c) => c.value === filters.ville)
+                        ?.adresses.map((adresse) => {
                           // Calculer le nombre de propriétés pour ce quartier
-                          const propertyCount = allProperties.filter(
-                            (p) => p.city === filters.city && p.district === district.id,
+                          const propertyCount = proprietes.filter(
+                            (p) => p.ville === filters.ville && p.adresse === adresse.id,
                           ).length
 
                           return (
                             <button
-                              key={district.id}
+                              key={adresse.id}
                               className={cn(
                                 "flex items-center justify-between p-3 rounded-lg border transition-all",
-                                filters.district === district.id
+                                filters.adresse === adresse.id
                                   ? "border-[#4153a4] bg-[#f5f7ff]"
                                   : "border-gray-200 hover:border-gray-300",
                               )}
-                              onClick={() => setFilters((prev) => ({ ...prev, district: district.id }))}
+                              onClick={() => setFilters((prev) => ({ ...prev, adresse: adresse.id }))}
                             >
                               <div className="flex items-center">
                                 <div
                                   className={cn(
                                     "w-8 h-8 rounded-full flex items-center justify-center mr-3",
-                                    filters.district === district.id ? "bg-[#e0e5ff]" : "bg-gray-100",
+                                    filters.adresse === adresse.id ? "bg-[#e0e5ff]" : "bg-gray-100",
                                   )}
                                 >
                                   <MapPin
                                     className={cn(
                                       "h-4 w-4",
-                                      filters.district === district.id ? "text-[#4153a4]" : "text-gray-500",
+                                      filters.adresse === adresse.id ? "text-[#4153a4]" : "text-gray-500",
                                     )}
                                   />
                                 </div>
                                 <div className="flex flex-col items-start">
-                                  <span className="text-sm">{district.name}</span>
+                                  <span className="text-sm">{adresse.name}</span>
                                   <span className="text-xs text-gray-500">
                                     {propertyCount} logement{propertyCount > 1 ? "s" : ""}
                                   </span>
                                 </div>
                               </div>
-                              {filters.district === district.id && (
+                              {filters.adresse === adresse.id && (
                                 <div className="h-2 w-2 rounded-full bg-[#4153a4]"></div>
                               )}
                             </button>
@@ -887,26 +927,26 @@ export function FilterSidebar({
               <div className="p-4 space-y-6">
                 <h3 className="text-base font-medium text-gray-900">Type de logement</h3>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                  {propertyTypes.map((type) => (
+                  {types.map((type) => (
                     <button
                       key={type.value}
                       className={cn(
                         "p-3 rounded-xl border transition-all",
-                        filters.propertyType === type.value ? "border-indigo-600 bg-indigo-50" : "border-gray-200",
+                        filters.type === type.value ? "border-indigo-600 bg-indigo-50" : "border-gray-200",
                       )}
-                      onClick={() => setFilters((prev) => ({ ...prev, propertyType: type.value }))}
+                      onClick={() => setFilters((prev) => ({ ...prev, type: type.value }))}
                     >
                       <div className="flex items-center gap-2">
                         <div
                           className={cn(
                             "w-8 h-8 rounded-full flex items-center justify-center",
-                            filters.propertyType === type.value ? "bg-indigo-100" : "bg-gray-100",
+                            filters.type === type.value ? "bg-indigo-100" : "bg-gray-100",
                           )}
                         >
                           {React.cloneElement(type.icon, {
                             className: cn(
                               "h-4 w-4",
-                              filters.propertyType === type.value ? "text-indigo-600" : "text-gray-500",
+                              filters.type === type.value ? "text-indigo-600" : "text-gray-500",
                             ),
                           })}
                         </div>
@@ -1049,9 +1089,9 @@ export function FilterSidebar({
                     <div className="flex flex-col">
                       <span className="text-xs text-gray-500">Sélection actuelle</span>
                       <span className="text-lg font-semibold text-[#4153a4]">
-                        {filters.bedrooms === 0
+                        {filters.nbrchambre === 0
                           ? "Toutes les chambres"
-                          : `${filters.bedrooms} ${filters.bedrooms > 1 ? "chambres" : "chambre"}`}
+                          : `${filters.nbrchambre} ${filters.nbrchambre > 1 ? "chambres" : "chambre"}`}
                       </span>
                     </div>
                     <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[#f5f7ff] border border-[#e0e5ff]">
@@ -1062,11 +1102,11 @@ export function FilterSidebar({
                   {/* Options de chambres */}
                   <div className="grid grid-cols-3 gap-3">
                     {bedroomOptions.map((option) => {
-                      const isSelected = filters.bedrooms === option.value
+                      const isSelected = filters.nbrchambre === option.value
                       return (
                         <motion.button
                           key={option.value}
-                          onClick={() => handleBedroomsChange(option.value)}
+                          onClick={() => handlenbrchambreChange(option.value)}
                           className={cn(
                             "relative flex flex-col items-center justify-center p-4 rounded-xl border transition-all duration-200",
                             isSelected
@@ -1125,7 +1165,7 @@ export function FilterSidebar({
                           onClick={() => handleSurfaceCategoryChange(category)}
                           className={cn(
                             "relative w-full flex items-center p-4 rounded-xl border transition-all duration-200",
-                            isSelected ? `${category.activeColor} shadow-sm` : `${category.color} hover:bg-opacity-80`,
+                            isSelected ? `${category.activeColor} shadow-sm` : `${category.color} hover:bg-opaville-80`,
                           )}
                           whileTap={{ scale: 0.99 }}
                         >
@@ -1133,7 +1173,7 @@ export function FilterSidebar({
                             <div
                               className={cn(
                                 "flex items-center justify-center w-10 h-10 rounded-full mr-3",
-                                isSelected ? "bg-white bg-opacity-30" : "bg-white bg-opacity-60",
+                                isSelected ? "bg-white bg-opaville-30" : "bg-white bg-opaville-60",
                               )}
                             >
                               {React.cloneElement(category.icon, {
@@ -1145,7 +1185,7 @@ export function FilterSidebar({
                                 {category.name}
                               </span>
                               <span
-                                className={cn("text-xs", isSelected ? "text-white text-opacity-80" : "text-gray-600")}
+                                className={cn("text-xs", isSelected ? "text-white text-opaville-80" : "text-gray-600")}
                               >
                                 {category.minArea} - {category.maxArea} m² • {category.description}
                               </span>
@@ -1159,9 +1199,9 @@ export function FilterSidebar({
                           )}
 
                           {/* Visualisation de la taille relative */}
-                          <div className="absolute bottom-0 left-0 right-0 h-1 bg-white bg-opacity-20">
+                          <div className="absolute bottom-0 left-0 right-0 h-1 bg-white bg-opaville-20">
                             <div
-                              className="h-full bg-white bg-opacity-40"
+                              className="h-full bg-white bg-opaville-40"
                               style={{
                                 width: `${Math.min(100, (category.maxArea / 200) * 100)}%`,
                               }}
@@ -1227,22 +1267,22 @@ export function FilterSidebar({
                     <div className="flex flex-col">
                       <span className="text-xs text-gray-500">Sélection actuelle</span>
                       <span className="text-lg font-semibold text-[#4153a4]">
-                        {tenantTypes.find((t) => t.value === filters.tenantType)?.label || "Tous types"}
+                        {typesLocairess.find((t) => t.value === filters.typesLocaires)?.label || "Tous types"}
                       </span>
                     </div>
                     <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[#f5f7ff] border border-[#e0e5ff]">
-                      <TenantTypeIcon type={filters.tenantType as any} className="h-6 w-6 text-[#4153a4]" size={24} />
+                      <TypesLocairesIcon type={filters.typesLocaires as any} className="h-6 w-6 text-[#4153a4]" size={24} />
                     </div>
                   </div>
 
                   {/* Options de types de locataires */}
                   <div className="grid grid-cols-2 gap-3">
-                    {tenantTypes.map((option) => {
-                      const isSelected = filters.tenantType === option.value
+                    {typesLocairess.map((option) => {
+                      const isSelected = filters.typesLocaires === option.value
                       return (
                         <motion.button
                           key={option.value}
-                          onClick={() => handleTenantTypeChange(option.value)}
+                          onClick={() => handletypesLocairesChange(option.value)}
                           className={cn(
                             "relative flex items-center p-4 rounded-xl border transition-all duration-200",
                             isSelected
@@ -1269,7 +1309,7 @@ export function FilterSidebar({
                           {isSelected && (
                             <motion.div
                               className="absolute top-2 right-2 h-2 w-2 rounded-full bg-[#4153a4]"
-                              layoutId="tenantTypeIndicator"
+                              layoutId="typesLocairesIndicator"
                               initial={{ opacity: 0 }}
                               animate={{ opacity: 1 }}
                               exit={{ opacity: 0 }}

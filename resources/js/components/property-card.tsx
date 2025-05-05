@@ -9,7 +9,6 @@ import { useAuth } from "@/contexts/auth-context";
 import { useFavorites } from "@/contexts/favorites-context";
 import { AuthAlert } from "@/components/auth/auth-alert";
 
-// تعريف النوع لـ Propriete
 type Propriete = {
   id: number;
   loueur_id: number;
@@ -35,6 +34,9 @@ type Propriete = {
       profile: string;
     };
   };
+};
+type InertiaPageProps = {
+  proprietes: Propriete[];
 };
 
 // دالة عادية بدل دالة سهمية
@@ -94,7 +96,7 @@ function PropertyCard({ propriete }: { propriete: Propriete }) {
           <div className="relative w-full">
             <div className="w-full h-64 md:h-72 overflow-hidden">
               <ImageCarousel
-                images={propertyImages}
+                images={imgs}
                 alt={titre}
                 aspectRatio="tall"
                 className="w-full h-full"

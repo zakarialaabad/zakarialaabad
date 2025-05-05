@@ -1,4 +1,3 @@
-"use client"
 
 import { useState } from "react"
 import { ChevronLeft, Minus, Plus } from "lucide-react"
@@ -8,15 +7,17 @@ import { Slider } from "@/components/ui/slider"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 export interface SearchFilters {
-  city: string
-  district: string
-  propertyType: string
-  tenantType: string
-  bedrooms: number
+  ville: string
+  localisation: string,
+  adresse:string,
+  type: string,
+  typesLocaires:string,
+  prixParMois: number
+  nbrchambre: number
   minPrice: number
   maxPrice: number
-  minArea: number
-  maxArea: number
+  minArea?: number; // تعيينه كـ number | undefined
+  maxArea?: number;
 }
 
 interface SearchFiltersProps {
@@ -32,7 +33,7 @@ export function SearchFilters({ isOpen, onClose, onApply, initialFilters }: Sear
   const handleBedroomsChange = (action: "increment" | "decrement") => {
     setFilters((prev) => ({
       ...prev,
-      bedrooms: action === "increment" ? prev.bedrooms + 1 : Math.max(0, prev.bedrooms - 1),
+      bedrooms: action === "increment" ? prev.nbrchambre + 1 : Math.max(0, prev.nbrchambre - 1),
     }))
   }
 
@@ -63,7 +64,7 @@ export function SearchFilters({ isOpen, onClose, onApply, initialFilters }: Sear
         <div className="space-y-6 py-4">
           <div className="space-y-2">
             <label className="font-medium text-sm">Ville</label>
-            <Select value={filters.city} onValueChange={(value) => setFilters((prev) => ({ ...prev, city: value }))}>
+            <Select value={filters.ville} onValueChange={(value) => setFilters((prev) => ({ ...prev, ville: value }))}>
               <SelectTrigger>
                 <SelectValue placeholder="Sélectionner une ville" />
               </SelectTrigger>
@@ -79,7 +80,7 @@ export function SearchFilters({ isOpen, onClose, onApply, initialFilters }: Sear
           <div className="space-y-2">
             <label className="font-medium text-sm">Quartier</label>
             <Select
-              value={filters.district}
+              value={filters.adresse}
               onValueChange={(value) => setFilters((prev) => ({ ...prev, district: value }))}
             >
               <SelectTrigger>
@@ -99,8 +100,8 @@ export function SearchFilters({ isOpen, onClose, onApply, initialFilters }: Sear
               {["tout", "appartement", "garconniere"].map((type) => (
                 <Button
                   key={type}
-                  variant={filters.propertyType === type ? "default" : "outline"}
-                  className={`flex-1 ${filters.propertyType === type ? "bg-primary text-white" : "bg-gray-50"}`}
+                  variant={filters.type === type ? "default" : "outline"}
+                  className={`flex-1 ${filters.type === type ? "bg-primary text-white" : "bg-gray-50"}`}
                   onClick={() => setFilters((prev) => ({ ...prev, propertyType: type }))}
                 >
                   {type === "tout" ? "Tout" : type === "appartement" ? "Appartement" : "Garçonnière"}
@@ -115,9 +116,9 @@ export function SearchFilters({ isOpen, onClose, onApply, initialFilters }: Sear
               {["tous", "famille", "etudiants"].map((type) => (
                 <Button
                   key={type}
-                  variant={filters.tenantType === type ? "default" : "outline"}
-                  className={`flex-1 ${filters.tenantType === type ? "bg-primary text-white" : "bg-gray-50"}`}
-                  onClick={() => setFilters((prev) => ({ ...prev, tenantType: type }))}
+                  variant={filters.typesLocaires === type ? "default" : "outline"}
+                  className={`flex-1 ${filters.typesLocaires === type ? "bg-primary text-white" : "bg-gray-50"}`}
+                  onClick={() => setFilters((prev) => ({ ...prev, typesLocaires: type }))}
                 >
                   {type === "tous" ? "Tous" : type === "famille" ? "Famille" : "Étudiants"}
                 </Button>
@@ -137,7 +138,7 @@ export function SearchFilters({ isOpen, onClose, onApply, initialFilters }: Sear
                 <Minus className="h-4 w-4" />
                 <span className="sr-only">Moins</span>
               </Button>
-              <span className="mx-4">{filters.bedrooms === 0 ? "Tout" : filters.bedrooms}</span>
+              <span className="mx-4">{filters.nbrchambre === 0 ? "Tout" : filters.nbrchambre}</span>
               <Button
                 variant="outline"
                 size="icon"
@@ -193,20 +194,23 @@ export function SearchFilters({ isOpen, onClose, onApply, initialFilters }: Sear
               <p className="text-xs text-gray-500">Surface du logement</p>
             </div>
 
-            <div className="h-[100px] bg-white relative mt-2">
-              <Slider
-                defaultValue={[filters.minArea, filters.maxArea]}
-                max={200}
-                step={5}
-                onValueChange={(value) =>
-                  setFilters((prev) => ({
-                    ...prev,
-                    minArea: value[0],
-                    maxArea: value[1],
-                  }))
-                }
-                className="absolute bottom-4 inset-x-6"
-              />
+            <div className="h-[100px] bg-white relative mt-2"><Slider
+  defaultValue={[
+    filters.minArea ?? 0,
+    filters.maxArea ?? 200
+  ]}
+  max={200}
+  step={5}
+  onValueChange={(value) =>
+    setFilters((prev) => ({
+      ...prev,
+      minArea: value[0],
+      maxArea: value[1],
+    }))
+  }
+  className="absolute bottom-4 inset-x-6"
+/>
+
             </div>
 
             <div className="flex justify-between">

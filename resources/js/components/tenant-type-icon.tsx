@@ -10,7 +10,7 @@ interface TenantTypeIconProps {
   color?: string
 }
 
-export const TenantTypeIcon: FC<TenantTypeIconProps> = ({
+export const TypesLocairesIcon: FC<TenantTypeIconProps> = ({
   type,
   className = "",
   size = 24,

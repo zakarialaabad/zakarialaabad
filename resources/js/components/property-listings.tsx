@@ -1,4 +1,3 @@
-"use client"
 
 import { useState, useEffect, useMemo, useCallback } from "react"
 import { PropertyCard } from "@/components/property-card"
@@ -12,25 +11,38 @@ import { FilterSidebar } from "@/components/filter-sidebar"
 import type { SearchFilters } from "./search-filters"
 import { generateText, openai } from "@/lib/openai"
 import { HorizontalFilterBar } from "@/components/horizontal-filter-bar"
-import { allProperties } from "@/data/properties" // Importation depuis le fichier séparé
 type Propriete = {
   id: number;
-  loueur_id:number,
-  titre:string;
-  localisation:string;
-  prixParMois:number;
-  imgs: string[]; // ✅ مصفوفة من الروابط أو أسماء الصور
-  description:Text,
-  disponibilite:boolean,
-  type:string,
-  adresse:string,
-  admin_id:number
-  // أضف أي خصائص أخرى حسب حاجتك
+  loueur_id: number;
+  titre: string;
+  localisation: string;
+  typesLocaires:string;
+  ville:string;
+  prixParMois: number;
+  imgs: string[];
+  description: Text;
+  disponibilite: boolean;
+  type: string;
+  nbrchambre: number;
+  surface: number;
+  adresse: string;
+  admin_id: number;
+  loueur: {
+    id: number;
+    user: {
+      name: string;
+      email: string;
+      prenom: string;
+      genre: string;
+      telephone: string;
+      profile: string;
+    };
+  };
 };
-type HomeProps = {
+type InertiaPageProps = {
   proprietes: Propriete[];
 };
-export function PropertyListings({proprietes}:HomeProps) {
+export function PropertyListings({proprietes}:InertiaPageProps) {
   const isMobile = useMediaQuery("(max-width: 768px)")
   const [currentPage, setCurrentPage] = useState(1)
   const [gridView, setGridView] = useState<"grid3" | "grid2">("grid3")
@@ -38,11 +50,13 @@ export function PropertyListings({proprietes}:HomeProps) {
   const [isFilterSidebarOpen, setIsFilterSidebarOpen] = useState(false)
   const [activeFilterTab, setActiveFilterTab] = useState<string>("location")
   const [filters, setFilters] = useState<SearchFilters>({
-    city: "",
-    district: "",
-    propertyType: "tout",
-    tenantType: "tous",
-    bedrooms: 0,
+    ville: "",
+    prixParMois: 0,
+    localisation:"",
+    adresse:"",
+    type: "tout",
+    typesLocaires: "tous",
+    nbrchambre: 0,
     minPrice: 500,
     maxPrice: 3000,
     minArea: 20,
@@ -50,7 +64,7 @@ export function PropertyListings({proprietes}:HomeProps) {
   })
   const [searchQuery, setSearchQuery] = useState("")
   const [searchCriteria, setSearchCriteria] = useState<any>(null)
-  const [filteredProperties, setFilteredProperties] = useState(allProperties)
+  const [filteredProperties, setFilteredProperties] = useState(proprietes)
   const [searchAnimation, setSearchAnimation] = useState(false)
   const [activeFilter, setActiveFilter] = useState("all")
 
@@ -60,14 +74,13 @@ export function PropertyListings({proprietes}:HomeProps) {
       { id: "all", label: "Tous", icon: <Home className="h-5 w-5" strokeWidth={1} /> },
       { id: "apartment", label: "Appartement", icon: <Building className="h-5 w-5" strokeWidth={1} /> },
       { id: "house", label: "Maison", icon: <Home className="h-5 w-5" strokeWidth={1} /> },
-      { id: "garconniere", label: "Garçonnière", icon: <Building2 className="h-5 w-5" strokeWidth={1} /> },
+      { id: "garconniere", label: "Boutique", icon: <Building2 className="h-5 w-5" strokeWidth={1} /> },
       { id: "studio", label: "Studio", icon: <Building2 className="h-5 w-5" strokeWidth={1} /> },
       { id: "villa", label: "Villa", icon: <Home className="h-5 w-5" strokeWidth={1} /> },
       { id: "bureau", label: "Bureau", icon: <Building className="h-5 w-5" strokeWidth={1} /> },
       { id: "garage", label: "Garage", icon: <Warehouse className="h-5 w-5" strokeWidth={1} /> },
       { id: "depot", label: "Dépôt", icon: <Warehouse className="h-5 w-5" strokeWidth={1} /> },
-      { id: "duplex", label: "Duplex", icon: <Building className="h-5 w-5" strokeWidth={1} /> },
-      { id: "loft", label: "Loft", icon: <Building2 className="h-5 w-5" strokeWidth={1} /> },
+      { id: "duplex", label: "Magasin", icon: <Building className="h-5 w-5" strokeWidth={1} /> },
     ],
     [],
   )
@@ -80,65 +93,64 @@ export function PropertyListings({proprietes}:HomeProps) {
 
       // Filtrer les propriétés en fonction du filtre sélectionné
       setTimeout(() => {
-        let filtered = [...allProperties]
+        let filtered = [...proprietes]
 
         if (filterId !== "all") {
           // Filtrer par type de propriété
-          const propertyTypeMap: Record<string, string> = {
+          const typeMap: Record<string, string> = {
             apartment: "Appartement",
             house: "Maison",
-            garconniere: "Garçonnière",
+            boutique: "Boutique",
             studio: "Studio",
             villa: "Villa",
             bureau: "Bureau",
             garage: "Garage",
             depot: "Dépôt",
-            duplex: "Duplex",
-            loft: "Loft",
+            magasin: "Magasin",
           }
 
-          if (propertyTypeMap[filterId]) {
-            filtered = allProperties.filter(
-              (p) => p.propertyType.toLowerCase() === propertyTypeMap[filterId]?.toLowerCase(),
+          if (typeMap[filterId]) {
+            filtered = proprietes.filter(
+              (p) => p.type.toLowerCase() === typeMap[filterId]?.toLowerCase(),
             )
           }
         }
 
         // Appliquer les filtres de ville et de quartier
-        if (filters.city) {
-          filtered = filtered.filter((p) => p.city === filters.city.toLowerCase())
+        if (filters.localisation) {
+          filtered = filtered.filter((p) => p.localisation === filters.localisation.toLowerCase())
 
           // Si un quartier spécifique est sélectionné, filtrer davantage
-          if (filters.district) {
-            filtered = filtered.filter((p) => p.district === filters.district)
+          if (filters.adresse) {
+            filtered = filtered.filter((p) => p.adresse === filters.adresse)
           }
           // Sinon, tous les logements de la ville sont déjà filtrés
         }
 
-        if (filters.bedrooms > 0) {
-          filtered = filtered.filter((p) => p.bedrooms >= filters.bedrooms)
+        if (filters.nbrchambre > 0) {
+          filtered = filtered.filter((p) => p.nbrchambre >= filters.nbrchambre)
         }
 
         if (filters.minPrice > 500) {
-          filtered = filtered.filter((p) => p.price >= filters.minPrice)
+          filtered = filtered.filter((p) => p.prixParMois >= filters.minPrice)
         }
 
         if (filters.maxPrice < 3000) {
-          filtered = filtered.filter((p) => p.price <= filters.maxPrice)
+          filtered = filtered.filter((p) => p.prixParMois <= filters.maxPrice)
         }
 
         // Appliquer les filtres de surface
         if (filters.minArea && filters.minArea > 20) {
-          filtered = filtered.filter((p) => p.area >= filters.minArea!)
+          filtered = filtered.filter((p) => p.surface >= filters.minArea!)
         }
 
         if (filters.maxArea && filters.maxArea < 150) {
-          filtered = filtered.filter((p) => p.area <= filters.maxArea!)
+          filtered = filtered.filter((p) => p.surface <= filters.maxArea!)
         }
 
         // Appliquer le filtre de type de locataire
-        if (filters.tenantType && filters.tenantType !== "tous") {
-          filtered = filtered.filter((p) => p.tenantType === filters.tenantType)
+        if (filters.typesLocaires && filters.typesLocaires !== "tous") {
+          filtered = filtered.filter((p) => p.typesLocaires === filters.typesLocaires)
         }
 
         setFilteredProperties(filtered)
@@ -153,95 +165,91 @@ export function PropertyListings({proprietes}:HomeProps) {
   useEffect(() => {
     if (!searchCriteria) {
       // Appliquer uniquement les filtres standards
-      let filtered = [...allProperties]
+      let filtered = [...proprietes]
 
-      if (filters.city) {
-        filtered = filtered.filter((p) => p.city === filters.city.toLowerCase())
+      if (filters.ville) {
+        filtered = filtered.filter((p) => p.ville === filters.ville.toLowerCase())
 
         // Si un quartier spécifique est sélectionné, filtrer davantage
-        if (filters.district) {
-          filtered = filtered.filter((p) => p.district === filters.district)
+        if (filters.adresse) {
+          filtered = filtered.filter((p) => p.ville === filters.ville)
         }
         // Sinon, tous les logements de la ville sont déjà filtrés
       }
-
-      if (filters.propertyType && filters.propertyType !== "tout") {
-        filtered = filtered.filter((p) => p.propertyType.toLowerCase() === filters.propertyType.toLowerCase())
+ 
+      if (filters.type && filters.type !== "tout") {
+        filtered = filtered.filter((p) => p.type.toLowerCase() === filters.type.toLowerCase())
       }
 
-      if (filters.tenantType && filters.tenantType !== "tous") {
-        filtered = filtered.filter((p) => p.tenantType === filters.tenantType)
+      if (filters.typesLocaires && filters.typesLocaires !== "tous") {
+        filtered = filtered.filter((p) => p.typesLocaires === filters.typesLocaires)
       }
 
-      if (filters.bedrooms > 0) {
+      if (filters.nbrchambre > 0) {
         // Si l'utilisateur sélectionne 5+, montrer toutes les propriétés avec 5 chambres ou plus
-        if (filters.bedrooms === 5) {
-          filtered = filtered.filter((p) => p.bedrooms >= 5)
+        if (filters.nbrchambre === 5) {
+          filtered = filtered.filter((p) => p.nbrchambre >= 5)
         } else {
           // Pour les autres valeurs, montrer exactement ce nombre de chambres
-          filtered = filtered.filter((p) => p.bedrooms === filters.bedrooms)
+          filtered = filtered.filter((p) => p.nbrchambre === filters.nbrchambre)
         }
       }
 
       if (filters.minPrice > 500) {
-        filtered = filtered.filter((p) => p.price >= filters.minPrice)
+        filtered = filtered.filter((p) => p.prixParMois >= filters.minPrice)
       }
 
       if (filters.maxPrice < 3000) {
-        filtered = filtered.filter((p) => p.price <= filters.maxPrice)
+        filtered = filtered.filter((p) => p.prixParMois <= filters.maxPrice)
       }
 
       // Appliquer les filtres de surface
       if (filters.minArea && filters.minArea > 20) {
-        filtered = filtered.filter((p) => p.area >= filters.minArea!)
+        filtered = filtered.filter((p) => p.surface >= filters.minArea!)
       }
 
       if (filters.maxArea && filters.maxArea < 150) {
-        filtered = filtered.filter((p) => p.area <= filters.maxArea!)
+        filtered = filtered.filter((p) => p.surface <= filters.maxArea!)
       }
 
-      setFilteredProperties(filtered)
-      return
-    }
+      setFilteredProperties(filtered)   // ... تطبيق الفلاتر واحدًا تلو الآخر ...
 
+      return // ⬅️ يخرج من useEffect بعد التحديث
+    }
     setIsLoading(true)
     setSearchAnimation(true)
-
     // Filtrer les propriétés en fonction des critères de recherche
-    const filtered = allProperties.filter((property) => {
+    const filtered = proprietes.filter((property) => {
       let matches = true
-
       // Filtrer par type de propriété
       if (searchCriteria.type && searchCriteria.type !== "tout") {
-        const propertyTypeMatch = property.propertyType.toLowerCase().includes(searchCriteria.type.toLowerCase())
-        matches = matches && propertyTypeMatch
+        const typeMatch = property.type.toLowerCase().includes(searchCriteria.type.toLowerCase())
+        matches = matches && typeMatch
       }
-
       // Filtrer par emplacement
-      if (searchCriteria.location) {
-        const locationMatch = property.location.toLowerCase().includes(searchCriteria.location.toLowerCase())
+      if (searchCriteria.localisation) {
+        const locationMatch = property.localisation.toLowerCase().includes(searchCriteria.location.toLowerCase())
         matches = matches && locationMatch
       }
-
       // Filtrer par prix
       if (searchCriteria.minPrice) {
-        matches = matches && property.price >= searchCriteria.minPrice
+        matches = matches && property.prixParMois >= searchCriteria.minPrice
       }
       if (searchCriteria.maxPrice) {
-        matches = matches && property.price <= searchCriteria.maxPrice
+        matches = matches && property.prixParMois <= searchCriteria.maxPrice
       }
 
       // Filtrer par nombre de chambres
-      if (searchCriteria.bedrooms) {
-        matches = matches && property.bedrooms >= searchCriteria.bedrooms
+      if (searchCriteria.nbrchambre) {
+        matches = matches && property.nbrchambre >= searchCriteria.nbrchambre
       }
 
       // Filtrer par caractéristiques
       if (searchCriteria.features && searchCriteria.features.length > 0) {
         const hasFeature = searchCriteria.features.some(
           (feature: string) =>
-            property.title.toLowerCase().includes(feature.toLowerCase()) ||
-            property.location.toLowerCase().includes(feature.toLowerCase()),
+            property.titre.toLowerCase().includes(feature.toLowerCase()) ||
+            property.localisation.toLowerCase().includes(feature.toLowerCase()),
         )
         matches = matches && hasFeature
       }
@@ -250,49 +258,46 @@ export function PropertyListings({proprietes}:HomeProps) {
       if (searchCriteria.keywords && searchCriteria.keywords.length > 0) {
         const hasKeyword = searchCriteria.keywords.some(
           (keyword: string) =>
-            property.title.toLowerCase().includes(keyword.toLowerCase()) ||
-            property.location.toLowerCase().includes(keyword.toLowerCase()) ||
-            property.propertyType.toLowerCase().includes(keyword.toLowerCase()),
+            property.titre.toLowerCase().includes(keyword.toLowerCase()) ||
+            property.localisation.toLowerCase().includes(keyword.toLowerCase()) ||
+            property.type.toLowerCase().includes(keyword.toLowerCase()),
         )
         matches = matches && hasKeyword
       }
 
       // Appliquer les filtres standards en plus des critères de recherche
-      if (filters.city) {
-        matches = matches && property.city === filters.city.toLowerCase()
+      if (filters.ville) {
+        matches = matches && property.ville === filters.ville.toLowerCase()
       }
 
-      if (filters.district) {
-        matches = matches && property.district === filters.district
+      if (filters.adresse) {
+        matches = matches && property.adresse === filters.adresse
       }
-
-      if (filters.propertyType && filters.propertyType !== "tout") {
-        matches = matches && property.propertyType.toLowerCase() === filters.propertyType.toLowerCase()
+      if (filters.type && filters.type !== "tout") {
+        matches = matches && property.type.toLowerCase() === filters.type.toLowerCase()
       }
-
-      if (filters.tenantType && filters.tenantType !== "tous") {
-        matches = matches && property.tenantType === filters.tenantType
+      if (filters.typesLocaires && filters.typesLocaires !== "tous") {
+        matches = matches && property.typesLocaires === filters.typesLocaires
       }
-
-      if (filters.bedrooms > 0) {
-        matches = matches && property.bedrooms >= filters.bedrooms
+      if (filters.nbrchambre > 0) {
+        matches = matches && property.nbrchambre >= filters.nbrchambre
       }
 
       if (filters.minPrice > 500) {
-        matches = matches && property.price >= filters.minPrice
+        matches = matches && property.prixParMois >= filters.minPrice
       }
 
       if (filters.maxPrice < 3000) {
-        matches = matches && property.price <= filters.maxPrice
+        matches = matches && property.prixParMois <= filters.maxPrice
       }
 
       // Appliquer les filtres de surface
       if (filters.minArea && filters.minArea > 20) {
-        matches = matches && property.area >= filters.minArea!
+        matches = matches && property.surface >= filters.minArea!
       }
 
       if (filters.maxArea && filters.maxArea < 150) {
-        matches = matches && property.area <= filters.maxArea!
+        matches = matches && property.surface <= filters.maxArea!
       }
 
       return matches
@@ -316,12 +321,6 @@ export function PropertyListings({proprietes}:HomeProps) {
     [filteredProperties.length, propertiesPerPage],
   )
 
-  // Obtenir les propriétés pour la page actuelle - Mémorisé pour éviter des calculs inutiles
-  const currentProperties = useMemo(() => {
-    const startIndex = (currentPage - 1) * propertiesPerPage
-    const endIndex = startIndex + propertiesPerPage
-    return filteredProperties.slice(startIndex, endIndex)
-  }, [filteredProperties, currentPage, propertiesPerPage])
 
   // Gérer le changement de page - Optimisé avec useCallback
   const handlePageChange = useCallback(
@@ -329,9 +328,7 @@ export function PropertyListings({proprietes}:HomeProps) {
       // S'assurer que la page est dans les limites
       if (page < 1) page = 1
       if (page > totalPages) page = totalPages
-
       setCurrentPage(page)
-
       // Faire défiler vers le haut de la liste
       window.scrollTo({
         top: document.getElementById("property-listings")?.offsetTop || 0,
@@ -363,69 +360,63 @@ export function PropertyListings({proprietes}:HomeProps) {
   const handleApplyFilters = useCallback((newFilters: SearchFilters) => {
     setFilters(newFilters)
     setIsLoading(true)
-
-    // Appliquer les filtres
+  
     setTimeout(() => {
-      let filtered = [...allProperties]
-
-      if (newFilters.city) {
-        filtered = filtered.filter((p) => p.city === newFilters.city.toLowerCase())
-
-        // Si un quartier spécifique est sélectionné, filtrer davantage
-        if (newFilters.district) {
-          filtered = filtered.filter((p) => p.district === newFilters.district)
+      let filtered = [...proprietes]
+  
+      if (newFilters.ville) {
+        filtered = filtered.filter((p) => p.ville === newFilters.ville.toLowerCase())
+  
+        if (newFilters.adresse) {
+          filtered = filtered.filter((p) => p.adresse === newFilters.adresse)
         }
-        // Sinon, tous les logements de la ville sont déjà filtrés
       }
-
-      if (newFilters.propertyType && newFilters.propertyType !== "tout") {
-        filtered = filtered.filter((p) => p.propertyType.toLowerCase() === newFilters.propertyType.toLowerCase())
+  
+      if (newFilters.type && newFilters.type !== "tout") {
+        filtered = filtered.filter((p) => p.type.toLowerCase() === newFilters.type.toLowerCase())
       }
-
-      if (newFilters.tenantType && newFilters.tenantType !== "tous") {
-        filtered = filtered.filter((p) => p.tenantType === newFilters.tenantType)
+  
+      if (newFilters.typesLocaires && newFilters.typesLocaires !== "tous") {
+        filtered = filtered.filter((p) => p.typesLocaires === newFilters.typesLocaires)
       }
-
-      // Filtre de chambres - Vérifier si c'est exactement le nombre de chambres ou au moins ce nombre
-      if (newFilters.bedrooms > 0) {
-        // Si l'utilisateur sélectionne 5+, montrer toutes les propriétés avec 5 chambres ou plus
-        if (newFilters.bedrooms === 5) {
-          filtered = filtered.filter((p) => p.bedrooms >= 5)
+  
+      if (newFilters.localisation && newFilters.localisation !== "tous") {
+        filtered = filtered.filter((p) => p.localisation === newFilters.localisation)
+      }
+  
+      if (newFilters.nbrchambre > 0) {
+        if (newFilters.nbrchambre === 5) {
+          filtered = filtered.filter((p) => p.nbrchambre >= 5)
         } else {
-          // Pour les autres valeurs, montrer exactement ce nombre de chambres
-          filtered = filtered.filter((p) => p.bedrooms === newFilters.bedrooms)
+          filtered = filtered.filter((p) => p.nbrchambre === newFilters.nbrchambre)
         }
       }
-
-      // Filtre de prix - S'assurer que les valeurs min et max sont appliquées correctement
+  
       if (newFilters.minPrice > 500) {
-        filtered = filtered.filter((p) => p.price >= newFilters.minPrice)
+        filtered = filtered.filter((p) => p.prixParMois >= newFilters.minPrice)
       }
-
+  
       if (newFilters.maxPrice < 3000) {
-        filtered = filtered.filter((p) => p.price <= newFilters.maxPrice)
+        filtered = filtered.filter((p) => p.prixParMois <= newFilters.maxPrice)
       }
-
-      // Filtre de surface - S'assurer que les valeurs min et max sont appliquées correctement
+  
       if (newFilters.minArea && newFilters.minArea > 20) {
-        filtered = filtered.filter((p) => p.area >= newFilters.minArea!)
+        filtered = filtered.filter((p) => p.surface >= (newFilters.minArea ?? 0))
       }
-
+  
       if (newFilters.maxArea && newFilters.maxArea < 150) {
-        filtered = filtered.filter((p) => p.area <= newFilters.maxArea!)
+        filtered = filtered.filter((p) => p.surface >= (newFilters.maxArea ?? 0))
       }
-
-      // Mettre à jour les propriétés filtrées et réinitialiser la pagination
+  
       setFilteredProperties(filtered)
       setIsLoading(false)
       setCurrentPage(1)
-
-      // Ajouter un log pour déboguer
+  
       console.log(`Filtres appliqués: ${JSON.stringify(newFilters)}`)
       console.log(`Nombre de propriétés après filtrage: ${filtered.length}`)
     }, 300)
-  }, [])
-
+  }, [proprietes])
+  
   // Gérer la recherche par IA - Optimisé avec useCallback
   const handleAISearch = useCallback(async (query: string, aiResults: any) => {
     setSearchQuery(query)
@@ -447,7 +438,7 @@ export function PropertyListings({proprietes}:HomeProps) {
             "location": emplacement ou quartier mentionné,
             "minPrice": prix minimum si mentionné (nombre),
             "maxPrice": prix maximum si mentionné (nombre),
-            "bedrooms": nombre de chambres si mentionné (nombre),
+            "nbrchambre": nombre de chambres si mentionné (nombre),
             "features": tableau de caractéristiques mentionnées (jardin, terrasse, piscine, etc.),
             "keywords": mots-clés importants pour la recherche
           }
@@ -479,11 +470,11 @@ export function PropertyListings({proprietes}:HomeProps) {
   // Compter les filtres actifs - Mémorisé pour éviter des calculs inutiles
   const activeFiltersCount = useMemo(() => {
     return Object.entries(filters).reduce((count, [key, value]) => {
-      if (key === "city" && value) count++
-      if (key === "district" && value) count++
-      if (key === "propertyType" && value !== "tout") count++
-      if (key === "tenantType" && value !== "tous") count++
-      if (key === "bedrooms" && value > 0) count++
+      if (key === "ville" && value) count++
+      if (key === "adresse" && value) count++
+      if (key === "type" && value !== "tout") count++
+      if (key === "typesLocaires" && value !== "tous") count++
+      if (key === "nbrchambre" && value > 0) count++
       if ((key === "minPrice" && value > 500) || (key === "maxPrice" && value < 3000)) count++
       if ((key === "minArea" && value > 20) || (key === "maxArea" && value < 150)) count++
       return count
@@ -517,10 +508,10 @@ export function PropertyListings({proprietes}:HomeProps) {
                   <div className="min-w-0 text-left">
                     <p className="text-xs md:text-sm text-gray-500 font-medium">Où?</p>
                     <p className="text-sm md:text-base font-medium text-gray-900 truncate">
-                      {filters.city
-                        ? filters.city.charAt(0).toUpperCase() + filters.city.slice(1)
+                      {filters.ville
+                        ? filters.ville.charAt(0).toUpperCase() + filters.ville.slice(1)
                         : "Toutes les villes"}
-                      {filters.district ? `, ${filters.district}` : ""}
+                      {filters.adresse ? `, ${filters.adresse}` : ""}
                     </p>
                   </div>
                 </div>
@@ -537,10 +528,10 @@ export function PropertyListings({proprietes}:HomeProps) {
                   <div className="min-w-0 text-left">
                     <p className="text-xs md:text-sm text-gray-500 font-medium">Chambres</p>
                     <p className="text-sm md:text-base font-medium text-gray-900 truncate">
-                      {filters.bedrooms > 0
-                        ? filters.bedrooms === 5
+                      {filters.nbrchambre > 0
+                        ? filters.nbrchambre === 5
                           ? "5+ chambres"
-                          : `${filters.bedrooms} chambre${filters.bedrooms > 1 ? "s" : ""}`
+                          : `${filters.nbrchambre} chambre${filters.nbrchambre > 1 ? "s" : ""}`
                         : "Toutes"}
                     </p>
                   </div>
@@ -562,8 +553,8 @@ export function PropertyListings({proprietes}:HomeProps) {
                   <div className="min-w-0 text-left">
                     <p className="text-xs md:text-sm text-gray-500 font-medium">Type locataire</p>
                     <p className="text-sm md:text-base font-medium text-gray-900 truncate">
-                      {filters.tenantType !== "tous"
-                        ? filters.tenantType.charAt(0).toUpperCase() + filters.tenantType.slice(1)
+                      {filters.typesLocaires !== "tous"
+                        ? filters.typesLocaires.charAt(0).toUpperCase() + filters.typesLocaires.slice(1)
                         : "Tous types"}
                     </p>
                   </div>
@@ -594,7 +585,7 @@ export function PropertyListings({proprietes}:HomeProps) {
                 <div className="flex items-center text-gray-700">
                   <MapPin className="h-4 w-4 mr-1" />
                   <span className="font-medium">
-                    {filters.city ? filters.city.charAt(0).toUpperCase() + filters.city.slice(1) : "Toutes les villes"}
+                    {filters.ville ? filters.ville.charAt(0).toUpperCase() + filters.ville.slice(1) : "Toutes les villes"}
                   </span>
                 </div>
                 <span className="text-gray-500">•</span>
@@ -687,11 +678,13 @@ export function PropertyListings({proprietes}:HomeProps) {
                 className="mt-2"
                 onClick={() => {
                   setFilters({
-                    city: "",
-                    district: "",
-                    propertyType: "tout",
-                    tenantType: "tous",
-                    bedrooms: 0,
+                    ville: "",
+                    prixParMois: 0,
+                    localisation:"",
+                    adresse:"",
+                    type: "tout",
+                    typesLocaires: "tous",
+                    nbrchambre: 0,
                     minPrice: 500,
                     maxPrice: 3000,
                     minArea: 20,
@@ -716,19 +709,23 @@ export function PropertyListings({proprietes}:HomeProps) {
                   gridView === "grid3" ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1 md:grid-cols-2",
                 )}
               >
-                {proprietes.map((property, index) => (
-                  <motion.div
-                    key={property.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{
-                      opacity: 1,
-                      y: 0,
-                      transition: { delay: index * 0.05 },
-                    }}
-                  >
-                    <PropertyCard {...property} />
-                  </motion.div>
-                ))}
+                {proprietes.map((property, index) => {
+  console.log(property); // ضع الـ console.log هنا قبل الـ return مباشرة
+  return (
+    <motion.div
+      key={property.id}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{
+        opacity: 1,
+        y: 0,
+        transition: { delay: index * 0.05 },
+      }}
+    >
+      <PropertyCard propriete={property} />
+    </motion.div>
+  );
+})}
+
               </motion.div>
             </AnimatePresence>
           )}
@@ -753,6 +750,7 @@ export function PropertyListings({proprietes}:HomeProps) {
         onClose={handleCloseFilters}
         onApply={handleApplyFilters}
         initialFilters={filters}
+        proprietes={proprietes}
         initialTab={activeFilterTab}
       />
     </section>

@@ -9,8 +9,12 @@ class Propriete extends Model
     //
     protected $fillable = [
         'loueur_id', 'titre', 'localisation', 'prixParMois',
-        'description', 'disponibilite', 'type', 'caracteristiques',
+        'description', 'disponibilite', 'type', 'nbrchambre',"surface",
         'condition', 'adresse'
+    ];
+    
+    protected $casts = [
+        'imgs' => 'array',
     ];
     public function photos()
     {
