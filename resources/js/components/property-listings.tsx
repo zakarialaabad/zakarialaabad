@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useMemo, useCallback } from "react"
 import { PropertyCard } from "@/components/property-card"
 import { useMediaQuery } from "@/utils/responsive-utils"
@@ -14,10 +13,10 @@ import { HorizontalFilterBar } from "@/components/horizontal-filter-bar"
 type Propriete = {
   id: number;
   loueur_id: number;
-  titre: string;
-  localisation: string;
-  typesLocaires:string;
   ville:string;
+  titre: string;
+  typesLocaires:string;
+  localisation: string;
   prixParMois: number;
   imgs: string[];
   description: Text;
@@ -48,7 +47,7 @@ export function PropertyListings({proprietes}:InertiaPageProps) {
   const [gridView, setGridView] = useState<"grid3" | "grid2">("grid3")
   const [isLoading, setIsLoading] = useState(false)
   const [isFilterSidebarOpen, setIsFilterSidebarOpen] = useState(false)
-  const [activeFilterTab, setActiveFilterTab] = useState<string>("location")
+  const [activeFilterTab, setActiveFilterTab] = useState<string>("localisation")
   const [filters, setFilters] = useState<SearchFilters>({
     ville: "",
     prixParMois: 0,
@@ -80,21 +79,18 @@ export function PropertyListings({proprietes}:InertiaPageProps) {
       { id: "bureau", label: "Bureau", icon: <Building className="h-5 w-5" strokeWidth={1} /> },
       { id: "garage", label: "Garage", icon: <Warehouse className="h-5 w-5" strokeWidth={1} /> },
       { id: "depot", label: "Dépôt", icon: <Warehouse className="h-5 w-5" strokeWidth={1} /> },
-      { id: "duplex", label: "Magasin", icon: <Building className="h-5 w-5" strokeWidth={1} /> },
+      { id: "magasin", label: "Magasin", icon: <Building className="h-5 w-5" strokeWidth={1} /> },
     ],
     [],
   )
-
   // Gérer le changement de filtre - Optimisé avec useCallback
   const handleFilterChange = useCallback(
     (filterId: string) => {
       setActiveFilter(filterId)
       setIsLoading(true)
-
       // Filtrer les propriétés en fonction du filtre sélectionné
       setTimeout(() => {
         let filtered = [...proprietes]
-
         if (filterId !== "all") {
           // Filtrer par type de propriété
           const typeMap: Record<string, string> = {
@@ -108,14 +104,12 @@ export function PropertyListings({proprietes}:InertiaPageProps) {
             depot: "Dépôt",
             magasin: "Magasin",
           }
-
           if (typeMap[filterId]) {
             filtered = proprietes.filter(
               (p) => p.type.toLowerCase() === typeMap[filterId]?.toLowerCase(),
             )
           }
         }
-
         // Appliquer les filtres de ville et de quartier
         if (filters.localisation) {
           filtered = filtered.filter((p) => p.localisation === filters.localisation.toLowerCase())
@@ -126,7 +120,6 @@ export function PropertyListings({proprietes}:InertiaPageProps) {
           }
           // Sinon, tous les logements de la ville sont déjà filtrés
         }
-
         if (filters.nbrchambre > 0) {
           filtered = filtered.filter((p) => p.nbrchambre >= filters.nbrchambre)
         }
@@ -176,11 +169,9 @@ export function PropertyListings({proprietes}:InertiaPageProps) {
         }
         // Sinon, tous les logements de la ville sont déjà filtrés
       }
- 
       if (filters.type && filters.type !== "tout") {
         filtered = filtered.filter((p) => p.type.toLowerCase() === filters.type.toLowerCase())
       }
-
       if (filters.typesLocaires && filters.typesLocaires !== "tous") {
         filtered = filtered.filter((p) => p.typesLocaires === filters.typesLocaires)
       }
@@ -481,6 +472,9 @@ export function PropertyListings({proprietes}:InertiaPageProps) {
     }, 0)
   }, [filters])
 
+  const startIndex = (currentPage - 1) * propertiesPerPage;
+  const endIndex = startIndex + propertiesPerPage;
+  const propertiesToShow = filteredProperties.slice(startIndex, endIndex);
   return (
     <section id="property-listings" className="w-full">
       {/* Header sticky qui contient tous les éléments de filtrage */}
@@ -494,7 +488,7 @@ export function PropertyListings({proprietes}:InertiaPageProps) {
               <div className="flex items-center">
                 <div
                   className="flex items-center py-3 md:py-3 px-5 md:px-6 flex-1 cursor-pointer hover:bg-black/5 transition-colors border-r"
-                  onClick={() => handleOpenFilters("location")}
+                  onClick={() => handleOpenFilters("localisation")}
                 >
                   <div className="w-8 md:w-8 h-8 md:h-8 flex-shrink-0 mr-3">
                     <img
@@ -504,6 +498,8 @@ export function PropertyListings({proprietes}:InertiaPageProps) {
                       height={40}
                       className="w-full h-full object-contain"
                     />
+
+        
                   </div>
                   <div className="min-w-0 text-left">
                     <p className="text-xs md:text-sm text-gray-500 font-medium">Où?</p>
@@ -536,7 +532,6 @@ export function PropertyListings({proprietes}:InertiaPageProps) {
                     </p>
                   </div>
                 </div>
-
                 <div
                   className="flex items-center py-3 md:py-3 px-5 md:px-6 flex-1 cursor-pointer hover:bg-black/5 transition-colors"
                   onClick={() => handleOpenFilters("tenant")}
@@ -709,28 +704,26 @@ export function PropertyListings({proprietes}:InertiaPageProps) {
                   gridView === "grid3" ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1 md:grid-cols-2",
                 )}
               >
-                {proprietes.map((property, index) => {
-  console.log(property); // ضع الـ console.log هنا قبل الـ return مباشرة
-  return (
-    <motion.div
-      key={property.id}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{
-        opacity: 1,
-        y: 0,
-        transition: { delay: index * 0.05 },
-      }}
-    >
-      <PropertyCard propriete={property} />
-    </motion.div>
-  );
-})}
-
+                {propertiesToShow.map((property, index) => {
+                  console.log(property);
+                  return (
+                    <motion.div
+                      key={property.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{
+                        opacity: 1,
+                        y: 0,
+                        transition: { delay: index * 0.05 },
+                      }}
+                    >
+                      <PropertyCard propriete={property} />
+                    </motion.div>
+                  );
+                })}
               </motion.div>
             </AnimatePresence>
           )}
         </div>
-
         {/* Pagination */}
         {totalPages > 1 && (
           <div className="mt-8">
@@ -743,7 +736,6 @@ export function PropertyListings({proprietes}:InertiaPageProps) {
           </div>
         )}
       </div>
-
       {/* Sidebar de filtrage */}
       <FilterSidebar
         isOpen={isFilterSidebarOpen}

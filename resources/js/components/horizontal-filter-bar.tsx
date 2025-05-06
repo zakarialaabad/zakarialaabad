@@ -1,4 +1,3 @@
-"use client"
 
 import React, { useState, useRef, useEffect, useCallback } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
@@ -24,7 +23,7 @@ export function HorizontalFilterBar({
   activeFilter,
   onFilterChange,
   className,
-}: HorizontalFilterBarProps): JSX.Element {
+}: HorizontalFilterBarProps){
   const [showLeftArrow, setShowLeftArrow] = useState(false)
   const [showRightArrow, setShowRightArrow] = useState(true)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
@@ -216,16 +215,15 @@ export function HorizontalFilterBar({
                 "hover:opacity-90 focus:outline-none",
               )}
             >
-              <div className="flex items-center justify-center mb-0.5 h-5">
-                {React.isValidElement(filter.icon) ? (
-                  React.cloneElement(filter.icon as React.ReactElement, {
-                    className: cn("h-5 w-5", activeFilter === filter.id ? "text-black" : "text-gray-500"),
-                    strokeWidth: 1,
-                  })
-                ) : (
-                  <span className="text-gray-500">Icon</span>
-                )}
-              </div>
+                      {React.isValidElement(filter.icon) ? (
+          React.cloneElement(filter.icon as React.ReactElement<any>, {
+            className: cn("h-5 w-5", activeFilter === filter.id ? "text-black" : "text-gray-500"),
+            strokeWidth: 1,
+          })
+        ) : (
+          <span className="text-gray-500">Icon</span>
+        )}
+
               <span
                 className={cn(
                   "text-xs font-medium whitespace-nowrap transition-colors duration-300",

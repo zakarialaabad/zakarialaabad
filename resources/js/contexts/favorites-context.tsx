@@ -1,37 +1,26 @@
-
-import  React from "react"
-
+import type React from "react"
 import { createContext, useContext, useState, useEffect } from "react"
 import { useAuth } from "@/contexts/auth-context"
-
 interface FavoritesContextType {
-  favorites: number[]
-  addFavorite: (propertyId: number) => void
-  removeFavorite: (propertyId: number) => void
-  isFavorite: (propertyId: number) => boolean
-  toggleFavorite: (propertyId: number) => void
+  favorites: number[] // Change string[] to number[]
+  addFavorite: (propertyId: number) => void // Change Number to number
+  removeFavorite: (propertyId: number) => void // Change Number to number
+  isFavorite: (propertyId: number) => boolean // Change Number to number
+  toggleFavorite: (propertyId: number) => void // Change Number to number
 }
-
 const FavoritesContext = createContext<FavoritesContextType | undefined>(undefined)
-
 export function FavoritesProvider({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuth()
-  const [favorites, setFavorites] = useState<number[]>([])
+  const [favorites, setFavorites] = useState<number[]>([]) // Change string[] to number[]
 
   // Charger les favoris depuis le localStorage au démarrage
   useEffect(() => {
     if (isAuthenticated) {
-      const storedFavorites = localStorage.getItem("favorites")
-      if (storedFavorites) {
-        try {
-          const parsed = JSON.parse(storedFavorites)
-          if (Array.isArray(parsed)) {
-            setFavorites(parsed.map((id: any) => Number(id)))
-          }
-        } catch (error) {
-          console.error("Error parsing favorites from localStorage:", error)
-        }
-      }
+          const savedFavorites = localStorage.getItem("favorites");
+    if (savedFavorites) {
+      setFavorites(JSON.parse(savedFavorites).map(Number)); // يحول القيم إلى أرقام
+    }
+
     } else {
       // Réinitialiser les favoris si l'utilisateur n'est pas connecté
       setFavorites([])
@@ -45,21 +34,21 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
     }
   }, [favorites, isAuthenticated])
 
-  const addFavorite = (propertyId: number) => {
+  const addFavorite = (propertyId: number) => { // Change Number to number
     if (!favorites.includes(propertyId)) {
       setFavorites((prev) => [...prev, propertyId])
     }
   }
 
-  const removeFavorite = (propertyId: number) => {
+  const removeFavorite = (propertyId: number) => { // Change Number to number
     setFavorites((prev) => prev.filter((id) => id !== propertyId))
   }
 
-  const isFavorite = (propertyId: number) => {
+  const isFavorite = (propertyId: number) => { // Change Number to number
     return favorites.includes(propertyId)
   }
 
-  const toggleFavorite = (propertyId: number) => {
+  const toggleFavorite = (propertyId: number) => { // Change Number to number
     if (isFavorite(propertyId)) {
       removeFavorite(propertyId)
     } else {

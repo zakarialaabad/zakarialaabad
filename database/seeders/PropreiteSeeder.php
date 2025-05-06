@@ -5,37 +5,40 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Propriete;
 use Illuminate\Support\Facades\File;
+
 class PropreiteSeeder extends Seeder
 {
-    
-public function getRandomImages($folderPath, $count = 5)
-{
-    $fullPath = public_path($folderPath);
+    private $typesLocairesOptions = ['Tout', 'Famille', 'Marei', 'Étudiant', 'Célibataire', 'Fonctionnaire'];
 
-    if (!File::exists($fullPath)) {
-        return [];
+    public function getRandomImages($folderPath, $count = 5)
+    {
+        $fullPath = public_path($folderPath);
+
+        if (!File::exists($fullPath)) {
+            return [];
+        }
+
+        $allFiles = collect(File::files($fullPath))
+            ->filter(function ($file) {
+                return in_array($file->getExtension(), ['jpg', 'jpeg', 'png', 'webp']);
+            })
+            ->shuffle()
+            ->take($count)
+            ->map(function ($file) use ($folderPath) {
+                return $folderPath . '/' . $file->getFilename(); // e.g., 'appartements/image1.jpg'
+            })
+            ->values()
+            ->toArray();
+
+        return $allFiles;
     }
 
-    $allFiles = collect(File::files($fullPath))
-        ->filter(function ($file) {
-            return in_array($file->getExtension(), ['jpg', 'jpeg', 'png', 'webp']);
-        })
-        ->shuffle()
-        ->take($count)
-        ->map(function ($file) use ($folderPath) {
-            return $folderPath . '/' . $file->getFilename(); // e.g., 'appartements/image1.jpg'
-        })
-        ->values()
-        ->toArray();
-
-    return $allFiles;
-}
     public function run()
     {
         $posts = [
             // Appartement
             [
-                'loueur_id' => rand(31, 60),
+                'loueur_id' => rand(1, 25),
                 'titre' => 'Appartement moderne à Casablanca',
                 'localisation' => 'Casablanca, Hay Riad',
                 'prixParMois' => 6000,
@@ -46,26 +49,31 @@ public function getRandomImages($folderPath, $count = 5)
                 'condition' => 'Loyer mensuel de 6000 MAD, 1 mois de caution.',
                 'adresse' => 'Casablanca, Hay Riad, Rue Mohammed VI',
                 'admin_id' => 1,
-                'surface' => rand(40, 300), // أو حسب نوع العقار
-                'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+                'surface' => rand(40, 300),
+                'nbrChambre' => rand(1, 6),
+                'typesLocaires' => $this->typesLocairesOptions[array_rand($this->typesLocairesOptions)],
+                "ville" => "Casablanca"
             ],
             [
-                'loueur_id' => rand(31, 60),
+                'loueur_id' => rand(1, 25),
                 'titre' => 'Appartement de luxe à Marrakech',
-                'localisation' => 'Marrakech, Gueliz',
-                'prixParMois' => 12000,
-                'imgs' =>json_encode($this->getRandomImages('Appartement--Villa--Maison')),
                 'description' => 'Spacieux appartement de luxe de 120 m² avec des finitions haut de gamme. L\'appartement offre 3 chambres, un grand salon, une cuisine ouverte, et un balcon avec une vue sur la ville. Emplacement idéal à Gueliz, proche des commerces.',
                 'disponibilite' => true,
+                'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')),
+                "prixParMois"=> 12000,
+                'localisation' => 'Marrakech, Gueliz',
                 'type' => 'Appartement',
                 'condition' => 'Loyer mensuel de 12000 MAD, contrat de 1 an.',
                 'adresse' => 'Marrakech, Gueliz, Rue de la Liberté',
                 'admin_id' => 2,
-                'surface' => rand(40, 300), // أو حسب نوع العقار
-                'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+                'surface' => rand(40, 300),
+                'nbrChambre' => rand(1, 6),
+                'typesLocaires' => 'Fonctionnaire',
+                "ville"=>"Marrakech"
+
             ],
             [
-                'loueur_id' => rand(31, 60),
+                'loueur_id' => rand(1, 25),
                 'titre' => 'Appartement au centre de Rabat',
                 'localisation' => 'Rabat, Centre-ville',
                 'prixParMois' => 4500,
@@ -76,11 +84,14 @@ public function getRandomImages($folderPath, $count = 5)
                 'condition' => 'Loyer mensuel de 4500 MAD, 1 mois de caution.',
                 'adresse' => 'Rabat, Centre-ville, Avenue Hassan II',
                 'admin_id' => 3,
-                'surface' => rand(40, 300), // أو حسب نوع العقار
-                'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+                'surface' => rand(40, 300),
+                'nbrChambre' => rand(1, 6),
+                'typesLocaires' => 'Étudiant',
+                "ville"=>"Rabat"
+
             ],
             [
-                'loueur_id' => rand(31, 60),
+                'loueur_id' => rand(1, 25),
                 'titre' => 'Appartement à Tanger, plage',
                 'localisation' => 'Tanger, Plage',
                 'prixParMois' => 7000,
@@ -91,13 +102,15 @@ public function getRandomImages($folderPath, $count = 5)
                 'condition' => 'Loyer mensuel de 7000 MAD, 1 mois de caution.',
                 'adresse' => 'Tanger, Plage, Rue de la Mer',
                 'admin_id' => 4,
-                'surface' => rand(40, 300), // أو حسب نوع العقار
-                'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+                'surface' => rand(40, 300),
+                'nbrChambre' => rand(1, 6),
+                'typesLocaires' => 'Célibataire',
+                "ville"=>"Tanger"
             ],
 
             // Villa
             [
-                'loueur_id' => rand(31, 60),
+                'loueur_id' => rand(1, 25),
                 'titre' => 'Villa de luxe à Marrakech',
                 'localisation' => 'Marrakech, Palmeraie',
                 'prixParMois' => 15000,
@@ -108,11 +121,13 @@ public function getRandomImages($folderPath, $count = 5)
                 'condition' => 'Loyer mensuel de 15000 MAD, 2 mois de caution.',
                 'adresse' => 'Marrakech, Palmeraie, Route de l\'Ourika',
                 'admin_id' => 1,
-                'surface' => rand(40, 300), // أو حسب نوع العقار
-                'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+                'surface' => rand(40, 300),
+                'nbrChambre' => rand(1, 6),
+                'typesLocaires' => 'Famille',
+                "ville"=>"Marrakech"
             ],
             [
-                'loueur_id' => rand(31, 60),
+                'loueur_id' => rand(1, 25),
                 'titre' => 'Villa avec jardin à Fès',
                 'localisation' => 'Fès, Ville Nouvelle',
                 'prixParMois' => 12000,
@@ -123,11 +138,13 @@ public function getRandomImages($folderPath, $count = 5)
                 'condition' => 'Loyer mensuel de 12000 MAD, contrat de 1 an.',
                 'adresse' => 'Fès, Ville Nouvelle, Rue des Roses',
                 'admin_id' => 2,
-                'surface' => rand(40, 300), // أو حسب نوع العقار
-                'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+                'surface' => rand(40, 300),
+                'nbrChambre' => rand(1, 6),
+                'typesLocaires' => 'Famille',
+                "ville"=>"Fès"
             ],
             [
-                'loueur_id' => rand(31, 60),
+                'loueur_id' => rand(1, 25),
                 'titre' => 'Villa avec piscine à Agadir',
                 'localisation' => 'Agadir, Tamraght',
                 'prixParMois' => 14000,
@@ -138,11 +155,13 @@ public function getRandomImages($folderPath, $count = 5)
                 'condition' => 'Loyer mensuel de 14000 MAD, 1 mois de caution.',
                 'adresse' => 'Agadir, Tamraght, Avenue de la Plage',
                 'admin_id' => 3,
-                'surface' => rand(40, 300), // أو حسب نوع العقار
-                'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+                'surface' => rand(40, 300),
+                'nbrChambre' => rand(1, 6),
+                'typesLocaires' => 'Famille',
+                "ville"=>"Agadir"
             ],
             [
-                'loueur_id' => rand(31, 60),
+                'loueur_id' => rand(1, 25),
                 'titre' => 'Villa moderne à Essaouira',
                 'localisation' => 'Essaouira, Centre-ville',
                 'prixParMois' => 10000,
@@ -153,13 +172,15 @@ public function getRandomImages($folderPath, $count = 5)
                 'condition' => 'Loyer mensuel de 10000 MAD, 1 mois de caution.',
                 'adresse' => 'Essaouira, Centre-ville, Rue des Mouettes',
                 'admin_id' => 4,
-                'surface' => rand(40, 300), // أو حسب نوع العقار
-                'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+                'surface' => rand(40, 300),
+                'nbrChambre' => rand(1, 6),
+                'typesLocaires' => 'Tout',
+                'ville' => 'Essaouira'
             ],
 
             // Bureau
             [
-                'loueur_id' => rand(31, 60),
+                'loueur_id' => rand(1, 25),
                 'titre' => 'Bureau moderne à Rabat, centre-ville',
                 'localisation' => 'Rabat, Agdal',
                 'prixParMois' => 8000,
@@ -170,11 +191,13 @@ public function getRandomImages($folderPath, $count = 5)
                 'condition' => 'Loyer mensuel de 8000 MAD, dépôt de garantie de 1 mois.',
                 'adresse' => 'Rabat, Agdal, Avenue Mohammed V',
                 'admin_id' => 5,
-                'surface' => rand(40, 300), // أو حسب نوع العقار
-                'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+                'surface' => rand(40, 300),
+                'nbrChambre' => rand(1, 6),
+                'typesLocaires' => 'Fonctionnaire',
+                'ville' => 'Rabat'
             ],
             [
-                'loueur_id' => rand(31, 60),
+                'loueur_id' => rand(1, 25),
                 'titre' => 'Bureau spacieux à Casablanca, Maarif',
                 'localisation' => 'Casablanca, Maarif',
                 'prixParMois' => 10000,
@@ -185,11 +208,13 @@ public function getRandomImages($folderPath, $count = 5)
                 'condition' => 'Loyer mensuel de 10000 MAD, 1 mois de caution.',
                 'adresse' => 'Casablanca, Maarif, Rue Al Massira',
                 'admin_id' => 6,
-                'surface' => rand(40, 300), // أو حسب نوع العقار
-                'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+                'surface' => rand(40, 300),
+                'nbrChambre' => rand(1, 6),
+                'typesLocaires' => 'Fonctionnaire',
+                'ville' => 'Casablanca'
             ],
             [
-                'loueur_id' => rand(31, 60),
+                'loueur_id' => rand(1, 25),
                 'titre' => 'Bureau à Tanger, centre commercial',
                 'localisation' => 'Tanger, Centre-ville',
                 'prixParMois' => 12000,
@@ -200,11 +225,13 @@ public function getRandomImages($folderPath, $count = 5)
                 'condition' => 'Loyer mensuel de 12000 MAD, dépôt de garantie.',
                 'adresse' => 'Tanger, Centre-ville, Boulevard Mohamed V',
                 'admin_id' => 7,
-                'surface' => rand(40, 300), // أو حسب نوع العقار
-                'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+                'surface' => rand(40, 300),
+                'nbrChambre' => rand(1, 6),
+                'typesLocaires' => 'Fonctionnaire',
+                'ville' => 'Tanger'
             ],
             [
-                'loueur_id' => rand(31, 60),
+                'loueur_id' => rand(1, 25),
                 'titre' => 'Bureau à Marrakech, Hivernage',
                 'localisation' => 'Marrakech, Hivernage',
                 'prixParMois' => 15000,
@@ -215,13 +242,15 @@ public function getRandomImages($folderPath, $count = 5)
                 'condition' => 'Loyer mensuel de 15000 MAD, contrat de 1 an.',
                 'adresse' => 'Marrakech, Hivernage, Avenue Mohammed VI',
                 'admin_id' => 8,
-                'surface' => rand(40, 300), // أو حسب نوع العقار
-                'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+                'surface' => rand(40, 300),
+                'nbrChambre' => rand(1, 6),
+                'typesLocaires' => 'Fonctionnaire',
+                'ville' => 'Marrakech'
             ],
             
             // Magasin
             [
-                'loueur_id' => rand(31, 60),
+                'loueur_id' => rand(1, 25),
                 'titre' => 'Magasin commercial à Tanger',
                 'localisation' => 'Tanger, Centre-ville',
                 'prixParMois' => 10000,
@@ -232,12 +261,14 @@ public function getRandomImages($folderPath, $count = 5)
                 'condition' => 'Loyer mensuel de 10000 MAD, 1 mois de caution.',
                 'adresse' => 'Tanger, Centre-ville, Rue Hassan II',
                 'admin_id' => 2,
-                'surface' => rand(40, 300), // أو حسب نوع العقار
-                'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+                'surface' => rand(40, 300),
+                'nbrChambre' => rand(1, 6),
+                'typesLocaires' => 'Tout',
+                'ville' => 'Tanger'
             ],
             // Entrepôt
             [
-                'loueur_id' => rand(31, 60),
+                'loueur_id' => rand(1, 25),
                 'titre' => 'Dépôt à Casablanca, zone industrielle',
                 'localisation' => 'Casablanca, Zone Industrielle',
                 'prixParMois' => 25000,
@@ -248,12 +279,14 @@ public function getRandomImages($folderPath, $count = 5)
                 'condition' => 'Loyer mensuel de 25000 MAD, 2 mois de caution.',
                 'adresse' => 'Casablanca, Zone Industrielle, Rue des Usines',
                 'admin_id' => 3,
-                'surface' => rand(40, 300), // أو حسب نوع العقار
-                'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+                'surface' => rand(40, 300),
+                'nbrChambre' => rand(1, 6),
+                'typesLocaires' => 'Tout',
+                'ville' => 'Casablanca'
             ],
             //Boutique
             [
-                'loueur_id' => rand(31, 60),
+                'loueur_id' => rand(1, 25),
                 'titre' => 'Boutique à Marrakech',
                 'localisation' => 'Marrakech, Hivernage',
                 'prixParMois' => 50000,
@@ -264,11 +297,13 @@ public function getRandomImages($folderPath, $count = 5)
                 'condition' => 'Loyer mensuel de 50000 MAD, 3 mois de caution.',
                 'adresse' => 'Marrakech, Hivernage, Avenue Mohammed VI',
                 'admin_id' => 3,
-                'surface' => rand(40, 300), // أو حسب نوع العقار
-                'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+                'surface' => rand(40, 300),
+                'nbrChambre' => rand(1, 6),
+                'typesLocaires' => 'Tout',
+                'ville' => 'Marrakech'
             ],
             [
-                'loueur_id' => rand(31, 60),
+                'loueur_id' => rand(1, 25),
                 'titre' => 'Boutique  à Casablanca, Maarif',
                 'localisation' => 'Casablanca, Maarif',
                 'prixParMois' => 70000,
@@ -279,11 +314,13 @@ public function getRandomImages($folderPath, $count = 5)
                 'condition' => 'Loyer mensuel de 70000 MAD, 3 mois de caution.',
                 'adresse' => 'Casablanca, Maarif',
                 'admin_id' => 2,
-                'surface' => rand(40, 300), // أو حسب نوع العقار
-                'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+                'surface' => rand(40, 300),
+                'nbrChambre' => rand(1, 6),
+                'typesLocaires' => 'Tout',
+                'ville' => 'Casablanca'
             ],
             [
-                'loueur_id' => rand(31, 60),
+                'loueur_id' => rand(1, 25),
                 'titre' => 'Boutique  à Rabat, Agdal',
                 'localisation' => 'Rabat, Agdal',
                 'prixParMois' => 80000,
@@ -294,11 +331,13 @@ public function getRandomImages($folderPath, $count = 5)
                 'condition' => 'Loyer mensuel de 80000 MAD, 3 mois de caution.',
                 'adresse' => 'Rabat, Agdal, Avenue Mohammed V',
                 'admin_id' => 1,
-                'surface' => rand(40, 300), // أو حسب نوع العقار
-                'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+                'surface' => rand(40, 300),
+                'nbrChambre' => rand(1, 6),
+                'typesLocaires' => 'Tout',
+                'ville' => 'Rabat'
             ],
             [
-                'loueur_id' => rand(31, 60),
+                'loueur_id' => rand(1, 25),
                 'titre' => 'Boutique  à Tanger, Zone touristique',
                 'localisation' => 'Tanger, Zone Touristique',
                 'prixParMois' => 60000,
@@ -309,12 +348,14 @@ public function getRandomImages($folderPath, $count = 5)
                 'condition' => 'Loyer mensuel de 60000 MAD, 3 mois de caution.',
                 'adresse' => 'Tanger, Zone Touristique',
                 'admin_id' => 3,
-                'surface' => rand(40, 300), // أو حسب نوع العقار
-                'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+                'surface' => rand(40, 300),
+                'nbrChambre' => rand(1, 6),
+                'typesLocaires' => 'Tout',
+                'ville' => 'Tanger'
             ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Appartement à Casablanca, Ain Diab',
     'localisation' => 'Casablanca, Ain Diab',
     'prixParMois' => 15000,
@@ -327,10 +368,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 2,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Famille',
+    'ville' => 'Casablanca'
 ],
 
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Appartement à Marrakech, Gueliz',
     'localisation' => 'Marrakech, Gueliz',
     'prixParMois' => 10000,
@@ -343,10 +386,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 1,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Fonctionnaire',
+    'ville' => 'Marrakech'
 ],
 
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Appartement à Rabat, Hay Riad',
     'localisation' => 'Rabat, Hay Riad',
     'prixParMois' => 12000,
@@ -359,10 +404,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 3,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Étudiant',
+    'ville' => 'Rabat'
 ],
 
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Appartement à Tanger, Centre Ville',
     'localisation' => 'Tanger, Centre Ville',
     'prixParMois' => 8000,
@@ -375,10 +422,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 1,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Célibataire',
+    'ville' => 'Tanger'
 ],
 
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Appartement à Fès, Ville Nouvelle',
     'localisation' => 'Fès, Ville Nouvelle',
     'prixParMois' => 9500,
@@ -391,9 +440,11 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 2,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Fonctionnaire',
+    'ville' => 'Fès'
 ]
 ,[
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Espace commercial à Boujdour',
     'localisation' => 'Boujdour',
     'prixParMois' => 25000,
@@ -406,10 +457,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 14,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Boujdour'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Garage à Laâyoune, Quartier Sidi Abderrahmane',
     'localisation' => 'Laâyoune',
     'prixParMois' => 1500,
@@ -422,10 +475,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 16,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Laâyoune'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Dépôt à Guelmim',
     'localisation' => 'Guelmim',
     'prixParMois' => 10000,
@@ -438,10 +493,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 12,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Guelmim'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Magasin à Dakhla, centre-ville',
     'localisation' => 'Dakhla',
     'prixParMois' => 15000,
@@ -454,10 +511,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 10,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Dakhla'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Bureau spacieux à Tantan',
     'localisation' => 'Tantan',
     'prixParMois' => 7000,
@@ -470,10 +529,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 8,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Tantan'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Studio moderne à Laâyoune',
     'localisation' => 'Laâyoune',
     'prixParMois' => 3500,
@@ -486,11 +547,13 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 6,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Laâyoune'
 ]
 ,
 
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Maison avec jardin à Boujdour',
     'localisation' => 'Boujdour',
     'prixParMois' => 12000,
@@ -503,10 +566,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 4,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Famille',
+    'ville' => 'Boujdour'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Villa luxueuse à Boujdour',
     'localisation' => 'Boujdour, Plage Oum Lajoul',
     'prixParMois' => 15000,
@@ -519,9 +584,11 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 1,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Famille',
+    'ville' => 'Boujdour'
 ],
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Villa avec jardin à Laayoun',
     'localisation' => 'Laayoun, Quartier Al Fajr',
     'prixParMois' => 13000,
@@ -534,9 +601,11 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 2,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Famille',
+    'ville' => 'Laayoun'
 ],
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Villa moderne à Tantan',
     'localisation' => 'Tantan, Avenue Hassan II',
     'prixParMois' => 14000,
@@ -549,9 +618,11 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 3,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Famille',
+    'ville' => 'Tantan'
 ],
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Villa familiale à Dhakla',
     'localisation' => 'Dhakla, Quartier Hassan II',
     'prixParMois' => 12000,
@@ -564,9 +635,11 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 4,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Famille',
+    'ville' => 'Dhakla'
 ],
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Villa avec vue sur mer à Glemim',
     'localisation' => 'Glemim, Quartier de la Mer',
     'prixParMois' => 16000,
@@ -579,9 +652,11 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 5,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Famille',
+    'ville' => 'Glemim'
 ],
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Appartement moderne à Boujdour',
     'localisation' => 'Boujdour, Quartier Plage',
     'prixParMois' => 8500,
@@ -594,9 +669,11 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 1,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Famille',
+    'ville' => 'Boujdour'
 ],
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Appartement spacieux à Laayoun',
     'localisation' => 'Laayoun, Centre Ville',
     'prixParMois' => 7500,
@@ -609,9 +686,11 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 2,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Famille',
+    'ville' => 'Laayoun'
 ],
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Appartement de luxe à Tantan',
     'localisation' => 'Tantan, Avenue Mohamed V',
     'prixParMois' => 10000,
@@ -624,9 +703,11 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 3,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Célibataire',
+    'ville' => 'Tantan'
 ],
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Appartement cosy à Dhakla',
     'localisation' => 'Dhakla, Quartier Touristique',
     'prixParMois' => 9500,
@@ -639,9 +720,11 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 4,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Célibataire',
+    'ville' => 'Dhakla'
 ],
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Appartement à Glemim',
     'localisation' => 'Glemim, Rue de la Liberté',
     'prixParMois' => 7000,
@@ -654,9 +737,11 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 5,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Célibataire',
+    'ville' => 'Glemim'
 ],
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Maison à Boujdour, Quartier Al-Madina',
     'localisation' => 'Boujdour',
     'prixParMois' => 8000,
@@ -669,9 +754,11 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 2,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Famille',
+    'ville' => 'Boujdour'
 ]
 ,[
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Maison à Laâyoune, proche du centre-ville',
     'localisation' => 'Laâyoune',
     'prixParMois' => 8500,
@@ -684,9 +771,11 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 14,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Famille',
+    'ville' => 'Laâyoune'
 ]
 ,[
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Maison familiale à Boujdour',
     'localisation' => 'Boujdour',
     'prixParMois' => 7800,
@@ -699,9 +788,11 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 12,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Famille',
+    'ville' => 'Boujdour'
 ]
 ,[
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Maison moderne à Dakhla',
     'localisation' => 'Dakhla',
     'prixParMois' => 9500,
@@ -714,10 +805,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 10,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Famille',
+    'ville' => 'Dakhla'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Maison de campagne à Guelmim',
     'localisation' => 'Guelmim',
     'prixParMois' => 6500,
@@ -730,10 +823,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 8,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Famille',
+    'ville' => 'Guelmim'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Maison à Tantan, zone résidentielle',
     'localisation' => 'Tantan',
     'prixParMois' => 7500,
@@ -746,10 +841,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 6,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Famille',
+    'ville' => 'Tantan'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Maison à Laâyoune, Quartier Al-Fath',
     'localisation' => 'Laâyoune',
     'prixParMois' => 10000,
@@ -762,10 +859,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 4,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Famille',
+    'ville' => 'Laâyoune'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Maison à Boujdour, Quartier Al-Madina',
     'localisation' => 'Boujdour',
     'prixParMois' => 8000,
@@ -778,9 +877,11 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 2,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Famille',
+    'ville' => 'Boujdour'
 ],
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Garage à Boujdour, Centre-ville',
     'localisation' => 'Boujdour',
     'prixParMois' => 1500,
@@ -793,9 +894,11 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 3,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Boujdour'
 ]
 ,[
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Garage à Tantan, Proche du Marché',
     'localisation' => 'Tantan',
     'prixParMois' => 1800,
@@ -808,10 +911,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 7,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Tantan'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Garage à Laâyoune, Quartier Al-Fath',
     'localisation' => 'Laâyoune',
     'prixParMois' => 2000,
@@ -824,10 +929,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 5,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Laâyoune'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Garage à Tantan, Près du Port',
     'localisation' => 'Tantan',
     'prixParMois' => 1700,
@@ -840,10 +947,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 17,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Tantan'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Garage à Laâyoune, Près de la Plage',
     'localisation' => 'Laâyoune',
     'prixParMois' => 2500,
@@ -856,10 +965,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 15,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Laâyoune'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Garage à Boujdour, Zone Industrielle',
     'localisation' => 'Boujdour',
     'prixParMois' => 1300,
@@ -872,10 +983,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 13,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Boujdour'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Garage à Dakhla, Quartier Al-Madina',
     'localisation' => 'Dakhla',
     'prixParMois' => 2200,
@@ -888,9 +1001,11 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 11,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Dakhla'
 ]
 ,[
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Garage à Tantan, Quartier Souk Al Jumaâ',
     'localisation' => 'Tantan',
     'prixParMois' => 1700,
@@ -903,9 +1018,11 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 17,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Tantan'
 ]
 ,[
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Studio à Boujdour, Hay Al Wifaq',
     'localisation' => 'Boujdour',
     'prixParMois' => 1900,
@@ -918,9 +1035,11 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 2,
     'surface' => rand(40, 300),
     'nbrChambre' => rand(1, 6),
+    'typesLocaires' => 'Tout',
+    'ville' => 'Boujdour'
 ],
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Studio moderne à Laâyoune, Quartier Al Qods',
     'localisation' => 'Laâyoune',
     'prixParMois' => 2100,
@@ -933,10 +1052,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 3,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Laâyoune'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Studio à Tantan, Hay Nahda',
     'localisation' => 'Tantan',
     'prixParMois' => 1500,
@@ -949,10 +1070,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 4,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Tantan'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Studio bien équipé à Guelmim, Riad Al Massira',
     'localisation' => 'Guelmim',
     'prixParMois' => 1800,
@@ -965,10 +1088,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 5,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Guelmim'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Studio à Dakhla, Quartier Al-Matar',
     'localisation' => 'Dakhla',
     'prixParMois' => 2300,
@@ -981,10 +1106,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 6,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Dakhla'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Studio simple à Boujdour, Hay Al Amal',
     'localisation' => 'Boujdour',
     'prixParMois' => 1400,
@@ -997,10 +1124,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 7,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Boujdour'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Studio à Laâyoune, Miftah Hay Salam',
     'localisation' => 'Laâyoune',
     'prixParMois' => 2000,
@@ -1013,10 +1142,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 8,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Laâyoune'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Studio à Laâyoune, Miftah Hay Salam',
     'localisation' => 'Laâyoune',
     'prixParMois' => 2000,
@@ -1029,10 +1160,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 8,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Laâyoune'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Studio meublé à Guelmim, Hay Al Wahda',
     'localisation' => 'Guelmim',
     'prixParMois' => 1700,
@@ -1045,10 +1178,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 9,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Guelmim'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Boutique à louer à Boujdour, Hay Nahda',
     'localisation' => 'Boujdour',
     'prixParMois' => 3200,
@@ -1061,10 +1196,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 2,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Boujdour'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Boutique à Laâyoune, Boulevard Mekka',
     'localisation' => 'Laâyoune',
     'prixParMois' => 5000,
@@ -1077,10 +1214,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 3,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Laâyoune'
 ],
 
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Local commercial à Tantan, Hay Al Massira',
     'localisation' => 'Tantan',
     'prixParMois' => 2700,
@@ -1093,10 +1232,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 3,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Tantan'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Boutique rénovée à Dakhla, Quartier Al Fath',
     'localisation' => 'Dakhla',
     'prixParMois' => 4500,
@@ -1109,10 +1250,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 4,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Dakhla'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Magasin à Guelmim, Hay Al Amal',
     'localisation' => 'Guelmim',
     'prixParMois' => 3800,
@@ -1125,10 +1268,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 5,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Guelmim'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Boutique à Boujdour, Hay Salam',
     'localisation' => 'Boujdour',
     'prixParMois' => 2950,
@@ -1141,10 +1286,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 6,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Boujdour'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Local à usage commercial à Laâyoune, Hay Moulay Rachid',
     'localisation' => 'Laâyoune',
     'prixParMois' => 4300,
@@ -1157,10 +1304,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 7,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Laâyoune'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Boutique fonctionnelle à Guelmim, Quartier Tantan Road',
     'localisation' => 'Guelmim',
     'prixParMois' => 3600,
@@ -1173,10 +1322,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 8,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Guelmim'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Dépôt sécurisé à Boujdour, Zone Industrielle',
     'localisation' => 'Boujdour',
     'prixParMois' => 6500,
@@ -1189,11 +1340,13 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 3,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Boujdour'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
-    'titre' => 'Grand dépôt à louer à Laâyoune, Route de Smara',
+    'loueur_id' => rand(1, 25),
+    'titre' => 'Grand dépôt à Laâyoune, Route de Smara',
     'localisation' => 'Laâyoune',
     'prixParMois' => 8500,
     'imgs' => json_encode($this->getRandomImages('Depot')),
@@ -1205,10 +1358,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 4,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Laâyoune'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Hangar de stockage à Tantan, Zone Logistique',
     'localisation' => 'Tantan',
     'prixParMois' => 4900,
@@ -1221,10 +1376,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 2,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Tantan'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Dépôt industriel à Dakhla, Quartier Tawarta',
     'localisation' => 'Dakhla',
     'prixParMois' => 9100,
@@ -1237,10 +1394,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 5,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Dakhla'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Entrepôt à Guelmim, Zone Saharienne',
     'localisation' => 'Guelmim',
     'prixParMois' => 7300,
@@ -1253,10 +1412,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 6,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Guelmim'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Local de dépôt à Boujdour, Hay Salam',
     'localisation' => 'Boujdour',
     'prixParMois' => 4000,
@@ -1269,10 +1430,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 7,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Boujdour'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Espace industriel à Laâyoune, Avenue 24 Novembre',
     'localisation' => 'Laâyoune',
     'prixParMois' => 7800,
@@ -1285,10 +1448,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 8,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Laâyoune'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Grand entrepôt à Guelmim, Route de Tata',
     'localisation' => 'Guelmim',
     'prixParMois' => 8800,
@@ -1301,10 +1466,12 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 9,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Guelmim'
 ]
 ,
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Dépôt moderne à Rabat, Hay Ryad',
     'localisation' => 'Rabat',
     'prixParMois' => 9800,
@@ -1317,9 +1484,11 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 2,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Rabat'
 ],
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Petit entrepôt à Rabat, Agdal',
     'localisation' => 'Rabat',
     'prixParMois' => 6500,
@@ -1332,9 +1501,11 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 2,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Rabat'
 ],
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Dépôt à louer à Rabat, Yacoub El Mansour',
     'localisation' => 'Rabat',
     'prixParMois' => 7200,
@@ -1347,9 +1518,11 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 3,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Rabat'
 ],
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Espace de stockage à Rabat, Route de Zaer',
     'localisation' => 'Rabat',
     'prixParMois' => 8700,
@@ -1362,9 +1535,11 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 3,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Rabat'
 ],
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Grand dépôt à Marrakech, Sidi Ghanem',
     'localisation' => 'Marrakech',
     'prixParMois' => 9900,
@@ -1377,9 +1552,11 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 4,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Marrakech'
 ],
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Entrepôt à Marrakech, Targa',
     'localisation' => 'Marrakech',
     'prixParMois' => 6800,
@@ -1392,9 +1569,11 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 4,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Marrakech'
 ],
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Local industriel à Marrakech, Massira',
     'localisation' => 'Marrakech',
     'prixParMois' => 7200,
@@ -1407,9 +1586,11 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 4,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Marrakech'
 ],
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Dépôt à Marrakech, route de Safi',
     'localisation' => 'Marrakech',
     'prixParMois' => 8100,
@@ -1422,9 +1603,11 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 5,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Marrakech'
 ],
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Entrepôt à Casablanca, Ain Sebaa',
     'localisation' => 'Casablanca',
     'prixParMois' => 11000,
@@ -1437,9 +1620,11 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 6,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Casablanca'
 ],
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Dépôt à Casablanca, Sidi Maârouf',
     'localisation' => 'Casablanca',
     'prixParMois' => 9700,
@@ -1452,9 +1637,11 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 6,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Casablanca'
 ],
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Local logistique à Casablanca, Derb Ghallef',
     'localisation' => 'Casablanca',
     'prixParMois' => 8800,
@@ -1467,9 +1654,11 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 7,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Casablanca'
 ],
 [
-    'loueur_id' => rand(31, 60),
+    'loueur_id' => rand(1, 25),
     'titre' => 'Hangar industriel à Casablanca, Moulay Rachid',
     'localisation' => 'Casablanca',
     'prixParMois' => 9400,
@@ -1482,6 +1671,8 @@ public function getRandomImages($folderPath, $count = 5)
     'admin_id' => 7,
     'surface' => rand(40, 300), // أو حسب نوع العقار
     'nbrChambre' => rand(1, 6), // أو حسب نوع العقار
+    'typesLocaires' => 'Tout',
+    'ville' => 'Casablanca'
 ],
 
         ];
@@ -1490,4 +1681,3 @@ public function getRandomImages($folderPath, $count = 5)
         }
     }
 }
-    

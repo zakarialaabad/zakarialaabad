@@ -8,7 +8,9 @@ import { Footer } from "@/components/footer";
 type Propriete = {
   id: number;
   loueur_id: number;
+  ville:string;
   titre: string;
+  typesLocaires:string;
   localisation: string;
   prixParMois: number;
   imgs: string[];

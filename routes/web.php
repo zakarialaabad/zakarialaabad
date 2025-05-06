@@ -4,14 +4,13 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\SocialiteController;
 use App\Http\Controllers\ProprieteContoller;
+use App\Http\Controllers\FavorisControler;
 
 Route::get('/', function () {
     return Inertia::render('app/property/page');
 });
 
-Route::get("/favoris",function(){
-    return Inertia::render("app/favoris/page");
-});
+Route::get("/favoris",[FavorisControler::class,"favoris"]);
 
 Route::get("/profil",function(){
     return Inertia::render("Profil");

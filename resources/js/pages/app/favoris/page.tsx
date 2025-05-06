@@ -4,23 +4,57 @@ import { StickyHeaderEffect } from "@/components/sticky-header-effect"
 import { useFavorites } from "@/contexts/favorites-context"
 import { useAuth } from "@/contexts/auth-context"
 import { PropertyCard } from "@/components/property-card"
-import type { Property } from "@/data/properties"
-import { allProperties } from "@/data/properties"
 import { Heart,ChevronLeft    } from "lucide-react"
 import { AuthModal } from "@/components/auth/auth-modal"
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
+import { usePage } from "@inertiajs/react"
+type Propriete = {
+  id: number;
+  loueur_id: number;
+  ville:string;
+  titre: string;
+  typesLocaires:string;
+  localisation: string;
+  prixParMois: number;
+  imgs: string[];
+  description: Text;
+  disponibilite: boolean;
+  type: string;
+  nbrchambre: number;
+  surface: number;
+  adresse: string;
+  admin_id: number;
+  loueur: {
+    id: number;
+    user: {
+      name: string;
+      email: string;
+      prenom: string;
+      genre: string;
+      telephone: string;
+      profile: string;
+    };
+  };
+};
+type InertiaPageProps = {
+  proprietes: Propriete[];
+};
 export default function FavoritesPage() {
   const { favorites } = useFavorites()
+  const { proprietes } = usePage<InertiaPageProps>().props;
+
   const { isAuthenticated } = useAuth()
-  const [favoriteProperties, setFavoriteProperties] = useState<Property[]>([])
+  const [favoriteProperties, setFavoriteProperties] = useState<Propriete[]>([])
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
 
-  useEffect(() => {
+  useEffect(() => { 
+     console.log(proprietes)
+
     // Filtrer les propriétés qui sont dans les favoris
-    const favProps = allProperties.filter((property) => favorites.includes(property.id))
+    const favProps = proprietes.filter((propriete) => favorites.includes(propriete.id))
     setFavoriteProperties(favProps)
   }, [favorites])
 
@@ -73,7 +107,8 @@ export default function FavoritesPage() {
             >
               {favoriteProperties.map((property) => (
                 <motion.div key={property.id} variants={item}>
-                  <PropertyCard {...property} />
+                    <PropertyCard propriete={property} />
+
                 </motion.div>
               ))}
             </motion.div>

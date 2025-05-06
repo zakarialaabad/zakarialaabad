@@ -16,7 +16,8 @@ class ProprieteContoller extends Controller
         $proprietes = Propriete::with('loueur.user')->get();
         return inertia("app/property/page",compact("proprietes"));
     }
-   
+ 
+    
     /**
      * Show the form for creating a new resource.
      */

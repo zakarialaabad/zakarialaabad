@@ -8,7 +8,6 @@ import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/auth-context";
 import { useFavorites } from "@/contexts/favorites-context";
 import { AuthAlert } from "@/components/auth/auth-alert";
-
 type Propriete = {
   id: number;
   loueur_id: number;
@@ -35,10 +34,6 @@ type Propriete = {
     };
   };
 };
-type InertiaPageProps = {
-  proprietes: Propriete[];
-};
-
 // دالة عادية بدل دالة سهمية
 function PropertyCard({ propriete }: { propriete: Propriete }) {
   const {
@@ -54,28 +49,26 @@ function PropertyCard({ propriete }: { propriete: Propriete }) {
     surface,
     loueur,
   } = propriete;
-
-  const propertyImages = imgs.length > 0 ? imgs : ["/placeholder.svg"];
   const { isAuthenticated } = useAuth();
   const { isFavorite, toggleFavorite } = useFavorites();
   const [showAuthAlert, setShowAuthAlert] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isHeartAnimating, setIsHeartAnimating] = useState(false);
+ const handleFavoriteClick = (e: React.MouseEvent) => {
+  e.preventDefault();
+  e.stopPropagation();
+  
+  if (isAuthenticated) {
+    setIsHeartAnimating(true);
+    toggleFavorite(propriete.id); // التبديل بين إضافة/إزالة من المفضلة
+    setTimeout(() => setIsHeartAnimating(false), 1000); // إنهاء الأنيميشن بعد ثانية
+  } else {
+    setShowAuthAlert(true); // إظهار تنبيه تسجيل الدخول
+  }
+};
 
-  const handleFavoriteClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
 
-    if (isAuthenticated) {
-      setIsHeartAnimating(true);
-      toggleFavorite(id);
-      setTimeout(() => setIsHeartAnimating(false), 1000);
-    } else {
-      setShowAuthAlert(true);
-    }
-  };
-
-  const isFav = isFavorite(id);
+  const isFav = isFavorite(propriete.id);
 
   const heartVariants = {
     initial: { scale: 1 },

@@ -3,9 +3,8 @@ import { ChevronLeft, ChevronRight } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-
 interface ImageCarouselProps {
-  images: string[]
+  images: string[] | string
   alt: string
   aspectRatio?: "square" | "video" | "wide" | "tall" | "auto"
   width?: number
@@ -14,7 +13,6 @@ interface ImageCarouselProps {
   showControls?: boolean
   priority?: boolean
 }
-
 export const ImageCarousel = memo(function ImageCarousel({
   images,
   alt,
@@ -23,12 +21,23 @@ export const ImageCarousel = memo(function ImageCarousel({
   height,
   className,
   showControls = true,
-}: ImageCarouselProps){
+}: ImageCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
-
-  const safeImages =
-    images && images.length > 0 ? images.filter((img) => img && img.trim() !== "") : ["/placeholder.svg"]
-
+  // ✅ تحويل الصور من string إلى array إن لزم
+  let parsedImages: string[] = []
+  try {
+    if (typeof images === "string") {
+      const temp = JSON.parse(images)
+      if (Array.isArray(temp)) {
+        parsedImages = temp.filter((img) => typeof img === "string" && img.trim() !== "")
+      }
+    } else if (Array.isArray(images)) {
+      parsedImages = images.filter((img) => typeof img === "string" && img.trim() !== "")
+    }
+  } catch (error) {
+    console.warn("Invalid image data:", error)
+  }
+  const safeImages = parsedImages.length > 0 ? parsedImages : ["/placeholder.svg"]
   const goToNext = useCallback(
     (e: MouseEvent): void => {
       e.preventDefault()
