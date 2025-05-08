@@ -10,14 +10,12 @@ interface FilterItem {
   label: string
   icon: React.ReactNode
 }
-
 interface HorizontalFilterBarProps {
   filters: FilterItem[]
   activeFilter: string
   onFilterChange: (filterId: string) => void
   className?: string
 }
-
 export function HorizontalFilterBar({
   filters,
   activeFilter,
