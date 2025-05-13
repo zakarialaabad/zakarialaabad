@@ -85,7 +85,7 @@ function PropertyCard({ propriete }: { propriete: Propriete }) {
         transition={{ type: "spring", stiffness: 300 }}
         className="group overflow-hidden rounded-xl border bg-white shadow-sm hover:shadow-md transition-all duration-300"
       >
-        <Link href={`/property/${id}`} className="block">
+        <Link href={`/Proprietes/${id}`} className="block">
           <div className="relative w-full">
             <div className="w-full h-64 md:h-72 overflow-hidden">
               <ImageCarousel

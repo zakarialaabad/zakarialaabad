@@ -5,10 +5,9 @@ use Inertia\Inertia;
 use App\Http\Controllers\SocialiteController;
 use App\Http\Controllers\ProprieteContoller;
 use App\Http\Controllers\FavorisControler;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
-Route::get('/', function () {
-    return Inertia::render('app/property/page');
-});
+
 
 Route::get("/favoris",[FavorisControler::class,"favoris"]);
 
@@ -27,12 +26,7 @@ Route::get("/notification",function(){
 Route::get("/connexion",function(){
     return Inertia::render("auth-modal");
 })->name('connexion');
-Route::get('/property/{id}', function ($id) {
-    return Inertia::render('app/property/[id]/page', [
-        'id' => $id,
-        // يمكنك تمرير بيانات إضافية من قاعدة البيانات هنا
-    ]);
-});
+Route::get('/Proprietes/{id}', [ProprieteContoller::class, "show"]);
 Route::get("/devenir-hote",function(){
     return Inertia::render("app/devenir-hote/page");
 });
@@ -46,9 +40,9 @@ Route::resource('Proprietes',ProprieteContoller::class)->except("index");
 Route::get("auth/google",[SocialiteController::class,"redirectToGoogle"]);
 Route::get("auth/google/callback",[SocialiteController::class,"handleGoogleCallback"]);
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
+    Route::get('/', function () {
+        return Inertia::render('app/property/page');
+    })->name('home');
 });
 Route::get('/',[ProprieteContoller::class,"index"]);
 require __DIR__.'/settings.php';

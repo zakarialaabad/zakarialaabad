@@ -76,4 +76,8 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Admin::class);
     }
+    public function favoris()
+    {
+        return $this->hasMany(Favori::class);
+    }
 }

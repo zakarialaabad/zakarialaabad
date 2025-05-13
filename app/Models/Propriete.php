@@ -10,7 +10,7 @@ class Propriete extends Model
     protected $fillable = [
         'loueur_id', 'titre', 'localisation', 'prixParMois',
         'description', 'disponibilite', 'type', 'nbrchambre',"surface",
-        'condition', 'adresse'
+        'condition', 'adresse',"imgs","typesLocaires"
     ];
     
     protected $casts = [

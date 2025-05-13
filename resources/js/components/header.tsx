@@ -59,44 +59,23 @@ export function Header() {
           <div className="flex items-center space-x-2 md:space-x-4">
             {!isMobile && (
               <>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="rounded-full">
-                      <Globe className="h-5 w-5 text-gray-700" />
-                      <span className="sr-only">Changer de langue</span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => setCurrentLanguage("Français")}>
-                      <span className={currentLanguage === "Français" ? "font-bold" : ""}>Français</span>
-                      {currentLanguage === "Français" && <span className="ml-2">✓</span>}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setCurrentLanguage("English")}>
-                      <span className={currentLanguage === "English" ? "font-bold" : ""}>English</span>
-                      {currentLanguage === "English" && <span className="ml-2">✓</span>}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setCurrentLanguage("العربية")}>
-                      <span className={currentLanguage === "العربية" ? "font-bold" : ""}>العربية</span>
-                      {currentLanguage === "العربية" && <span className="ml-2">✓</span>}
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+       
+      
 
                 {isAuthenticated && (
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          className="text-gray-800 hover:bg-gray-100 hover:text-gray-700 transition-colors duration-300 rounded-full h-10 w-10 border-gray-300"
-                          asChild
-                        >
+                     
                           <Link href="/devenir-hote">
-                            <Home className="h-5 w-5" />
-                            <span className="sr-only">Devenir hôte</span>
+                          <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-gray-800 hover:bg-gray-100 hover:text-gray-700 transition-colors duration-300 rounded-full px-4 py-2 h-auto border-gray-300"
+                  >
+                    <span>Devenir hôte</span>
+                  </Button>
                           </Link>
-                        </Button>
                       </TooltipTrigger>
                       <TooltipContent>
                         <p>Devenir Louer</p>
@@ -105,21 +84,7 @@ export function Header() {
                   </TooltipProvider>
                 )}
 
-                <Link href={isAuthenticated ? "/messages" : "#"} onClick={handleFavoritesClick} className="relative">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-primary hover:bg-gray-100 hover:text-gray-700 transition-colors duration-300 rounded-full h-10 w-10"
-                  >
-                    <MessageCircle className="h-5 w-5" />
-                    <span className="sr-only">Messages</span>
-                  </Button>
-                  {isAuthenticated && unreadMessages > 0 && (
-                    <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-medium text-white">
-                      {unreadMessages}
-                    </span>
-                  )}
-                </Link>
+           
               </>
             )}
 
@@ -166,17 +131,7 @@ export function Header() {
                         )}
                       </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link href="/messages">
-                        <MessageCircle className="mr-2 h-4 w-4" />
-                        <span>Messages</span>
-                        {unreadMessages > 0 && (
-                          <span className="ml-auto bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                            {unreadMessages}
-                          </span>
-                        )}
-                      </Link>
-                    </DropdownMenuItem>
+                 
                     <DropdownMenuItem asChild>
                       <Link href="/notifications">
                         <Bell className="mr-2 h-4 w-4" />
@@ -190,10 +145,7 @@ export function Header() {
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
-                    <Settings className="mr-2 h-4 w-4" />
-                    <span>Paramètres</span>
-                  </DropdownMenuItem>
+                 
                   <DropdownMenuItem onClick={logout}>
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Déconnexion</span>

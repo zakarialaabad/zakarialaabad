@@ -1,6 +1,6 @@
 
 import type React from "react"
-import { useState, useCallback } from "react"
+import { useState, useCallback, useEffect } from "react"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight, X, Grid2X2 } from "lucide-react"
@@ -16,7 +16,9 @@ export function PropertyGallery({ images, title }: PropertyGalleryProps) {
   const [showAllPhotos, setShowAllPhotos] = useState(false)
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0)
   const [isHovering, setIsHovering] = useState(false)
-
+useEffect(() => {
+  console.log("list of images:", images);
+})
   const handlePrevious = useCallback(() => {
     setCurrentPhotoIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1))
   }, [images.length])
@@ -52,7 +54,7 @@ export function PropertyGallery({ images, title }: PropertyGalleryProps) {
             <div className="relative col-span-1 row-span-2 md:col-span-2 overflow-hidden group">
               <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.4 }} className="h-full w-full">
               <img
-    src={images[0] || "/placeholder.svg"}
+    src={`/${images[0]}`}
     alt={`${title} - Image principale`}
     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700"
     style={{
@@ -75,10 +77,11 @@ export function PropertyGallery({ images, title }: PropertyGalleryProps) {
               <div key={index} className="relative hidden md:block overflow-hidden group">
                 <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.4 }} className="h-full w-full">
                   <img
-                    src={image || "/placeholder.svg"}
+                  src={`/${image}`}
                     alt={`${title} - Image ${index + 2}`}
                     className="absolute inset-0 bg-black pointer-events-none object-cover transition-transform duration-700"
                     sizes="25vw"
+                    loading="lazy" 
                   />
                 </motion.div>
 
@@ -146,7 +149,7 @@ export function PropertyGallery({ images, title }: PropertyGalleryProps) {
                 className="relative h-full w-full flex items-center justify-center"
               >
                 <img
-                  src={images[currentPhotoIndex] || "/placeholder.svg"}
+                  src={`/${images[currentPhotoIndex]}` || "/placeholder.svg"}
                   alt={`${title} - Photo ${currentPhotoIndex + 1}`}
                   className="absolute inset-0 bg-black pointer-events-none object-contain"
 

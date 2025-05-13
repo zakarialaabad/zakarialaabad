@@ -1,5 +1,6 @@
 import AppLogoIcon from '@/components/app-logo-icon';
 import { Link } from '@inertiajs/react';
+import logo from "../img/E-JAR.png"
 import { type PropsWithChildren } from 'react';
 
 interface AuthLayoutProps {
@@ -14,9 +15,9 @@ export default function AuthSimpleLayout({ children, title, description }: Props
             <div className="w-full max-w-sm">
                 <div className="flex flex-col gap-8">
                     <div className="flex flex-col items-center gap-4">
-                        <Link href={route('home')} className="flex flex-col items-center gap-2 font-medium">
+                        <Link href={"/"} className="flex flex-col items-center gap-2 font-medium">
                             <div className="mb-1 flex h-9 w-9 items-center justify-center rounded-md">
-                                <AppLogoIcon className="size-9 fill-current text-[var(--foreground)] dark:text-white" />
+                            <img src={logo} className="object-contain drop-shadow-sm w-40 h-full text-[var(--foreground)] dark:text-white" />
                             </div>
                             <span className="sr-only">{title}</span>
                         </Link>

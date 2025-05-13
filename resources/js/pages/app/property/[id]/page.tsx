@@ -1,28 +1,64 @@
+import { useState, useEffect } from "react";
+import { MapPin, Star, Heart, Share2, ChevronLeft, Info } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { PropertyAmenities } from "@/components/property-amenities";
+import { PropertyMap } from "@/components/property-map";
+import { PropertyReservationForm } from "@/components/property-reservation-form";
+import { PropertyGallery } from "@/components/property-gallery";
+import { motion, AnimatePresence } from "framer-motion";
+import { Header } from "@/components/header";
+import { Footer } from "@/components/footer";
+import { properties } from "@/data/properties";
 
-import { useState, useEffect } from "react"
-import { MapPin, Star, Heart, Share2, ChevronLeft, Info } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { PropertyAmenities } from "@/components/property-amenities"
-import { PropertyMap } from "@/components/property-map"
-import { PropertyReservationForm } from "@/components/property-reservation-form"
-import { PropertyGallery } from "@/components/property-gallery"
-import { PropertyOwner } from "@/components/property-owner"
-import { motion, AnimatePresence } from "framer-motion"
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
-export default function PropertyDetails() {
-  const [isFavorite, setIsFavorite] = useState(false)
-  const [isLoaded, setIsLoaded] = useState(false)
+type Propriete = {
+  id: number;
+  loueur_id: number;
+  ville: string;
+  titre: string;
+  typesLocaires: string;
+  localisation: string;
+  prixParMois: number;
+  imgs: string[] | string;
+  description: string;
+  disponibilite: boolean;
+  type: string;
+  nbrchambre: number;
+  surface: number;
+  adresse: string;
+  admin_id: number;
+};
+
+export default function PropertyDetails({ propriete }: { propriete: Propriete }) {
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // تحليل الصور إذا كانت من نوع string
+  let parsedImages: string[] = [];
+  try {
+    if (typeof propriete.imgs === "string") {
+      const temp = JSON.parse(propriete.imgs);
+      if (Array.isArray(temp)) {
+        parsedImages = temp.filter((img) => typeof img === "string" && img.trim() !== "");
+      }
+    } else if (Array.isArray(propriete.imgs)) {
+      parsedImages = propriete.imgs.filter((img) => typeof img === "string" && img.trim() !== "");
+    }
+  } catch (error) {
+    console.warn("Invalid image data:", error);
+  }
+
+  const safeImages = parsedImages.length > 0 ? parsedImages : ["/placeholder.svg"];
 
   // Simuler un chargement pour montrer l'animation
   useEffect(() => {
     const timer = setTimeout(() => {
-      setIsLoaded(true)
-    }, 100)
-    return () => clearTimeout(timer)
-  }, [])
+      setIsLoaded(true);
+      console.log("Current imgs:", propriete.imgs); // Debugging line
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [propriete.imgs]); // Add propriete.imgs as a dependency
 
   // Données simulées pour la démonstration
   const property = {
@@ -89,7 +125,7 @@ export default function PropertyDetails() {
       maxStay: 60,
       availableFrom: "2023-06-01",
     },
-  }
+  };
 
   // Variantes d'animation pour les différentes sections
   const containerVariants = {
@@ -101,7 +137,7 @@ export default function PropertyDetails() {
         staggerChildren: 0.1,
       },
     },
-  }
+  };
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -110,11 +146,11 @@ export default function PropertyDetails() {
       y: 0,
       transition: { duration: 0.5 },
     },
-  }
+  };
 
   return (
     <AnimatePresence>
-    <Header/>
+      <Header />
       {isLoaded && (
         <motion.main
           initial={{ opacity: 0 }}
@@ -124,13 +160,17 @@ export default function PropertyDetails() {
         >
           {/* Bouton retour avec animation */}
           <div className="container px-4 py-4 md:px-6">
-            <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3 }}>
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3 }}
+            >
               <Button
                 variant="ghost"
                 size="sm"
-                className="mb-4 flex items-center text-?gray-600 hover:text-gray-900 hover:bg-gray-100 transition-all duration-200"
+                className="mb-4 flex items-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-all duration-200"
                 onClick={() => window.history.back()}
->
+              >
                 <ChevronLeft className="mr-1 h-4 w-4" />
                 Retour aux résultats
               </Button>
@@ -138,7 +178,7 @@ export default function PropertyDetails() {
           </div>
 
           {/* Galerie de photos - déjà animée dans le composant */}
-          <PropertyGallery images={property.images} title={property.title} />
+          <PropertyGallery images={safeImages} title={propriete.titre} />
 
           {/* Contenu principal avec animations séquentielles */}
           <motion.div
@@ -153,11 +193,11 @@ export default function PropertyDetails() {
                 <div className="flex items-start justify-between">
                   <div>
                     <motion.h1 variants={itemVariants} className="text-2xl font-bold text-gray-900 md:text-3xl">
-                      {property.title}
+                      {propriete.titre}
                     </motion.h1>
                     <motion.div variants={itemVariants} className="mt-2 flex items-center text-sm text-gray-600">
                       <MapPin className="mr-1 h-4 w-4 text-gray-400" />
-                      <span>{property.location}</span>
+                      <span>{propriete.localisation}</span>
                     </motion.div>
                   </div>
                   <motion.div variants={itemVariants} className="flex space-x-2">
@@ -168,7 +208,9 @@ export default function PropertyDetails() {
                       onClick={() => setIsFavorite(!isFavorite)}
                     >
                       <Heart
-                        className={`h-5 w-5 transition-colors duration-300 ${isFavorite ? "fill-red-500 text-red-500" : "text-gray-600"}`}
+                        className={`h-5 w-5 transition-colors duration-300 ${
+                          isFavorite ? "fill-red-500 text-red-500" : "text-gray-600"
+                        }`}
                       />
                       <span className="sr-only">Ajouter aux favoris</span>
                     </Button>
@@ -195,13 +237,13 @@ export default function PropertyDetails() {
                     </Badge>
                   </div>
                   <div className="flex items-center text-sm text-gray-600">
-                    <span className="font-medium">{property.bedrooms}</span>
-                    <span className="mx-1">chambre{property.bedrooms > 1 ? "s" : ""}</span>
+                    <span className="font-medium">{propriete.nbrchambre}</span>
+                    <span className="mx-1">chambre{propriete.nbrchambre> 1 ? "s" : ""}</span>
                     <span className="mx-2">•</span>
-                    <span className="font-medium">{property.bathrooms}</span>
-                    <span className="mx-1">salle{property.bathrooms > 1 ? "s" : ""} de bain</span>
+                    <span className="font-medium">{propriete.nbrchambre}</span>
+                    <span className="mx-1">salle{propriete.nbrchambre> 1 ? "s" : ""} de bain</span>
                     <span className="mx-2">•</span>
-                    <span className="font-medium">{property.area}</span>
+                    <span className="font-medium">{propriete.surface}</span>
                     <span className="mx-1">m²</span>
                   </div>
                 </motion.div>
@@ -225,7 +267,7 @@ export default function PropertyDetails() {
                         transition={{ duration: 0.3 }}
                         className="space-y-4"
                       >
-                        <p className="text-gray-700">{property.description}</p>
+                        <p className="text-gray-700">{propriete.description}</p>
                         <div className="rounded-lg bg-blue-50 p-4">
                           <div className="flex items-start">
                             <Info className="mr-3 h-5 w-5 text-blue-500" />
@@ -290,9 +332,6 @@ export default function PropertyDetails() {
               </motion.div>
 
               {/* Informations sur le propriétaire avec animation */}
-              <motion.div variants={itemVariants}>
-                <PropertyOwner owner={property.owner} />
-              </motion.div>
             </motion.div>
 
             {/* Colonne latérale avec formulaire de réservation */}
@@ -309,7 +348,7 @@ export default function PropertyDetails() {
           </motion.div>
         </motion.main>
       )}
-      <Footer/>
+      <Footer />
     </AnimatePresence>
-  )
+  );
 }

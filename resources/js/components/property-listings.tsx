@@ -407,7 +407,7 @@ export function PropertyListings({ proprietes }: InertiaPageProps) {
 
                 <div className="flex items-center pr-3">
                   <Button
-                    className="h-12 md:h-12 w-12 md:w-12 rounded-full bg-primary hover:bg-primary/90 text-white m-1"
+                    className="h-12 md:h-12 w-12 md:w-12 rounded-full bg-[#485aa8] hover:bg-[#485aa8]/90 text-white m-1"
                     onClick={() => handleOpenFilters("location")}
                   >
                     <Search className="h-5 md:h-5 w-5 md:w-5" />

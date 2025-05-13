@@ -134,15 +134,9 @@ export function PropertyReservationForm({ price, priceUnit, maxGuests, owner }: 
         </div>
 
         {/* Boutons d'action */}
-        <Button
-          variant="outline"
-          className="mt-2 flex w-full items-center justify-center gap-2 border-primary py-6 text-base font-medium text-primary hover:bg-primary/10"
-        >
-          <Phone className="h-5 w-5" />
-          Appeler le propriétaire
-        </Button>
+      
 
-        <Button className="w-full bg-primary py-6 text-base font-medium text-white hover:bg-primary/90">
+        <Button className="w-full bg-[#485aa8] py-6 text-base font-medium text-white hover:bg-primary/90">
           Réserver un rendez-vous
         </Button>
       </div>

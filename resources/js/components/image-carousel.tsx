@@ -17,8 +17,6 @@ export const ImageCarousel = memo(function ImageCarousel({
   images,
   alt,
   aspectRatio = "auto",
-  width,
-  height,
   className,
   showControls = true,
 }: ImageCarouselProps) {

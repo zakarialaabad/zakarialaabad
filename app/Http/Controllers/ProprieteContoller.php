@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Propriete;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ProprieteContoller extends Controller
 {
@@ -13,8 +14,8 @@ class ProprieteContoller extends Controller
     public function index()
     {
         //
-        $proprietes = Propriete::with('loueur.user')->get();
-        return inertia("app/property/page",compact("proprietes"));
+        $proprietes = Propriete::with('loueur.user')->latest()->get();
+        return Inertia::render("app/property/page",compact("proprietes"));
     }
  
     
@@ -37,10 +38,17 @@ class ProprieteContoller extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Propriete $propriete)
+    public function show($id)
     {
-        //
+        try {
+            $propriete = Propriete::findOrFail($id);
+            return Inertia::render("app/property/[id]/page", compact("propriete"));
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // Handle the case where the model is not found
+            return response()->json(['message' => 'Propriete not found'], 404);
+        }
     }
+    
 
     /**
      * Show the form for editing the specified resource.
