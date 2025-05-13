@@ -1,38 +1,40 @@
 
 import { useState, useRef, useEffect, useCallback } from "react"
-import { router } from "@inertiajs/react"
 import { motion, useAnimation, useInView, AnimatePresence } from "framer-motion"
 import { useAuth } from "@/contexts/auth-context"
 import { AuthModal } from "@/components/auth/auth-modal"
-import { AuthAlert } from "@/components/auth/auth-alert"
-import { PropertySubmissionForm } from "@/components/property-submission-form"
-import { PropertyPreview } from "@/components/property-preview"
 import { SubmissionSuccessModal } from "@/components/submission-success-modal"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, MessageCircle, CheckCircle, Home, FileText, Users, ArrowLeft } from "lucide-react"
+import { ArrowRight, MessageCircle, CheckCircle, Home, Building2, Briefcase, DoorClosed, ShoppingBag, Shirt, FileText, ArrowLeft, Clock, Zap } from "lucide-react"
+import { PricingPacks } from "@/components/pricing-packs"
 import "./style.css"
+import { router } from '@inertiajs/react';
+
 
 export default function DevenirHote() {
   const { isAuthenticated } = useAuth()
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
   const [showSuccessModal, setShowSuccessModal] = useState(false)
-  const [formData, setFormData] = useState<Record<string, any>>({});
+  const [formData, setFormData] = useState<string | null>(null);
+
   const [showContactInfo, setShowContactInfo] = useState(false)
   const [currentPropertyIndex, setCurrentPropertyIndex] = useState(0)
-  const formRef = useRef<HTMLFormElement>(null);
+  const [expandedCard, setExpandedCard] = useState<number | null>(null)
+
+  const formRef = useRef(null)
   const titleRef = useRef(null)
   const processRef = useRef(null)
+  const advantagesTitleRef = useRef(null)
   const isInView = useInView(titleRef, { once: true, amount: 0.5 })
   const isProcessInView = useInView(processRef, { once: true, amount: 0.3 })
+  const isAdvantagesTitleInView = useInView(advantagesTitleRef, { once: true, amount: 0.5 })
   const controls = useAnimation()
   const processControls = useAnimation()
+  const advantagesTitleControls = useAnimation()
 
-  // Près du début du composant, après les autres déclarations useState
-  const handleBack = useCallback(() => {
-    router.visit("/");
-  }, [router])
+  
 
   useEffect(() => {
     if (isInView) {
@@ -41,13 +43,17 @@ export default function DevenirHote() {
     if (isProcessInView) {
       processControls.start("visible")
     }
-  }, [isInView, isProcessInView, controls, processControls])
+    if (isAdvantagesTitleInView) {
+      advantagesTitleControls.start("visible")
+    }
+  }, [isInView, isProcessInView, isAdvantagesTitleInView, controls, processControls, advantagesTitleControls])
 
-  const handleFormSubmit = (data: Record<string, any>) => {
+  // Fonction pour gérer la soumission du formulaire
+  const handleFormSubmit = (data:string) => {
     setFormData(data)
     setShowSuccessModal(true)
+    // Ici, vous pourriez envoyer les données à votre API
   }
-  
 
   // Fonction pour démarrer le processus
   const handleStartProcess = () => {
@@ -56,18 +62,18 @@ export default function DevenirHote() {
       return
     }
 
-    // Défiler vers le formulaire de manière sécurisée
-    if (formRef.current) {
-      formRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      })
-    }
+    // Rediriger vers la page de dépôt d'annonce
+    router.visit("/deposer-annonce")
   }
 
   // Fonction pour afficher les informations de contact
   const handleContactUs = () => {
     setShowContactInfo(!showContactInfo)
+  }
+
+  // Fonction pour gérer l'expansion des cartes
+  const toggleCardExpansion = (index: number) => {
+    setExpandedCard(expandedCard === index ? null : index)
   }
 
   // Liste des avantages avec des animations
@@ -97,12 +103,12 @@ export default function DevenirHote() {
       number: "01",
       extraContent: (
         <motion.div
-          className="mt-2 flex items-center text-blue-600 text-sm font-medium"
+          className="flex items-center text-blue-600 text-sm font-medium"
           initial={{ opacity: 0, y: 5 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.7 }}
         >
-          <span className="inline-block mr-1">Économisez jusqu'à 8% sur chaque location</span>
+          <span className="inline-block mr-1">Sans frais ni commissions cachés</span>
           <motion.span
             animate={{ x: [0, 3, 0] }}
             transition={{ repeat: Number.POSITIVE_INFINITY, duration: 1.5, repeatDelay: 2 }}
@@ -110,6 +116,50 @@ export default function DevenirHote() {
             →
           </motion.span>
         </motion.div>
+      ),
+      visualElement: (
+        <div className="bg-white bg-opacity-70 p-4 rounded-lg shadow-sm mt-4">
+          <h5 className="text-sm font-semibold text-gray-700 mb-3">Maximisez vos revenus</h5>
+          <div className="space-y-4">
+            <div>
+              <div className="flex justify-between text-sm mb-1">
+                <span className="text-gray-600 font-medium">Plateformes traditionnelles</span>
+                <span className="text-red-500 font-semibold">8-15%</span>
+              </div>
+              <div className="w-full bg-gray-100 h-4 rounded-full overflow-hidden shadow-inner">
+                <motion.div
+                  className="bg-gradient-to-r from-red-400 to-red-500 h-full rounded-full flex items-center justify-end pr-2"
+                  initial={{ width: "0%" }}
+                  whileInView={{ width: "15%" }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
+                >
+                  <span className="text-white text-xs font-bold">-15%</span>
+                </motion.div>
+              </div>
+            </div>
+
+            <div>
+              <div className="flex justify-between text-sm mb-1">
+                <span className="text-gray-600 font-medium">E-JAR</span>
+                <span className="text-green-500 font-semibold">0%</span>
+              </div>
+              <div className="w-full bg-gray-100 h-4 rounded-full overflow-hidden shadow-inner relative">
+                <div className="absolute inset-0 flex items-center justify-start pl-2">
+                  <span className="text-green-700 text-xs font-bold">0%</span>
+                </div>
+                <motion.div
+                  className="bg-gradient-to-r from-green-400 to-green-500 h-full rounded-full w-0"
+                  initial={{ width: "0%" }}
+                  whileInView={{ width: "0%" }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5 }}
+                />
+              </div>
+              <p className="text-xs text-green-600 mt-1 font-medium">Gardez 100% de vos revenus locatifs</p>
+            </div>
+          </div>
+        </div>
       ),
     },
     {
@@ -149,7 +199,7 @@ export default function DevenirHote() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3, delay: 0.7 }}
         >
-          {["Durée", "Prix", "Conditions"].map((tag, i) => (
+          {["Autonomie", "Flexibilité", "Sécurité"].map((tag, i) => (
             <motion.span
               key={i}
               className="inline-block px-2 py-1 bg-white bg-opacity-60 rounded-md text-xs text-orange-600"
@@ -161,6 +211,77 @@ export default function DevenirHote() {
             </motion.span>
           ))}
         </motion.div>
+      ),
+      visualElement: (
+        <div className="bg-white bg-opacity-70 p-4 rounded-lg shadow-sm mt-4">
+          <h5 className="text-sm font-semibold text-gray-700 mb-3">Personnalisez votre offre</h5>
+          <div className="grid grid-cols-2 gap-2">
+            <div className="flex items-center p-2 rounded-lg bg-orange-50">
+              <div className="mr-2 p-1 rounded-full bg-orange-100">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-3 w-3 text-orange-500"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+              <span className="text-xs font-medium text-gray-700">Durée flexible</span>
+            </div>
+            <div className="flex items-center p-2 rounded-lg bg-orange-50">
+              <div className="mr-2 p-1 rounded-full bg-orange-100">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-3 w-3 text-orange-500"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+              <span className="text-xs font-medium text-gray-700">Prix personnalisé</span>
+            </div>
+            <div className="flex items-center p-2 rounded-lg bg-orange-50">
+              <div className="mr-2 p-1 rounded-full bg-orange-100">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-3 w-3 text-orange-500"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zM12 2a1 1 0 01.967.744L14.146 7.2 17.5 9.134a1 1 0 010 1.732l-3.354 1.935-1.18 4.455a1 1 0 01-1.933 0L9.854 12.8 6.5 10.866a1 1 0 010-1.732l3.354-1.935 1.18-4.455A1 1 0 0112 2z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+              <span className="text-xs font-medium text-gray-700">Vos conditions</span>
+            </div>
+            <div className="flex items-center p-2 rounded-lg bg-orange-50">
+              <div className="mr-2 p-1 rounded-full bg-orange-100">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-3 w-3 text-orange-500"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+                </svg>
+              </div>
+              <span className="text-xs font-medium text-gray-700">Sélection locataires</span>
+            </div>
+          </div>
+        </div>
       ),
     },
     {
@@ -209,6 +330,52 @@ export default function DevenirHote() {
           </motion.div>
           <span>Processus accéléré</span>
         </motion.div>
+      ),
+      visualElement: (
+        <div className="bg-white bg-opacity-70 p-4 rounded-lg shadow-sm mt-4">
+          <h5 className="text-sm font-semibold text-gray-700 mb-3">Processus de publication</h5>
+          <div className="space-y-4">
+            <div className="relative">
+              <div className="flex mb-1 items-center justify-between">
+                <span className="text-xs font-medium text-gray-700">Délai total</span>
+                <span className="text-xs font-medium text-emerald-600">72h maximum</span>
+              </div>
+              <div className="h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
+                <div className="h-full bg-emerald-500 rounded-full" style={{ width: "100%" }}></div>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex items-center">
+                <div className="flex-shrink-0 h-4 w-4 rounded-full border border-emerald-500 bg-emerald-100 flex items-center justify-center">
+                  <div className="h-2 w-2 rounded-full bg-emerald-500"></div>
+                </div>
+                <div className="ml-2 flex justify-between w-full">
+                  <span className="text-xs text-gray-600">Vérification des informations</span>
+                  <span className="text-xs text-emerald-600">24h</span>
+                </div>
+              </div>
+              <div className="flex items-center">
+                <div className="flex-shrink-0 h-4 w-4 rounded-full border border-emerald-500 bg-emerald-100 flex items-center justify-center">
+                  <div className="h-2 w-2 rounded-full bg-emerald-500"></div>
+                </div>
+                <div className="ml-2 flex justify-between w-full">
+                  <span className="text-xs text-gray-600">Validation de l'annonce</span>
+                  <span className="text-xs text-emerald-600">24h</span>
+                </div>
+              </div>
+              <div className="flex items-center">
+                <div className="flex-shrink-0 h-4 w-4 rounded-full border border-emerald-500 bg-emerald-100 flex items-center justify-center">
+                  <div className="h-2 w-2 rounded-full bg-emerald-500"></div>
+                </div>
+                <div className="ml-2 flex justify-between w-full">
+                  <span className="text-xs text-gray-600">Publication en ligne</span>
+                  <span className="text-xs text-emerald-600">24h</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       ),
     },
   ]
@@ -276,11 +443,74 @@ export default function DevenirHote() {
       ),
     },
   ]
-
-  // Données pour le carrousel de propriétés
   const propertyCards = [
     {
       id: 1,
+      type: "Appartement moderne",
+      features: ["2 chambres", "1 salle de bain"],
+      location: "Guéliz, Marrakech • Disponible maintenant",
+      price: "3800 DH",
+      period: "/ mois",
+      contract: "Contrat minimum: 6 mois",
+      status: "Populaire",
+      icon: <Building2 className="h-5 w-5 text-purple-600" />,
+      bgColor: "bg-purple-50",
+      image: "/Appartement--Villa--Maison/Moroccan-Chandelier-Elegance.png",
+    },
+    {
+      id: 2,
+      type: "Bureau équipé",
+      features: ["2 pièces", "wifi inclus"],
+      location: "Centre Ville, Marrakech • Immédiatement",
+      price: "6000 DH",
+      period: "/ mois",
+      contract: "Contrat min : 6 mois",
+      status: "Professionnel",
+      icon: <Briefcase className="h-5 w-5 text-gray-600" />,
+      bgColor: "bg-gray-100",
+      image: "/Boutique/botique90.jpg",
+    },
+    {
+      id: 3,
+      type: "Studio cosy",
+      features: ["1 chambre", "1 salle de bain"],
+      location: "Hivernage, Marrakech • Libre dès maintenant",
+      price: "2800 DH",
+      period: "/ mois",
+      contract: "Contrat min : 3 mois",
+      status: "Économique",
+      icon: <DoorClosed className="h-5 w-5 text-yellow-600" />,
+      bgColor: "bg-yellow-50",
+      image: "Bureau/bureau2.jpg",
+    },
+    {
+      id: 4,
+      type: "Magasin commercial",
+      features: ["40 m²", "vitrine sur rue"],
+      location: "Souk, Marrakech • Disponible",
+      price: "5000 DH",
+      period: "/ mois",
+      contract: "Contrat min : 12 mois",
+      status: "Commercial",
+      icon: <ShoppingBag className="h-5 w-5 text-pink-600" />,
+      bgColor: "bg-pink-50",
+      image: "Magasin/magasin1.jpg",
+    },
+    {
+      id: 5,
+      type: "Boutique de luxe",
+      features: ["30 m²", "emplacement premium"],
+      location: "Guéliz, Marrakech • Disponible",
+      price: "7000 DH",
+      period: "/ mois",
+      contract: "Contrat min : 12 mois",
+      status: "Luxe",
+      icon: <Shirt className="h-5 w-5 text-indigo-600" />,
+      bgColor: "bg-indigo-50",
+      image: "Studio/Studio2.jpeg",
+    },
+    {
+      id: 6,
       type: "Riad traditionnel",
       features: ["3 chambres", "2 salles de bain"],
       location: "Médina, Marrakech • Disponible maintenant",
@@ -290,44 +520,24 @@ export default function DevenirHote() {
       status: "Validé",
       icon: <Home className="h-5 w-5 text-blue-600" />,
       bgColor: "bg-blue-50",
-      image: "/riad-retreat.png",
+      image: "/Appartement--Villa--Maison/Moroccan-Chandelier-Elegance.png",
     },
-    {
-      id: 2,
-      type: "Appartement moderne",
-      features: ["2 chambres", "1 salle de bain"],
-      location: "Guéliz, Marrakech • Disponible dès maintenant",
-      price: "3800 DH",
-      period: "/ mois",
-      contract: "Contrat minimum: 6 mois",
-      status: "Populaire",
-      icon: <Home className="h-5 w-5 text-purple-600" />,
-      bgColor: "bg-purple-50",
-      image: "/modern-moroccan-living.png",
-    },
-    {
-      id: 3,
-      type: "Villa avec piscine",
-      features: ["4 chambres", "3 salles de bain"],
-      location: "Palmeraie, Marrakech • Disponible le 15/06",
-      price: "8500 DH",
-      period: "/ mois",
-      contract: "Contrat minimum: 12 mois",
-      status: "Premium",
-      icon: <Home className="h-5 w-5 text-emerald-600" />,
-      bgColor: "bg-emerald-50",
-      image: "/moroccan-villa-oasis.png",
-    },
-  ]
+  ];
+  
+  
 
   // Effet pour changer la propriété affichée toutes les 4 secondes
   useEffect(() => {
-    const interval = setInterval(() => {
+    // Utilisons une référence pour éviter les problèmes de nettoyage
+    const intervalId = setInterval(() => {
       setCurrentPropertyIndex((prevIndex) => (prevIndex + 1) % propertyCards.length)
-    }, 5000) // Augmenté à 5 secondes pour mieux apprécier chaque image
+    }, 5000)
 
-    return () => clearInterval(interval)
-  }, [propertyCards.length])
+    // Nettoyage explicite
+    return () => {
+      clearInterval(intervalId)
+    }
+  }, [propertyCards.length]) // Dépendance stable
 
   // Animation variants pour le titre avec effet 3D
   const containerVariants = {
@@ -388,6 +598,15 @@ export default function DevenirHote() {
   const titleLine2 = "votre logement,".split(" ")
   const titleLine3 = "gardez le contrôle".split(" ")
 
+  // Diviser le titre des avantages en mots pour l'animation
+  // Remplacer ces lignes:
+  // const advantagesTitleLine1 = "Pourquoi choisir".split(" ")
+  // const advantagesTitleLine2 = "E-JAR ?".split(" ")
+
+  // Par celles-ci:
+  const advantagesTitleLine1 = "Nos avantages".split(" ")
+  const advantagesTitleLine2 = "exclusifs".split(" ")
+
   // Fonction pour changer manuellement la propriété affichée
   const changeProperty = (index:number) => {
     setCurrentPropertyIndex(index)
@@ -395,34 +614,33 @@ export default function DevenirHote() {
 
   // Ajoutez cette fonction pour initialiser correctement la page
   useEffect(() => {
-    // Vérifier si nous sommes dans un nouvel onglet
+    // Exécuter une seule fois au montage
     const isNewTab = window.opener !== null
 
     if (isNewTab) {
-      // Forcer l'affichage du formulaire et de la prévisualisation
-      const formSection = document.getElementById("property-submission-form")
-      if (formSection) {
-        formSection.style.display = "block"
-      }
-
-      const previewSection = document.getElementById("property-preview-section")
-      if (previewSection) {
-        previewSection.style.display = "block"
-      }
+      // Utiliser requestAnimationFrame pour s'assurer que le DOM est prêt
+      requestAnimationFrame(() => {
+        const formSection = document.getElementById("property-submission-form")
+        if (formSection) {
+          formSection.style.display = "block"
+        }
+      })
     }
-  }, [])
+  }, []) // Tableau de dépendances vide pour n'exécuter qu'une seule fois
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
+      <Header />
+
       {/* Hero Section redesignée */}
-      <section className="relative py-20 md:py-28 overflow-hidden bg-gradient-to-b from-slate-50 to-white">
+      <section className="relative py-16 md:py-20 overflow-hidden bg-white">
         {/* Bouton de retour */}
-        <div className="absolute top-4 left-4 z-20">
+        <div className="absolute top-2 left-2 z-20">
           <Button
             variant="ghost"
             size="sm"
-            onClick={handleBack}
-            className="flex items-center gap-1 text-gray-600 hover:text-gray-900 hover:bg-gray-100/80 rounded-full px-3 py-2 transition-all"
+            onClick={() => window.history.back()}  
+          className="flex items-center gap-1 text-gray-600 hover:text-gray-900 hover:bg-gray-100/80 rounded-full px-2 py-1 transition-all"
           >
             <ArrowLeft className="h-4 w-4" />
             <span>Retour</span>
@@ -468,7 +686,7 @@ export default function DevenirHote() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
               <div className="inline-block px-4 py-1.5 bg-gradient-to-r from-blue-50 to-blue-100 rounded-full text-blue-600 font-medium text-sm mb-6">
-                <span className={" italic font-medium"} style={{ fontFamily: 'var(--font-playfair)' }}>
+                <span className={`playfair-font italic font-medium`}>
                   Propriétaires, maximisez votre investissement
                 </span>
               </div>
@@ -569,49 +787,45 @@ export default function DevenirHote() {
                   }}
                 />
 
-                <div className="relative z-10">
-                  {[
-                    "Nous simplifions votre location",
-                    "pour que vous vous concentriez sur l'essentiel :",
-                    "rentabiliser votre bien en toute liberté.",
-                  ].map((line, i) => (
-                    <motion.p
-                      key={i}
-                      className={`text-lg font-medium text-gray-700 mb-1 ${i === 0 ? "playfair-font italic" : ""}`}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.5, delay: 1.7 + i * 0.2 }}
+                <div className="relative z-10 space-y-4">
+                  <div className="space-y-3">
+                    <motion.div
+                      className="flex items-start gap-2"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, delay: 1.9 }}
                     >
-                      {line}
-                    </motion.p>
-                  ))}
+                      <div className="bg-blue-100 p-1 rounded-full mt-0.5 flex-shrink-0">
+                        <Zap className="h-4 w-4 text-blue-600" />
+                      </div>
+                      <p className="text-gray-700 font-medium">Une liberté totale, un accompagnement discret</p>
+                    </motion.div>
 
-                  <div className="mt-3 space-y-2">
-                    {[
-                      { icon: "check-circle", text: "Pas d'agence, pas de frais cachés." },
-                      { icon: "file-text", text: "Déposez votre annonce, fixez vos propres règles." },
-                      {
-                        icon: "users",
-                        text: "Entrez en contact avec des candidats sérieux prêts à s'engager sur le long terme.",
-                      },
-                    ].map((item, i) => (
-                      <motion.div
-                        key={i}
-                        className="flex items-start gap-2"
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.4, delay: 2.3 + i * 0.2 }}
-                      >
-                        {item.icon === "check-circle" && (
-                          <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                        )}
-                        {item.icon === "file-text" && (
-                          <FileText className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
-                        )}
-                        {item.icon === "users" && <Users className="h-5 w-5 text-indigo-500 mt-0.5 flex-shrink-0" />}
-                        <p className="text-gray-600">{item.text}</p>
-                      </motion.div>
-                    ))}
+                    <motion.div
+                      className="flex items-start gap-2"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, delay: 2.1 }}
+                    >
+                      <div className="bg-indigo-100 p-1 rounded-full mt-0.5 flex-shrink-0">
+                        <FileText className="h-4 w-4 text-indigo-600" />
+                      </div>
+                      <p className="text-gray-700">
+                        Créez votre annonce, fixez vos conditions, et recevez des demandes de locataires fiables.
+                      </p>
+                    </motion.div>
+
+                    <motion.div
+                      className="flex items-start gap-2"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, delay: 2.3 }}
+                    >
+                      <div className="bg-green-100 p-1 rounded-full mt-0.5 flex-shrink-0">
+                        <Clock className="h-4 w-4 text-green-600" />
+                      </div>
+                      <p className="text-gray-700">Gagnez du temps, de la tranquillité… et un revenu régulier.</p>
+                    </motion.div>
                   </div>
                 </div>
               </motion.div>
@@ -768,21 +982,15 @@ export default function DevenirHote() {
                         filter: { duration: 0.8, ease: "easeInOut" },
                       }}
                     >
-                      <img
-                          src={property.image || "/placeholder.svg"}
-                          alt={`${property.type} - E-JAR`}
-                          className="object-cover transition-transform duration-[2000ms] ease-out"
-                          style={{
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "cover",
-                            transform: currentPropertyIndex === idx ? "scale(1.05)" : "scale(1)",
-                            position: "absolute", // في حال كنت تستخدمها بنفس طريقة `fill`
-                            top: 0,
-                            left: 0,
-                          }}
-                        />
-
+                     <img
+                    src={property.image || "/placeholder.svg"}  // إذا لم توجد صورة للعقار، سيتم استخدام صورة بديلة
+                    alt={`${property.type} - E-JAR`}  // النص البديل للصورة
+                    className="object-cover transition-transform duration-[2000ms] ease-out"  // أضف التحولات والأنماط المطلوبة
+                    style={{
+                      transform: currentPropertyIndex === idx ? "scale(1.05)" : "scale(1)",  // التغيير في مقياس الصورة عند تحديدها
+                    }}
+                    loading={idx === 0 ? "eager" : "lazy"}  // اجعل الصورة الأولى تُحمّل بشكل سريع
+                  />
                     </motion.div>
                   ))}
                 </div>
@@ -934,21 +1142,69 @@ export default function DevenirHote() {
       {/* Section des avantages */}
       <section className="py-16 bg-gradient-to-b from-white to-slate-50">
         <div className="container mx-auto px-4 md:px-6">
-          <motion.div
-            className="text-center mb-12"
+          {/* Titre avec animation 3D comme le titre principal */}
+          <div ref={advantagesTitleRef} className="perspective-1000 mb-12 text-center">
+            <motion.div
+              className="relative"
+              initial="hidden"
+              animate={advantagesTitleControls}
+              variants={containerVariants}
+            >
+              {/* Éléments décoratifs autour du titre */}
+              <motion.div
+                className="absolute -top-6 left-1/2 w-12 h-12 rounded-full border-2 border-dashed border-blue-300 opacity-70"
+                variants={decorationVariants}
+              />
+
+              <motion.div
+                className="absolute -bottom-4 left-1/3 w-16 h-16 rounded-full border-2 border-dashed border-purple-300 opacity-70"
+                variants={decorationVariants}
+              />
+
+              <motion.div
+                className="absolute top-1/2 right-1/3 w-4 h-4 bg-gradient-to-r from-blue-400 to-indigo-400 rounded-full opacity-70"
+                variants={decorationVariants}
+              />
+
+              {/* Première ligne */}
+              <motion.div className="mb-2 flex justify-center" variants={lineVariants}>
+                {advantagesTitleLine1.map((word, i) => (
+                  <motion.span
+                    key={`adv-line1-${i}`}
+                    className="inline-block mr-3 text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 transform-gpu"
+                    variants={wordVariants}
+                    style={{ transformStyle: "preserve-3d" }}
+                  >
+                    {word}
+                  </motion.span>
+                ))}
+              </motion.div>
+
+              {/* Deuxième ligne */}
+              <motion.div className="flex justify-center" variants={lineVariants}>
+                {advantagesTitleLine2.map((word, i) => (
+                  <motion.span
+                    key={`adv-line2-${i}`}
+                    className="inline-block mr-3 text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 transform-gpu"
+                    variants={wordVariants}
+                    style={{ transformStyle: "preserve-3d" }}
+                  >
+                    {word}
+                  </motion.span>
+                ))}
+              </motion.div>
+            </motion.div>
+          </div>
+
+          <motion.p
+            className={`text-lg font-medium text-gray-700  italic text-center max-w-2xl mx-auto mb-12`}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.7 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
           >
-            <h2 className="text-3xl font-bold mb-4">
-              <span className={"playfair-font"}>Pourquoi choisir</span> <span className="text-blue-600">E-JAR</span>{" "}
-              ?
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Nous vous offrons une expérience de location simplifiée, transparente et entièrement sous votre contrôle.
-            </p>
-          </motion.div>
+            Louez à votre rythme, selon vos règles — sans intermédiaires, sans contraintes.
+          </motion.p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {advantages.map((advantage, index) => (
@@ -978,158 +1234,55 @@ export default function DevenirHote() {
                   }}
                 />
 
-                <div className="absolute top-4 right-4 bg-white/80 backdrop-blur-sm rounded-full px-3 py-1 text-sm font-bold text-gray-500">
-                  {advantage.number}
+                {/* En-tête avec numéro et icône */}
+                <div className="flex justify-between items-center mb-4">
+                  <div className={`${advantage.iconBgColor} p-3 rounded-full inline-block relative`}>
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                    >
+                      {advantage.icon}
+                    </motion.div>
+                  </div>
+                  <div className="bg-white/80 backdrop-blur-sm rounded-full px-3 py-1 text-sm font-bold text-gray-500">
+                    {advantage.number}
+                  </div>
                 </div>
 
-                <div className={`${advantage.iconBgColor} p-3 rounded-full inline-block mb-4 relative`}>
-                  {advantage.icon}
-                  <motion.div
-                    className={`absolute inset-0 rounded-full bg-gradient-to-r ${advantage.highlightColor} opacity-0`}
-                    animate={{
-                      opacity: [0, 0.5, 0],
-                      scale: [1, 1.2, 1],
-                    }}
-                    transition={{
-                      repeat: Number.POSITIVE_INFINITY,
-                      duration: 3,
-                      delay: index * 1.5,
-                      repeatDelay: 5,
-                    }}
-                  />
+                {/* Contenu principal */}
+                <div>
+                  <h3 className="text-xl font-bold mb-3 relative z-10">{advantage.title}</h3>
+                  <p className="text-gray-600 mb-4 relative z-10">{advantage.description}</p>
+
+                  {/* Ligne de séparation subtile */}
+                  <div className={`h-px w-1/3 bg-gradient-to-r ${advantage.processColor} opacity-30 my-4`}></div>
+
+                  {/* Contenu supplémentaire */}
+                  <div className="mt-2">{advantage.extraContent}</div>
+
+                  {/* Élément visuel directement affiché */}
+                  {advantage.visualElement}
                 </div>
-
-                <h3 className="text-xl font-bold mb-2 relative z-10">{advantage.title}</h3>
-                <p className="text-gray-600 mb-4 relative z-10">{advantage.description}</p>
-
-                {advantage.extraContent}
-
-                <motion.div
-                  className={`h-1 w-16 bg-gradient-to-r ${advantage.processColor} rounded-full mt-4`}
-                  initial={{ width: 0 }}
-                  whileInView={{ width: "4rem" }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 1, delay: 0.5 + index * 0.2 }}
-                />
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Formulaire de dépôt d'annonce */}
-      <section ref={formRef} id="property-form" className="py-20 bg-white relative">
+      {/* Section des packs */}
+      <section className="py-16 bg-gradient-to-b from-slate-50 to-white">
         <motion.div
           className="container mx-auto px-4 md:px-6"
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.7 }}
         >
-          <motion.div
-            className="max-w-3xl mx-auto mb-12"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-          >
-            <motion.div
-              className="flex items-center justify-center mb-4"
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-            >
-              <div className="h-px bg-gradient-to-r from-transparent via-blue-200 to-transparent w-16"></div>
-              <div className="px-4">
-                <motion.div
-                  className="bg-blue-50 rounded-full p-2"
-                  whileHover={{ scale: 1.1, backgroundColor: "rgba(59, 130, 246, 0.2)" }}
-                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                >
-                  <FileText className="h-5 w-5 text-blue-500" />
-                </motion.div>
-              </div>
-              <div className="h-px bg-gradient-to-r from-transparent via-blue-200 to-transparent w-16"></div>
-            </motion.div>
-
-            <motion.h2
-              className="text-3xl font-bold text-center mb-4"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-            >
-              <motion.span
-                className="text-blue-600"
-                initial={{ backgroundSize: "0% 3px" }}
-                whileInView={{ backgroundSize: "100% 3px" }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 1, delay: 0.6 }}
-                style={{
-                  backgroundImage: "linear-gradient(to right, #4153a4, #5195cd)",
-                  backgroundRepeat: "no-repeat",
-                  backgroundPosition: "0 bottom",
-                }}
-              >
-                Déposez votre annonce
-              </motion.span>{" "}
-              en quelques clics
-            </motion.h2>
-
-            <motion.p
-              className="text-gray-600 text-center mb-0"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.5, delay: 0.5 }}
-            >
-              Complétez le formulaire ci-dessous avec les informations de votre bien immobilier pour le mettre en
-              location longue durée
-            </motion.p>
-          </motion.div>
-
-          {isAuthenticated ? (
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-              <div className="lg:col-span-3">
-                <motion.div
-                  initial={{ opacity: 0, x: -30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: 0.7, delay: 0.2 }}
-                >
-                  <section id="property-submission-form">
-                    <PropertySubmissionForm onSubmit={handleFormSubmit} />
-                  </section>
-                </motion.div>
-              </div>
-              <div className="lg:col-span-2">
-                <div className="sticky top-24">
-                  <motion.div
-                    initial={{ opacity: 0, x: 30 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true, margin: "-100px" }}
-                    transition={{ duration: 0.7, delay: 0.4 }}
-                  >
-                    <section id="property-preview-section">
-                      <PropertyPreview />
-                    </section>
-                  </motion.div>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-              <AuthAlert
-                title="Connexion requise"
-                description="Vous devez être connecté pour déposer une annonce."
-                buttonText="Se connecter"
-                onButtonClick={() => setIsAuthModalOpen(true)}
-              />
-            </motion.div>
-          )}
+          <PricingPacks />
         </motion.div>
       </section>
+
+      {/* Removed property submission form section */}
 
       {/* Modals */}
       <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
@@ -1139,6 +1292,7 @@ export default function DevenirHote() {
         onDashboardClick={() => router.visit("/dashboard/mes-annonces")}
       />
 
+      <Footer />
     </div>
   )
 }
