@@ -34,4 +34,9 @@ class Propriete extends Model
     public function loueur(){
         return $this->belongsTo(Loueur::class);
     }
+    public function favoredBy()
+{
+    return $this->belongsToMany(User::class, 'favorites', 'propriete_id', 'user_id');
+}
+
 }

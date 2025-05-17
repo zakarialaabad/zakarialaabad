@@ -11,67 +11,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { PropertyTypeSelect } from "./property-type-select" 
 import { useState, useEffect } from "react"
 import { X, Upload, ImageIcon } from "lucide-react"
-type PreviewFields =
-  | "title"
-  | "description"
-  | "propertyType"
-  | "tenantType"
-  | "city"
-  | "district"
-  | "address"
-  | "area"
-  | "bedrooms"
-  | "bathrooms"
-  | "images"
-  | "price"
-  | "minimumStay"
-  | "availableFrom"
-  | "rules.petsAllowed"
-  | "rules.smokingAllowed"
-  | "rules.smallPetsOnly"
-  | "rules.petFee"
-  | "rules.petDeposit"
-  | "rules.noDrugs"
-  | "rules.smokingOutdoorOnly"
-  | "rules.ecigaretteAllowed"
-  | "rules.eventsAllowed"
-  | "rules.partiesAllowed"
-  | "rules.additionalGuestsAllowed"
-  | "rules.guestRegistration"
-  | "rules.quietHours"
-  | "rules.noLoudMusic"
-  | "rules.respectNeighbors"
-  | "rules.noPartiesWeekdays"
-  | "rules.childFriendly"
-  | "rules.babyFriendly"
-  | "rules.familyFriendly"
-  | "rules.childSafetyFeatures"
-  | "rules.noCandles"
-  | "rules.noModifications"
-  | "rules.cleaningRequired"
-  | "rules.trashDisposalRules"
-  | "rules.additionalRules"
-  | 'rules.depositWithheld'
-  | 'rules.earlyTermination'
-  | 'rules.additionalFees'
-  | 'rules.penaltyDetails';
 
 interface PropertySubmissionFormProps {
   onSubmit: (data: any) => void
-  onFieldFocus?: (fieldName: PreviewFields) => void
+  onFieldFocus?: (fieldName: string) => void
   onFieldBlur?: () => void
   currentStep?: number
   goToNextStep?: () => void
   goToPreviousStep?: () => void
   totalSteps?: number
-}
-interface ImagePreview {
-  preview: string;
-  fileInfo: {
-    name: string;
-    size: number;
-    type: string;
-  } | null;
 }
 
 const PropertySubmissionForm = ({
@@ -153,9 +101,9 @@ const PropertySubmissionForm = ({
 
   // Load existing images from form data if available
   useEffect(() => {
-    const existingImages = methods.watch("images") as ImagePreview[] | undefined;
+    const existingImages = methods.watch("images")
     if (existingImages && existingImages.length > 0) {
-      setImagePreviews(existingImages.map((img) => img.preview));
+      setImagePreviews(existingImages.map((img) => img.preview))
     }
   }, [methods])
 

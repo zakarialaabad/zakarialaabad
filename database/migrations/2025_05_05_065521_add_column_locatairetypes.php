@@ -16,7 +16,6 @@ return new class extends Migration
             $table->enum("typesLocaires",['Tout', 'Famille', 'Marei', 'Étudiant', 'Célibataire', 'Fonctionnaire']);
         });
     }
-
     /**
      * Reverse the migrations.
      */

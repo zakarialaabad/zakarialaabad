@@ -1,10 +1,9 @@
-"use client"
 
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { CheckCircle, AlertTriangle, Info, AlertCircle } from "lucide-react"
 import { cn } from "@/lib/utils"
-import Link from "next/link"
+import { Link } from "@inertiajs/react"
 import type { Notification } from "@/contexts/notifications-context"
 
 interface NotificationItemProps {

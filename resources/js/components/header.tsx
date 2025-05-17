@@ -1,6 +1,6 @@
 import { useState } from "react"
 import type React from "react"
-
+import { router } from '@inertiajs/react';
 import { Heart, Bell, MessageCircle, User, Settings, LogOut, Menu, LogIn, Globe, Home } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useMediaQuery } from "@/hooks/use-media-query"
@@ -19,6 +19,20 @@ import { AuthModal } from "@/components/auth/auth-modal"
 import { useFavorites } from "@/contexts/favorites-context"
 import { AuthAlert } from "@/components/auth/auth-alert"
 import { Link } from "@inertiajs/react"
+import { NotificationsPanel } from "@/components/notifications/notifications-panel"
+
+import { usePage } from "@inertiajs/react"
+type User = {
+  id: number;
+  name: string;
+  email: string;
+};
+
+type PageProps = {
+  auth: {
+    user: User | null;
+  };
+};
 
 export function Header() {
   const isMobile = useMediaQuery("(max-width: 768px)")
@@ -30,15 +44,20 @@ export function Header() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
   const [showAuthAlert, setShowAuthAlert] = useState(false)
   const [currentLanguage, setCurrentLanguage] = useState("Français")
-
+  const { auth } = usePage<PageProps>().props;
+  const [isNotificationsPanelOpen, setIsNotificationsPanelOpen] = useState(false)
   const handleOpenAuthModal = () => {
     setIsAuthModalOpen(true)
   }
-
+  const handleLogout = () => {
+    router.post('/logout')
+  }
   const handleCloseAuthModal = () => {
     setIsAuthModalOpen(false)
   }
-
+  const toggleNotificationsPanel = () => {
+    setIsNotificationsPanelOpen(!isNotificationsPanelOpen)
+  }
   const handleFavoritesClick = (e: React.MouseEvent) => {
     if (!isAuthenticated) {
       e.preventDefault()
@@ -62,7 +81,7 @@ export function Header() {
        
       
 
-                {isAuthenticated && (
+                {auth.user  && (
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger asChild>
@@ -88,7 +107,7 @@ export function Header() {
               </>
             )}
 
-            {isAuthenticated ? (
+            {auth.user  ? (
               // Menu pour utilisateurs connectés
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -132,21 +151,21 @@ export function Header() {
                       </Link>
                     </DropdownMenuItem>
                  
-                    <DropdownMenuItem asChild>
-                      <Link href="/notifications">
-                        <Bell className="mr-2 h-4 w-4" />
+                    <DropdownMenuItem
+                      className="hover:bg-gray-700 hover:text-white focus:bg-gray-700 focus:text-white"
+                      onClick={toggleNotificationsPanel}
+                    >                        <Bell className="mr-2 h-4 w-4" />
                         <span>Notifications</span>
                         {unreadNotifications > 0 && (
                           <span className="ml-auto bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                             {unreadNotifications}
                           </span>
                         )}
-                      </Link>
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
                  
-                  <DropdownMenuItem onClick={logout}>
+                  <DropdownMenuItem onClick={handleLogout}>
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Déconnexion</span>
                   </DropdownMenuItem>
@@ -155,8 +174,8 @@ export function Header() {
             ) : (
               // Bouton de connexion pour utilisateurs non connectés
               <Button
-                onClick={handleOpenAuthModal}
-                className="bg-[#485aa8] hover:bg-[#485aa8]/90 cursor-pointer  text-white rounded-full px-4 py-2 h-auto"
+              onClick={() => router.get(route('login'))}
+              className="bg-[#485aa8] hover:bg-[#485aa8]/90 cursor-pointer  text-white rounded-full px-4 py-2 h-auto"
               >
                 <LogIn className="h-5 w-5 mr-2" />
                 <span>Connexion</span>
@@ -165,7 +184,7 @@ export function Header() {
           </div>
         </div>
       </header>
-
+      <NotificationsPanel isOpen={isNotificationsPanelOpen} onClose={() => setIsNotificationsPanelOpen(false)} />
       <AuthModal isOpen={isAuthModalOpen} onClose={handleCloseAuthModal} />
       <AuthAlert
         isOpen={showAuthAlert}

@@ -24,7 +24,6 @@ class User extends Authenticatable
         'password',
         'prenom', 
         'telephone',
-        'typeCompte',
         'genre',
         'photo', 
         'villeChoisie',
@@ -76,8 +75,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Admin::class);
     }
-    public function favoris()
+    public function favorites()
     {
-        return $this->hasMany(Favori::class);
+        return $this->belongsToMany(Propriete::class, 'favorites', 'user_id', 'propriete_id');
     }
+    
 }
