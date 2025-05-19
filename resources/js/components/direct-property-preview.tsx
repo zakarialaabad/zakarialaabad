@@ -17,8 +17,19 @@ import {
 } from "lucide-react"
 import { router } from "@inertiajs/react"
 import { useState, useEffect } from "react"
-type PreviewFields = keyof typeof fieldToPreviewSection;
-
+type PreviewFields =
+| "title"
+| "description"
+| "propertyType"
+| "tenantType"
+| "city"
+| "district"
+| "address"
+| "area"
+| "bedrooms"
+| "bathrooms"
+| "images"
+| "price";
 interface DirectPropertyPreviewProps {
   activeField?: PreviewFields | null;
   currentStep?: number;

@@ -1,7 +1,7 @@
 import { useState } from "react"
 import type React from "react"
 import { router } from '@inertiajs/react';
-import { Heart, Bell, MessageCircle, User, Settings, LogOut, Menu, LogIn, Globe, Home } from "lucide-react"
+import { Heart, Bell, MessageCircle, User, Settings, LogOut, Menu, LogIn, Globe, Home,LayoutDashboard } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import { Logo } from "@/components/logo"
@@ -63,6 +63,11 @@ export function Header() {
       e.preventDefault()
       setShowAuthAlert(true)
     }
+  }
+  
+  // Safer way to handle dashboard navigation
+  const navigateToDashboard = () => {
+    router.visit("/dashboard")
   }
   return (
     <>
@@ -138,6 +143,13 @@ export function Header() {
                     <DropdownMenuItem>
                       <User className="mr-2 h-4 w-4" />
                       <span>Mon profil</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      className="hover:bg-gray-700 hover:text-white focus:bg-gray-700 focus:text-white"
+                      onClick={navigateToDashboard}
+                    >
+                      <LayoutDashboard className="mr-2 h-4 w-4" />
+                      <span>Tableau de bord</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                       <Link href="/favoris">

@@ -1,6 +1,4 @@
-"use client"
 import { ReactNode } from "react"
-
 import { useFormContext, useWatch } from "react-hook-form"
 import { Badge } from "@/components/ui/badge"
 import {
@@ -255,7 +253,7 @@ export function RealTimePropertyPreview() {
             </div>
           </div>
         </div>
-
+        {/* Contenu de la prévisualisation */}
         <div className="p-4">
           {/* Message d'information sur la mise à jour automatique */}
           <div className="mb-3 bg-blue-50 p-2 rounded-md border border-blue-100">

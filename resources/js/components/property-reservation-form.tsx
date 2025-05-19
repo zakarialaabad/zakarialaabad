@@ -1,4 +1,3 @@
-"use client"
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
@@ -134,8 +133,6 @@ export function PropertyReservationForm({ price, priceUnit, maxGuests, owner }: 
         </div>
 
         {/* Boutons d'action */}
-      
-
         <Button className="w-full bg-[#485aa8] py-6 text-base font-medium text-white hover:bg-primary/90">
           Réserver un rendez-vous
         </Button>

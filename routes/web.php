@@ -25,6 +25,35 @@ Route::get('/Proprietes/{id}', [ProprieteContoller::class, "show"]);
 Route::get("/devenir-hote",function(){
     return Inertia::render("app/devenir-hote/page");
 });
+Route::get('/property/preview', function () {
+    return Inertia::render('app/property/preview/page');
+});
+Route::get("/dashboard",function(){
+    return Inertia::render("app/dashboard/page");
+});;
+Route::get('/admin/login', function () {
+    return Inertia::render('app/admin/login/page');
+});
+Route::get('/admin/dashboard', function () {
+    return Inertia::render('app/admin/dashboard/page');
+});
+Route::get('/admin/properties', function () {
+    return Inertia::render('app/admin/properties/page');
+});
+Route::get('/admin/users', function () {
+    return Inertia::render('app/admin/users/page');
+});Route::get('/admin/bookings', function () {
+    return Inertia::render('app/admin/bookings/page');
+});
+Route::get('/admin/payments', function () {
+    return Inertia::render('app/admin/payments/page');
+});
+Route::get('/admin/notifications', function () {
+    return Inertia::render('app/admin/notifications/page');
+});
+Route::get('/admin/settings', function () {
+    return Inertia::render('app/admin/settings/page');
+});
 Route::get("/devenir-hote/verification",function(){
     return Inertia::render("app/devenir-hote/verification/page");
 });

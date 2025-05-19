@@ -1,27 +1,21 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
-import { PropertyCard } from "@/components/property-card";
-import { useMediaQuery } from "@/utils/responsive-utils";
-import { Pagination } from "@/components/ui/pagination";
-import { Button } from "@/components/ui/button";
-import { motion, AnimatePresence } from "framer-motion";
-import { Grid3X3, Grid2X2, Filter, Search, Home, Building, Building2, Warehouse, MapPin, Bed } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { FilterSidebar } from "@/components/filter-sidebar";
-import type { SearchFilters } from "./search-filters";
-import { generateText, openai } from "@/lib/openai";
-import { HorizontalFilterBar } from "@/components/horizontal-filter-bar";
-
-// Constants
-const FILTER_DEBOUNCE_TIME = 300;
-const DEFAULT_MIN_PRICE = 500;
-const DEFAULT_MAX_PRICE = 3000;
-
-type Propriete = {
+import { useState, useEffect, useMemo, useCallback } from "react"
+import { PropertyCard } from "@/components/property-card"
+import { useMediaQuery } from "@/utils/responsive-utils"
+import { Pagination } from "@/components/ui/pagination"
+import { Button } from "@/components/ui/button"
+import { motion, AnimatePresence } from "framer-motion"
+import { Grid3X3, Grid2X2, Filter, Search, Home, Building, Building2, Warehouse, MapPin, Bed } from "lucide-react"
+import { cn } from "@/lib/utils"
+import { FilterSidebar } from "@/components/filter-sidebar"
+import type { SearchFilters } from "./search-filters"
+import { generateText, openai } from "@/lib/openai"
+import { HorizontalFilterBar } from "@/components/horizontal-filter-bar"
+type Propriete = { 
   id: number;
   loueur_id: number;
-  ville: string;
+  ville:string;
   titre: string;
-  typesLocaires: string;
+  typesLocaires:string;
   localisation: string;
   prixParMois: number;
   imgs: string[];
@@ -44,42 +38,40 @@ type Propriete = {
     };
   };
 };
-
 type InertiaPageProps = {
   proprietes: Propriete[];
 };
-
-export function PropertyListings({ proprietes }: InertiaPageProps) {
-  const isMobile = useMediaQuery("(max-width: 768px)");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [gridView, setGridView] = useState<"grid3" | "grid2">("grid3");
-  const [isLoading, setIsLoading] = useState(false);
-  const [isFilterSidebarOpen, setIsFilterSidebarOpen] = useState(false);
-  const [activeFilterTab, setActiveFilterTab] = useState<string>("localisation");
+export function PropertyListings({ proprietes = [] }: InertiaPageProps) {
+  const isMobile = useMediaQuery("(max-width: 768px)")
+  const [currentPage, setCurrentPage] = useState(1)
+  const [gridView, setGridView] = useState<"grid3" | "grid2">("grid3")
+  const [isLoading, setIsLoading] = useState(false)
+  const [isFilterSidebarOpen, setIsFilterSidebarOpen] = useState(false)
+  const [activeFilterTab, setActiveFilterTab] = useState<string>("localisation")
   const [filters, setFilters] = useState<SearchFilters>({
     ville: "",
     prixParMois: 0,
-    localisation: "",
-    adresse: "",
+    localisation:"",
+    adresse:"",
     type: "tout",
     typesLocaires: "tous",
     nbrchambre: 0,
-    minPrice: DEFAULT_MIN_PRICE,
-    maxPrice: DEFAULT_MAX_PRICE,
+    minPrice: 500,
+    maxPrice: 3000,
     minArea: 20,
     maxArea: 150,
-  });
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchCriteria, setSearchCriteria] = useState<any>(null);
-  const [filteredProperties, setFilteredProperties] = useState(proprietes);
-  const [searchAnimation, setSearchAnimation] = useState(false);
-  const [activeFilter, setActiveFilter] = useState("all");
+  })
+  const [searchQuery, setSearchQuery] = useState("")
+  const [searchCriteria, setSearchCriteria] = useState<any>(null)
+  const [filteredProperties, setFilteredProperties] = useState(proprietes)
+  const [searchAnimation, setSearchAnimation] = useState(false)
+  const [activeFilter, setActiveFilter] = useState("all")
 
-  // Filter items for the horizontal filter bar
+  // Définition des filtres pour la barre horizontale - Mémorisé pour éviter des re-rendus inutiles
   const filterItems = useMemo(
     () => [
       { id: "all", label: "Tous", icon: <Home className="h-5 w-5" strokeWidth={1} /> },
-      { id: "appartement", label: "Appartement", icon: <Building className="h-5 w-5" strokeWidth={1} /> },
+      { id: "apartment", label: "Appartement", icon: <Building className="h-5 w-5" strokeWidth={1} /> },
       { id: "house", label: "Maison", icon: <Home className="h-5 w-5" strokeWidth={1} /> },
       { id: "garconniere", label: "Boutique", icon: <Building2 className="h-5 w-5" strokeWidth={1} /> },
       { id: "studio", label: "Studio", icon: <Building2 className="h-5 w-5" strokeWidth={1} /> },
@@ -89,37 +81,20 @@ export function PropertyListings({ proprietes }: InertiaPageProps) {
       { id: "depot", label: "Dépôt", icon: <Warehouse className="h-5 w-5" strokeWidth={1} /> },
       { id: "magasin", label: "Magasin", icon: <Building className="h-5 w-5" strokeWidth={1} /> },
     ],
-    []
-  );
-
-  // Apply filters to properties
-  const applyFilters = (properties: Propriete[], filters: SearchFilters): Propriete[] => {
-    return properties.filter((property: Propriete)  => {
-      return (
-        (filters.ville ? property.ville.toLowerCase() === filters.ville.toLowerCase() : true) &&
-        (filters.adresse ? property.adresse === filters.adresse : true) &&
-        (filters.type && filters.type !== "tout" ? property.type.toLowerCase() === filters.type.toLowerCase() : true) &&
-        (filters.typesLocaires && filters.typesLocaires !== "tous" ? property.typesLocaires === filters.typesLocaires : true) &&
-        (filters.nbrchambre > 0 ? filters.nbrchambre === 5 ? property.nbrchambre >= 5 : property.nbrchambre === filters.nbrchambre : true) &&
-        (filters.minPrice > DEFAULT_MIN_PRICE ? property.prixParMois >= filters.minPrice : true) &&
-        (filters.maxPrice < DEFAULT_MAX_PRICE ? property.prixParMois <= filters.maxPrice : true) &&
-        (filters.minArea && filters.minArea > 20 ? property.surface >= filters.minArea : true) &&
-        (filters.maxArea && filters.maxArea < 150 ? property.surface <= filters.maxArea : true)
-      );
-    });
-  };
-
-  // Handle filter change
+    [],
+  )
+  // Gérer le changement de filtre - Optimisé avec useCallback
   const handleFilterChange = useCallback(
     (filterId: string) => {
-      setActiveFilter(filterId);
-      setIsLoading(true);
-
+      setActiveFilter(filterId)
+      setIsLoading(true)
+      // Filtrer les propriétés en fonction du filtre sélectionné
       setTimeout(() => {
-        let filtered = [...proprietes];
+        let filtered = [...proprietes]
         if (filterId !== "all") {
+          // Filtrer par type de propriété
           const typeMap: Record<string, string> = {
-            appartement: "Appartement",
+            apartment: "Appartement",
             house: "Maison",
             boutique: "Boutique",
             studio: "Studio",
@@ -128,159 +103,320 @@ export function PropertyListings({ proprietes }: InertiaPageProps) {
             garage: "Garage",
             depot: "Dépôt",
             magasin: "Magasin",
-          };
+          }
           if (typeMap[filterId]) {
-            filtered = proprietes.filter((p) => p.type.toLowerCase() === typeMap[filterId]?.toLowerCase());
+            filtered = proprietes.filter(
+              (p) => p.type.toLowerCase() === typeMap[filterId]?.toLowerCase(),
+            )
           }
         }
+        // Appliquer les filtres de ville et de quartier
+        if (filters.localisation) {
+          filtered = filtered.filter((p) => p.localisation === filters.localisation.toLowerCase())
 
-        filtered = applyFilters(filtered, filters);
-        setFilteredProperties(filtered);
-        setIsLoading(false);
-        setCurrentPage(1);
-      }, FILTER_DEBOUNCE_TIME);
+          // Si un quartier spécifique est sélectionné, filtrer davantage
+          if (filters.adresse) {
+            filtered = filtered.filter((p) => p.adresse === filters.adresse)
+          }
+          // Sinon, tous les logements de la ville sont déjà filtrés
+        }
+        if (filters.nbrchambre > 0) {
+          filtered = filtered.filter((p) => p.nbrchambre >= filters.nbrchambre)
+        }
+
+        if (filters.minPrice > 500) {
+          filtered = filtered.filter((p) => p.prixParMois >= filters.minPrice)
+        }
+
+        if (filters.maxPrice < 3000) {
+          filtered = filtered.filter((p) => p.prixParMois <= filters.maxPrice)
+        }
+
+        // Appliquer les filtres de surface
+        if (filters.minArea && filters.minArea > 20) {
+          filtered = filtered.filter((p) => p.surface >= filters.minArea!)
+        }
+
+        if (filters.maxArea && filters.maxArea < 150) {
+          filtered = filtered.filter((p) => p.surface <= filters.maxArea!)
+        }
+
+        // Appliquer le filtre de type de locataire
+        if (filters.typesLocaires && filters.typesLocaires !== "tous") {
+          filtered = filtered.filter((p) => p.typesLocaires === filters.typesLocaires)
+        }
+
+        setFilteredProperties(filtered)
+        setIsLoading(false)
+        setCurrentPage(1) // Réinitialiser la pagination
+      }, 300) // Réduit de 500ms à 300ms pour une meilleure réactivité
     },
-    [filters, proprietes]
-  );
+    [filters],
+  )
 
-  // Effect for filtering properties based on search criteria
+  // Effet pour filtrer les propriétés en fonction des critères de recherche
   useEffect(() => {
     if (!searchCriteria) {
-      const filtered = applyFilters(proprietes, filters);
-      setFilteredProperties(filtered);
-      return;
+      // Appliquer uniquement les filtres standards
+      let filtered = [...proprietes]
+      if (filters.ville) {
+        filtered = filtered.filter((p) => p.ville === filters.ville.toLowerCase())
+        // Si un quartier spécifique est sélectionné, filtrer davantage
+        if (filters.adresse) {
+          filtered = filtered.filter((p) => p.ville === filters.ville)
+        }
+        // Sinon, tous les logements de la ville sont déjà filtrés
+      }
+      if (filters.type && filters.type !== "tout") {
+        filtered = filtered.filter((p) => p.type.toLowerCase() === filters.type.toLowerCase())
+      }
+      if (filters.typesLocaires && filters.typesLocaires !== "tous") {
+        filtered = filtered.filter((p) => p.typesLocaires === filters.typesLocaires)
+      }
+      if (filters.nbrchambre > 0) {
+        // Si l'utilisateur sélectionne 5+, montrer toutes les propriétés avec 5 chambres ou plus
+        if (filters.nbrchambre === 5) {
+          filtered = filtered.filter((p) => p.nbrchambre >= 5)
+        } else {
+          // Pour les autres valeurs, montrer exactement ce nombre de chambres
+          filtered = filtered.filter((p) => p.nbrchambre === filters.nbrchambre)
+        }
+      }
+
+      if (filters.minPrice > 500) {
+        filtered = filtered.filter((p) => p.prixParMois >= filters.minPrice)
+      }
+
+      if (filters.maxPrice < 3000) {
+        filtered = filtered.filter((p) => p.prixParMois <= filters.maxPrice)
+      }
+
+      // Appliquer les filtres de surface
+      if (filters.minArea && filters.minArea > 20) {
+        filtered = filtered.filter((p) => p.surface >= filters.minArea!)
+      }
+
+      if (filters.maxArea && filters.maxArea < 150) {
+        filtered = filtered.filter((p) => p.surface <= filters.maxArea!)
+      }
+
+      setFilteredProperties(filtered)   // ... تطبيق الفلاتر واحدًا تلو الآخر ...
+
+      return // ⬅️ يخرج من useEffect بعد التحديث
     }
-
-    setIsLoading(true);
-    setSearchAnimation(true);
-
+    setIsLoading(true)
+    setSearchAnimation(true)
+    // Filtrer les propriétés en fonction des critères de recherche
     const filtered = proprietes.filter((property) => {
-      let matches = true;
-
+      let matches = true
+      // Filtrer par type de propriété
       if (searchCriteria.type && searchCriteria.type !== "tout") {
-        const typeMatch = property.type.toLowerCase().includes(searchCriteria.type.toLowerCase());
-        matches = matches && typeMatch;
+        const typeMatch = property.type.toLowerCase().includes(searchCriteria.type.toLowerCase())
+        matches = matches && typeMatch
       }
-
+      // Filtrer par emplacement
       if (searchCriteria.localisation) {
-        const locationMatch = property.localisation.toLowerCase().includes(searchCriteria.location.toLowerCase());
-        matches = matches && locationMatch;
+        const locationMatch = property.localisation.toLowerCase().includes(searchCriteria.location.toLowerCase())
+        matches = matches && locationMatch
       }
-
+      // Filtrer par prix
       if (searchCriteria.minPrice) {
-        matches = matches && property.prixParMois >= searchCriteria.minPrice;
+        matches = matches && property.prixParMois >= searchCriteria.minPrice
       }
-
       if (searchCriteria.maxPrice) {
-        matches = matches && property.prixParMois <= searchCriteria.maxPrice;
+        matches = matches && property.prixParMois <= searchCriteria.maxPrice
       }
 
+      // Filtrer par nombre de chambres
       if (searchCriteria.nbrchambre) {
-        matches = matches && property.nbrchambre >= searchCriteria.nbrchambre;
+        matches = matches && property.nbrchambre >= searchCriteria.nbrchambre
       }
 
+      // Filtrer par caractéristiques
       if (searchCriteria.features && searchCriteria.features.length > 0) {
-        const hasFeature = searchCriteria.features.some((feature: string) =>
-          property.titre.toLowerCase().includes(feature.toLowerCase()) ||
-          property.localisation.toLowerCase().includes(feature.toLowerCase())
-        );
-        matches = matches && hasFeature;
+        const hasFeature = searchCriteria.features.some(
+          (feature: string) =>
+            property.titre.toLowerCase().includes(feature.toLowerCase()) ||
+            property.localisation.toLowerCase().includes(feature.toLowerCase()),
+        )
+        matches = matches && hasFeature
       }
 
+      // Filtrer par mots-clés
       if (searchCriteria.keywords && searchCriteria.keywords.length > 0) {
-        const hasKeyword = searchCriteria.keywords.some((keyword: string) =>
-          property.titre.toLowerCase().includes(keyword.toLowerCase()) ||
-          property.localisation.toLowerCase().includes(keyword.toLowerCase()) ||
-          property.type.toLowerCase().includes(keyword.toLowerCase())
-        );
-        matches = matches && hasKeyword;
+        const hasKeyword = searchCriteria.keywords.some(
+          (keyword: string) =>
+            property.titre.toLowerCase().includes(keyword.toLowerCase()) ||
+            property.localisation.toLowerCase().includes(keyword.toLowerCase()) ||
+            property.type.toLowerCase().includes(keyword.toLowerCase()),
+        )
+        matches = matches && hasKeyword
       }
 
-      return matches && applyFilters([property], filters).length > 0;
-    });
+      // Appliquer les filtres standards en plus des critères de recherche
+      if (filters.ville) {
+        matches = matches && property.ville === filters.ville.toLowerCase()
+      }
+
+      if (filters.adresse) {
+        matches = matches && property.adresse === filters.adresse
+      }
+      if (filters.type && filters.type !== "tout") {
+        matches = matches && property.type.toLowerCase() === filters.type.toLowerCase()
+      }
+      if (filters.typesLocaires && filters.typesLocaires !== "tous") {
+        matches = matches && property.typesLocaires === filters.typesLocaires
+      }
+      if (filters.nbrchambre > 0) {
+        matches = matches && property.nbrchambre >= filters.nbrchambre
+      }
+
+      if (filters.minPrice > 500) {
+        matches = matches && property.prixParMois >= filters.minPrice
+      }
+
+      if (filters.maxPrice < 3000) {
+        matches = matches && property.prixParMois <= filters.maxPrice
+      }
+
+      // Appliquer les filtres de surface
+      if (filters.minArea && filters.minArea > 20) {
+        matches = matches && property.surface >= filters.minArea!
+      }
+
+      if (filters.maxArea && filters.maxArea < 150) {
+        matches = matches && property.surface <= filters.maxArea!
+      }
+
+      return matches
+    })
 
     setTimeout(() => {
-      setFilteredProperties(filtered);
-      setIsLoading(false);
-      setSearchAnimation(false);
-      setCurrentPage(1);
-    }, FILTER_DEBOUNCE_TIME);
-  }, [searchCriteria, filters, proprietes]);
+      setFilteredProperties(filtered)
+      setIsLoading(false)
+      setSearchAnimation(false)
+      // Réinitialiser la page courante
+      setCurrentPage(1)
+    }, 500) // Réduit de 800ms à 500ms
+  }, [searchCriteria, filters])
 
-  // Calculate the number of properties per page based on the view
-  const propertiesPerPage = gridView === "grid3" ? 9 : 8;
+  // Calculer le nombre de propriétés par page en fonction de la vue
+  const propertiesPerPage = gridView === "grid3" ? 9 : 8
 
-  // Calculate the total number of pages
+  // Calculer le nombre total de pages - Mémorisé pour éviter des calculs inutiles
   const totalPages = useMemo(
     () => Math.ceil(filteredProperties.length / propertiesPerPage),
-    [filteredProperties.length, propertiesPerPage]
-  );
+    [filteredProperties.length, propertiesPerPage],
+  )
 
-  // Get the properties for the current page
-  const currentProperties = useMemo(() => {
-    const startIndex = (currentPage - 1) * propertiesPerPage;
-    const endIndex = startIndex + propertiesPerPage;
-    return filteredProperties.slice(startIndex, endIndex);
-  }, [filteredProperties, currentPage, propertiesPerPage]);
 
-  // Handle page change
+  // Gérer le changement de page - Optimisé avec useCallback
   const handlePageChange = useCallback(
     (page: number) => {
-      if (page < 1) page = 1;
-      if (page > totalPages) page = totalPages;
-      setCurrentPage(page);
+      // S'assurer que la page est dans les limites
+      if (page < 1) page = 1
+      if (page > totalPages) page = totalPages
+      setCurrentPage(page)
+      // Faire défiler vers le haut de la liste
       window.scrollTo({
         top: document.getElementById("property-listings")?.offsetTop || 0,
         behavior: "smooth",
-      });
+      })
     },
-    [totalPages]
-  );
+    [totalPages],
+  )
 
-  // Toggle grid view
+  // Changer la vue de la grille - Optimisé avec useCallback
   const toggleGridView = useCallback(() => {
-    setGridView((prev) => (prev === "grid3" ? "grid2" : "grid3"));
-  }, []);
+    setGridView((prev) => (prev === "grid3" ? "grid2" : "grid3"))
+  }, [])
 
-  // Handle opening filters
+  // Gérer l'ouverture des filtres - Optimisé avec useCallback
   const handleOpenFilters = useCallback((tab?: string) => {
     if (tab) {
-      setActiveFilterTab(tab);
+      setActiveFilterTab(tab)
     }
-    setIsFilterSidebarOpen(true);
-  }, []);
+    setIsFilterSidebarOpen(true)
+  }, [])
 
-  // Handle closing filters
+  // Gérer la fermeture des filtres - Optimisé avec useCallback
   const handleCloseFilters = useCallback(() => {
-    setIsFilterSidebarOpen(false);
-  }, []);
+    setIsFilterSidebarOpen(false)
+  }, [])
 
-  // Handle applying filters
-  const handleApplyFilters = useCallback(
-    (newFilters: SearchFilters) => {
-      setFilters(newFilters);
-      setIsLoading(true);
-
-      setTimeout(() => {
-        const filtered = applyFilters(proprietes, newFilters);
-        setFilteredProperties(filtered);
-        setIsLoading(false);
-        setCurrentPage(1);
-      }, FILTER_DEBOUNCE_TIME);
-    },
-    [proprietes]
-  );
-
-  // Handle AI search
+  // Gérer l'application des filtres - Optimisé avec useCallback
+  const handleApplyFilters = useCallback((newFilters: SearchFilters) => {
+    setFilters(newFilters)
+    setIsLoading(true)
+  
+    setTimeout(() => {
+      let filtered = [...proprietes]
+  
+      if (newFilters.ville) {
+        filtered = filtered.filter((p) => p.ville === newFilters.ville.toLowerCase())
+  
+        if (newFilters.adresse) {
+          filtered = filtered.filter((p) => p.adresse === newFilters.adresse)
+        }
+      }
+  
+      if (newFilters.type && newFilters.type !== "tout") {
+        filtered = filtered.filter((p) => p.type.toLowerCase() === newFilters.type.toLowerCase())
+      }
+  
+      if (newFilters.typesLocaires && newFilters.typesLocaires !== "tous") {
+        filtered = filtered.filter((p) => p.typesLocaires === newFilters.typesLocaires)
+      }
+  
+      if (newFilters.localisation && newFilters.localisation !== "tous") {
+        filtered = filtered.filter((p) => p.localisation === newFilters.localisation)
+      }
+  
+      if (newFilters.nbrchambre > 0) {
+        if (newFilters.nbrchambre === 5) {
+          filtered = filtered.filter((p) => p.nbrchambre >= 5)
+        } else {
+          filtered = filtered.filter((p) => p.nbrchambre === newFilters.nbrchambre)
+        }
+      }
+  
+      if (newFilters.minPrice > 500) {
+        filtered = filtered.filter((p) => p.prixParMois >= newFilters.minPrice)
+      }
+  
+      if (newFilters.maxPrice < 3000) {
+        filtered = filtered.filter((p) => p.prixParMois <= newFilters.maxPrice)
+      }
+  
+      if (newFilters.minArea && newFilters.minArea > 20) {
+        filtered = filtered.filter((p) => p.surface >= (newFilters.minArea ?? 0))
+      }
+  
+      if (newFilters.maxArea && newFilters.maxArea < 150) {
+        filtered = filtered.filter((p) => p.surface >= (newFilters.maxArea ?? 0))
+      }
+  
+      setFilteredProperties(filtered)
+      setIsLoading(false)
+      setCurrentPage(1)
+  
+      console.log(`Filtres appliqués: ${JSON.stringify(newFilters)}`)
+      console.log(`Nombre de propriétés après filtrage: ${filtered.length}`)
+    }, 300)
+  }, [proprietes])
+  
+  // Gérer la recherche par IA - Optimisé avec useCallback
   const handleAISearch = useCallback(async (query: string, aiResults: any) => {
-    setSearchQuery(query);
-    setIsLoading(true);
-    setSearchAnimation(true);
+    setSearchQuery(query)
+    setIsLoading(true)
+    setSearchAnimation(true)
 
     try {
+      // Si aiResults est déjà fourni, l'utiliser directement
       if (aiResults) {
-        setSearchCriteria(aiResults);
+        setSearchCriteria(aiResults)
       } else {
+        // Sinon, analyser la requête manuellement
         const { text } = await generateText({
           model: openai("gpt-4o"),
           prompt: `Analyse cette requête de recherche de logement: "${query}".
@@ -296,59 +432,60 @@ export function PropertyListings({ proprietes }: InertiaPageProps) {
           }
           Renvoie uniquement l'objet JSON, sans autre texte.`,
           maxTokens: 300,
-        });
+        })
 
         try {
-          const parsedCriteria = JSON.parse(text);
-          setSearchCriteria(parsedCriteria);
+          const parsedCriteria = JSON.parse(text)
+          setSearchCriteria(parsedCriteria)
         } catch (e) {
-          console.error("Erreur lors de l'analyse de la réponse JSON:", e);
-          setSearchCriteria({ keywords: [query] });
+          console.error("Erreur lors de l'analyse de la réponse JSON:", e)
+          // Fallback simple en cas d'erreur de parsing
+          setSearchCriteria({ keywords: [query] })
         }
       }
     } catch (error) {
-      console.error("Erreur lors de la recherche:", error);
-      setSearchCriteria({ keywords: [query] });
+      console.error("Erreur lors de la recherche:", error)
+      setSearchCriteria({ keywords: [query] })
     }
-  }, []);
+  }, [])
 
-  // Reset search
+  // Réinitialiser la recherche - Optimisé avec useCallback
   const resetSearch = useCallback(() => {
-    setSearchQuery("");
-    setSearchCriteria(null);
-  }, []);
+    setSearchQuery("")
+    setSearchCriteria(null)
+  }, [])
 
-  // Count active filters
+  // Compter les filtres actifs - Mémorisé pour éviter des calculs inutiles
   const activeFiltersCount = useMemo(() => {
     return Object.entries(filters).reduce((count, [key, value]) => {
-      if (key === "ville" && value) count++;
-      if (key === "adresse" && value) count++;
-      if (key === "type" && value !== "tout") count++;
-      if (key === "typesLocaires" && value !== "tous") count++;
-      if (key === "nbrchambre" && value > 0) count++;
-      if ((key === "minPrice" && value > DEFAULT_MIN_PRICE) || (key === "maxPrice" && value < DEFAULT_MAX_PRICE)) count++;
-      if ((key === "minArea" && value > 20) || (key === "maxArea" && value < 150)) count++;
-      return count;
-    }, 0);
-  }, [filters]);
+      if (key === "ville" && value) count++
+      if (key === "adresse" && value) count++
+      if (key === "type" && value !== "tout") count++
+      if (key === "typesLocaires" && value !== "tous") count++
+      if (key === "nbrchambre" && value > 0) count++
+      if ((key === "minPrice" && value > 500) || (key === "maxPrice" && value < 3000)) count++
+      if ((key === "minArea" && value > 20) || (key === "maxArea" && value < 150)) count++
+      return count
+    }, 0)
+  }, [filters])
 
   const startIndex = (currentPage - 1) * propertiesPerPage;
   const endIndex = startIndex + propertiesPerPage;
   const propertiesToShow = filteredProperties.slice(startIndex, endIndex);
-
   return (
     <section id="property-listings" className="w-full">
-      {/* Sticky header containing all filtering elements */}
+      {/* Header sticky qui contient tous les éléments de filtrage */}
       <div className="sticky top-16 bg-white z-40 border-b">
         <div className="container px-4 md:px-6">
+          {/* Espacement supérieur réduit */}
           <div className="h-2"></div>
-          {/* Integrated filter bar */}
+          {/* Barre de filtrage intégrée */}
           <div className="w-full pb-3">
             <div className="rounded-full overflow-hidden border border-gray-200 text-base md:text-lg bg-white shadow-sm">
               <div className="flex items-center">
                 <div
                   className="flex items-center py-3 md:py-3 px-5 md:px-6 flex-1 cursor-pointer hover:bg-black/5 transition-colors border-r"
-                  onClick={() => handleOpenFilters("ville")}
+                  onClick={() => handleOpenFilters("localisation")}
                 >
                   <div className="w-8 md:w-8 h-8 md:h-8 flex-shrink-0 mr-3">
                     <img
@@ -358,11 +495,15 @@ export function PropertyListings({ proprietes }: InertiaPageProps) {
                       height={40}
                       className="w-full h-full object-contain"
                     />
+
+        
                   </div>
                   <div className="min-w-0 text-left">
                     <p className="text-xs md:text-sm text-gray-500 font-medium">Où?</p>
                     <p className="text-sm md:text-base font-medium text-gray-900 truncate">
-                      {filters.ville ? filters.ville.charAt(0).toUpperCase() + filters.ville.slice(1) : "Toutes les villes"}
+                      {filters.ville
+                        ? filters.ville.charAt(0).toUpperCase() + filters.ville.slice(1)
+                        : "Toutes les villes"}
                       {filters.adresse ? `, ${filters.adresse}` : ""}
                     </p>
                   </div>
@@ -374,13 +515,17 @@ export function PropertyListings({ proprietes }: InertiaPageProps) {
                 >
                   <div className="w-8 md:w-8 h-8 md:h-8 flex-shrink-0 mr-3">
                     <div className="flex items-center justify-center w-full h-full bg-gray-100 rounded-full">
-                      <Bed className="h-5 w-5 text-[#485aa8]" strokeWidth={1.5} />
+                      <Bed className="h-5 w-5 text-[#465baa]" strokeWidth={1.5} />
                     </div>
                   </div>
                   <div className="min-w-0 text-left">
                     <p className="text-xs md:text-sm text-gray-500 font-medium">Chambres</p>
                     <p className="text-sm md:text-base font-medium text-gray-900 truncate">
-                      {filters.nbrchambre > 0 ? filters.nbrchambre === 5 ? "5+ chambres" : `${filters.nbrchambre} chambre${filters.nbrchambre > 1 ? "s" : ""}` : "Toutes"}
+                      {filters.nbrchambre > 0
+                        ? filters.nbrchambre === 5
+                          ? "5+ chambres"
+                          : `${filters.nbrchambre} chambre${filters.nbrchambre > 1 ? "s" : ""}`
+                        : "Toutes"}
                     </p>
                   </div>
                 </div>
@@ -400,14 +545,16 @@ export function PropertyListings({ proprietes }: InertiaPageProps) {
                   <div className="min-w-0 text-left">
                     <p className="text-xs md:text-sm text-gray-500 font-medium">Type locataire</p>
                     <p className="text-sm md:text-base font-medium text-gray-900 truncate">
-                      {filters.typesLocaires !== "tous" ? filters.typesLocaires.charAt(0).toUpperCase() + filters.typesLocaires.slice(1) : "Tous types"}
+                      {filters.typesLocaires !== "tous"
+                        ? filters.typesLocaires.charAt(0).toUpperCase() + filters.typesLocaires.slice(1)
+                        : "Tous types"}
                     </p>
                   </div>
                 </div>
 
                 <div className="flex items-center pr-3">
                   <Button
-                    className="h-12 md:h-12 w-12 md:w-12 rounded-full bg-[#485aa8] hover:bg-[#485aa8]/90 text-white m-1"
+                    className="h-12 md:h-12 w-12 md:w-12 rounded-full bg-[#465baa] hover:bg-[#465baa]/90 text-white m-1"
                     onClick={() => handleOpenFilters("location")}
                   >
                     <Search className="h-5 md:h-5 w-5 md:w-5" />
@@ -418,12 +565,13 @@ export function PropertyListings({ proprietes }: InertiaPageProps) {
             </div>
           </div>
 
-          {/* View controls and filters */}
+          {/* Contrôles de vue et filtres - avec un espacement vertical uniforme */}
           <div
             className={`flex flex-col md:flex-row justify-between items-center gap-2 py-2 border-t controls-container ${
               filteredProperties.length === 0 ? "hidden" : ""
             }`}
           >
+            {/* Localisation et nombre de logements - À GAUCHE */}
             <div className="flex items-center text-sm whitespace-nowrap flex-shrink-0 md:w-auto">
               <div className="flex items-center gap-2">
                 <div className="flex items-center text-gray-700">
@@ -437,6 +585,7 @@ export function PropertyListings({ proprietes }: InertiaPageProps) {
               </div>
             </div>
 
+            {/* Barre de filtres horizontale - AU MILIEU */}
             <div className="flex-1 mx-0 md:mx-2 overflow-hidden integrated-filter-bar">
               <HorizontalFilterBar
                 filters={filterItems}
@@ -446,6 +595,7 @@ export function PropertyListings({ proprietes }: InertiaPageProps) {
               />
             </div>
 
+            {/* Contrôles de vue et bouton de filtres - À DROITE */}
             <div className="flex items-center space-x-3 flex-shrink-0 md:w-auto">
               <div className="flex items-center border rounded-lg overflow-hidden">
                 <Button
@@ -491,12 +641,13 @@ export function PropertyListings({ proprietes }: InertiaPageProps) {
             </div>
           </div>
         </div>
+        {/* Espacement inférieur réduit */}
         <div className="h-2"></div>
       </div>
 
-      {/* Main content with padding to compensate for the sticky header */}
+      {/* Contenu principal avec un padding pour compenser le header sticky */}
       <div className="container px-4 md:px-6 pt-6">
-        {/* Property grid */}
+        {/* Grille de propriétés */}
         <div className="relative min-h-[500px]">
           {isLoading ? (
             <div className="absolute inset-0 flex items-center justify-center">
@@ -521,17 +672,17 @@ export function PropertyListings({ proprietes }: InertiaPageProps) {
                   setFilters({
                     ville: "",
                     prixParMois: 0,
-                    localisation: "",
-                    adresse: "",
+                    localisation:"",
+                    adresse:"",
                     type: "tout",
                     typesLocaires: "tous",
                     nbrchambre: 0,
-                    minPrice: DEFAULT_MIN_PRICE,
-                    maxPrice: DEFAULT_MAX_PRICE,
+                    minPrice: 500,
+                    maxPrice: 3000,
                     minArea: 20,
                     maxArea: 150,
-                  });
-                  handleFilterChange("all");
+                  })
+                  handleFilterChange("all")
                 }}
               >
                 Réinitialiser les filtres
@@ -550,24 +701,26 @@ export function PropertyListings({ proprietes }: InertiaPageProps) {
                   gridView === "grid3" ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1 md:grid-cols-2",
                 )}
               >
-                {currentProperties.map((property, index) => (
-                  <motion.div
-                    key={property.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{
-                      opacity: 1,
-                      y: 0,
-                      transition: { delay: index * 0.05 },
-                    }}
-                  >
-                    <PropertyCard propriete={property} />
-                  </motion.div>
-                ))}
+                {propertiesToShow.map((property, index) => {
+                  console.log(property);
+                  return (
+                    <motion.div
+                      key={property.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{
+                        opacity: 1,
+                        y: 0,
+                        transition: { delay: index * 0.05 },
+                      }}
+                    >
+                      <PropertyCard propriete={property} />
+                    </motion.div>
+                  );
+                })}
               </motion.div>
             </AnimatePresence>
           )}
         </div>
-
         {/* Pagination */}
         {totalPages > 1 && (
           <div className="mt-8">
@@ -580,8 +733,7 @@ export function PropertyListings({ proprietes }: InertiaPageProps) {
           </div>
         )}
       </div>
-
-      {/* Filter sidebar */}
+      {/* Sidebar de filtrage */}
       <FilterSidebar
         isOpen={isFilterSidebarOpen}
         onClose={handleCloseFilters}
@@ -591,5 +743,5 @@ export function PropertyListings({ proprietes }: InertiaPageProps) {
         initialTab={activeFilterTab}
       />
     </section>
-  );
+  )
 }

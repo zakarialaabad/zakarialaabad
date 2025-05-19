@@ -124,10 +124,7 @@ function PropertyCard({ propriete }: { propriete: Propriete }) {
           <div className="flex flex-col space-y-2">
             <div className="flex justify-between items-start">
               <h3 className="font-medium text-gray-900 line-clamp-1">{titre}</h3>
-              <div className="flex items-center">
-                <Star className="h-4 w-4 text-amber-500 fill-amber-500 mr-1" />
-                <span className="text-sm font-medium text-gray-600">4.5</span>
-              </div>
+             
             </div>
 
             <p className="text-sm text-gray-500 flex items-center">
