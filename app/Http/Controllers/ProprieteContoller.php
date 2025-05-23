@@ -14,11 +14,11 @@ class ProprieteContoller extends Controller
     public function index()
     {
         //
-        $proprietes = Propriete::with('loueur.user')->latest()->get();
+        $proprietes = Propriete::with('loueur.user')
+        ->with("commodites")
+        ->latest()->get();
         return Inertia::render("app/property/page",compact("proprietes"));
     }
- 
-    
     /**
      * Show the form for creating a new resource.
      */
@@ -26,7 +26,6 @@ class ProprieteContoller extends Controller
     {
         //
     }
-
     /**
      * Store a newly created resource in storage.
      */
@@ -41,8 +40,10 @@ class ProprieteContoller extends Controller
     public function show($id)
     {
         try {
-            $propriete = Propriete::findOrFail($id);
-            return Inertia::render("app/property/[id]/page", compact("propriete"));
+            $propriete = Propriete::with(['loueur.user', 'commodites'])->findOrFail($id);
+            return Inertia::render('app/property/[id]/page', [
+                'propriete' => $propriete
+            ]);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             // Handle the case where the model is not found
             return response()->json(['message' => 'Propriete not found'], 404);

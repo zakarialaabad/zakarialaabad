@@ -15,7 +15,7 @@ export const TenantTypeIcon: FC<TenantTypeIconProps> = ({
   className = "",
   size = 24,
   color = "currentColor",
-}): JSX.Element => {
+})=>{
   switch (type) {
     case "famille":
       return <Users size={size} className={className} color={color} />

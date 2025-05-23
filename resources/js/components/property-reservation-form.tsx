@@ -1,22 +1,54 @@
+import { useState, useCallback } from "react";
+import { Button } from "@/components/ui/button";
+import { Users, Calendar } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { TimePicker } from "@/components/time-picker";
+import { useNotifications } from "@/contexts/notifications-context";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Phone, Users, Calendar } from "lucide-react"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+// Constants
+const MIN_PHONE_LENGTH = 8;
 
 interface PropertyReservationFormProps {
-  price: number
-  priceUnit: string
-  maxGuests: number
+  price: number;
+  priceUnit: string;
+  maxGuests: number;
   owner: {
-    name: string
-    phone: string
-  }
+    name: string;
+    phone: string;
+  };
 }
 
 export function PropertyReservationForm({ price, priceUnit, maxGuests, owner }: PropertyReservationFormProps) {
-  const [guests, setGuests] = useState(1)
-  const [duration, setDuration] = useState(1) // Par défaut 1 mois
+  const [guests, setGuests] = useState(1);
+  const [duration, setDuration] = useState(1); // Par défaut 1 mois
+  const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false);
+  const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  const [phone, setPhone] = useState("");
+  const [appointmentDate, setAppointmentDate] = useState("");
+
+  const { addNotification } = useNotifications();
+
+  // Form validation
+  const isFormValid = selectedTime && appointmentDate && phone.length >= MIN_PHONE_LENGTH;
+
+  // Memoized event handlers
+  const handleConfirm = useCallback(() => {
+    if (isFormValid) {
+      addNotification({
+        title: "Réservation confirmée",
+        message: `Votre demande de rendez-vous pour le ${appointmentDate} à ${selectedTime} a été envoyée avec succès.`,
+        type: "success",
+        link: "/dashboard/messages",
+      });
+
+      setIsAppointmentModalOpen(false);
+      setSelectedTime(null);
+      setAppointmentDate("");
+      setPhone("");
+    }
+  }, [isFormValid, appointmentDate, selectedTime, phone, addNotification]);
 
   // Options de durée de location
   const durationOptions = [
@@ -27,7 +59,7 @@ export function PropertyReservationForm({ price, priceUnit, maxGuests, owner }: 
     { value: 12, label: "1 an (12 mois)" },
     { value: 24, label: "2 ans (24 mois)" },
     { value: 36, label: "3 ans (36 mois)" },
-  ]
+  ];
 
   // Options pour le nombre de personnes
   const guestOptions = [
@@ -36,7 +68,7 @@ export function PropertyReservationForm({ price, priceUnit, maxGuests, owner }: 
     { value: 3, label: "3 personnes" },
     { value: 4, label: "4 personnes" },
     { value: 5, label: "5+ personnes" },
-  ]
+  ];
 
   return (
     <div className="rounded-xl border bg-white p-6 shadow-lg">
@@ -133,10 +165,82 @@ export function PropertyReservationForm({ price, priceUnit, maxGuests, owner }: 
         </div>
 
         {/* Boutons d'action */}
-        <Button className="w-full bg-[#485aa8] py-6 text-base font-medium text-white hover:bg-primary/90">
+        <Button
+          className="w-full bg-primary py-6 text-base font-medium text-white hover:bg-primary/90"
+          onClick={() => setIsAppointmentModalOpen(true)}
+        >
           Réserver un rendez-vous
         </Button>
       </div>
+
+      <Dialog open={isAppointmentModalOpen} onOpenChange={setIsAppointmentModalOpen}>
+        <DialogContent className="rounded-xl border bg-white p-6 shadow-lg sm:max-w-[500px]">
+          <DialogHeader className="mb-4">
+            <DialogTitle className="text-xl font-bold text-gray-900">Réserver un rendez-vous</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <div className="space-y-1.5">
+              <label htmlFor="appointment-date" className="block text-sm font-medium text-gray-700">
+                Date <span className="text-red-500">*</span>
+              </label>
+              <Input
+                id="appointment-date"
+                type="date"
+                className="w-full border-gray-300 bg-white"
+                min={new Date().toISOString().split("T")[0]}
+                value={appointmentDate}
+                onChange={(e) => setAppointmentDate(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="block text-sm font-medium text-gray-700">
+                Heure <span className="text-red-500">*</span>
+              </label>
+              <div className="flex justify-center">
+                <TimePicker value={selectedTime} onChange={setSelectedTime} />
+              </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <label htmlFor="appointment-phone" className="block text-sm font-medium text-gray-700">
+                Téléphone <span className="text-red-500">*</span>
+              </label>
+              <Input
+                id="appointment-phone"
+                type="tel"
+                placeholder="Votre numéro de téléphone"
+                className="w-full border-gray-300 bg-white"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                required
+              />
+              {phone && phone.length < MIN_PHONE_LENGTH && (
+                <p className="mt-1 text-xs text-red-500">Veuillez entrer un numéro de téléphone valide</p>
+              )}
+            </div>
+          </div>
+          <DialogFooter className="mt-6 flex gap-3">
+            <Button
+              variant="outline"
+              onClick={() => setIsAppointmentModalOpen(false)}
+              className="flex-1 border-primary text-primary hover:bg-primary/10"
+            >
+              Annuler
+            </Button>
+            <Button
+              onClick={handleConfirm}
+              disabled={!isFormValid}
+              className={`flex-1 py-2 text-base font-medium text-white ${
+                isFormValid ? "bg-primary hover:bg-primary/90" : "bg-gray-400 cursor-not-allowed"
+              }`}
+            >
+              Confirmer
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
-  )
+  );
 }

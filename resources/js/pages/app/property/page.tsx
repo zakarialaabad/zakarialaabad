@@ -32,6 +32,11 @@ type Propriete = {
       profile: string;
     };
   };
+  commodites : {
+    id: number;
+    commodite: string;
+    categorie: string;
+}[];
 };
 type InertiaPageProps = {
   proprietes: Propriete[];

@@ -33,6 +33,11 @@ type Propriete = {
       profile: string;
     };
   };
+  commodites: {
+    id: number;
+    commodite: string;
+    categorie: string;
+  }[];
 };
 // دالة عادية بدل دالة سهمية
 function PropertyCard({ propriete }: { propriete: Propriete }) {

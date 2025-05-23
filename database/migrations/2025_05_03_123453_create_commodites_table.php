@@ -13,8 +13,6 @@ class CreateCommoditesTable extends Migration
             $table->id();
             $table->string('categorie'); // The category of the commodity
             $table->string('commodite'); // The commodity/feature itself
-            $table->unsignedBigInteger("propriete_id");
-            $table->foreign("propriete_id")->references("id")->on("proprietes")->onDelete("cascade")->onUpdate("cascade");
             $table->timestamps();
         });
     }

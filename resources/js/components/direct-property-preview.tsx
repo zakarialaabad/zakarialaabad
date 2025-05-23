@@ -18,18 +18,18 @@ import {
 import { router } from "@inertiajs/react"
 import { useState, useEffect } from "react"
 type PreviewFields =
-| "title"
-| "description"
-| "propertyType"
-| "tenantType"
-| "city"
-| "district"
-| "address"
-| "area"
-| "bedrooms"
-| "bathrooms"
-| "images"
-| "price";
+| "titre"
+  | "description"
+  | "type"
+  | "typesLocaires"
+  | "ville"
+  | "localisation"
+  | "adresse"
+  | "surface"
+  | "nbrchambre"
+  | "bathrooms"
+  | "imgs"
+  | "prixParMois"
 interface DirectPropertyPreviewProps {
   activeField?: PreviewFields | null;
   currentStep?: number;
@@ -41,7 +41,7 @@ interface DirectPropertyPreviewProps {
   useFormData?: boolean;
 }
 // Mappages des types avec leurs icônes simplifiés
-const propertyTypeIcons = {
+const typeIcons = {
   apartment: <Building className="h-4 w-4 mr-1" />,
   villa: <Building className="h-4 w-4 mr-1" />,
   house: <Home className="h-4 w-4 mr-1" />,
@@ -54,7 +54,7 @@ const propertyTypeIcons = {
 }
 
 // Mappages des types
-const getPropertyTypeLabel = (type: string) => {
+const gettypeLabel = (type: string) => {
   const typeMap: { [key: string]: string } = {
     apartment: "Appartement",
     villa: "Villa",
@@ -68,7 +68,7 @@ const getPropertyTypeLabel = (type: string) => {
   }
   return typeMap[type] || type
 }
-const getTenantTypeLabel = (type:string) => {
+const gettypesLocairesLabel = (type:string) => {
   const typeMap: { [key: string]: string } = {
     all: "Tout",
     family: "Famille",
@@ -82,18 +82,18 @@ const getTenantTypeLabel = (type:string) => {
 
 // Mapping des champs du formulaire aux sections de la prévisualisation
 const fieldToPreviewSection = {
-  title: "title",
+  titre: "titre",
   description: "description",
-  propertyType: "propertyType",
-  tenantType: "tenantType",
-  city: "location",
-  district: "location",
-  address: "location",
-  bedrooms: "features",
+  type: "type",
+  typesLocaires: "typesLocaires",
+  ville: "location",
+  localisation: "location",
+  adresse: "location",
+  nbrchambre: "features",
   bathrooms: "features",
-  area: "features",
-  price: "price",
-  images: "images",
+  surface: "features",
+  prixParMois: "prixParMois",
+  imgs: "imgs",
 }
 
 export function DirectPropertyPreview({ activeField, currentStep = 1 }:DirectPropertyPreviewProps) {
@@ -104,17 +104,17 @@ export function DirectPropertyPreview({ activeField, currentStep = 1 }:DirectPro
   const { watch } = useFormContext()
 
   // Observer tous les champs du formulaire
-  const title = watch("title")
+  const titre = watch("titre")
   const description = watch("description")
-  const tenantType = watch("tenantType")
-  const city = watch("city")
-  const district = watch("district")
-  const address = watch("address")
-  const bedrooms = watch("bedrooms")
+  const typesLocaires = watch("typesLocaires")
+  const ville = watch("ville")
+  const localisation = watch("localisation")
+  const adresse = watch("adresse")
+  const nbrchambre = watch("nbrchambre")
   const bathrooms = watch("bathrooms")
-  const area = watch("area")
-  const price = watch("price")
-  const images = watch("images") || []
+  const surface = watch("surface")
+  const prixParMois = watch("prixParMois")
+  const imgs = watch("imgs") || []
 
   // Mettre à jour la section en surbrillance en fonction du champ actif
   useEffect(() => {
@@ -124,7 +124,6 @@ export function DirectPropertyPreview({ activeField, currentStep = 1 }:DirectPro
       setHighlightedSection(null)
     }
   }, [activeField])
-
   // Effet pour mettre à jour la prévisualisation lorsque l'étape change
   useEffect(() => {
     // Forcer une mise à jour de la prévisualisation
@@ -137,18 +136,18 @@ export function DirectPropertyPreview({ activeField, currentStep = 1 }:DirectPro
     }, 1000)
   }, [currentStep])
 
-  // Reset current image index when images change
+  // Reset current image index when imgs change
   useEffect(() => {
     setCurrentImageIndex(0)
-  }, [images.length])
+  }, [imgs.length])
 
   // Valeurs par défaut pour la prévisualisation
-  const defaultTitle = "Titre de votre annonce"
-  const defaultCity = "Casablanca"
-  const defaultBedrooms = 1
+  const defaulttitre = "Titre de votre annonce"
+  const defaultville = "Casablanca"
+  const defaultnbrchambre = 1
   const defaultBathrooms = 1
-  const defaultArea = 50
-  const defaultPrice = 1500
+  const defaultsurface = 50
+  const defaultprixParMois = 1500
 
   // Function to get step name based on current step
   const getStepName = (step:number):string => {
@@ -162,7 +161,7 @@ export function DirectPropertyPreview({ activeField, currentStep = 1 }:DirectPro
       case 4:
         return "Photos"
       case 5:
-        return "Prix et disponibilité"
+        return "prixParMois et disponibilité"
       case 6:
         return "Équipements"
       case 7:
@@ -177,15 +176,15 @@ export function DirectPropertyPreview({ activeField, currentStep = 1 }:DirectPro
   // Navigation functions for image carousel
   const goToNextImage = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.stopPropagation()
-    if (images.length > 0) {
-      setCurrentImageIndex((prev) => (prev + 1) % images.length)
+    if (imgs.length > 0) {
+      setCurrentImageIndex((prev) => (prev + 1) % imgs.length)
     }
   }
 
   const goToPrevImage = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.stopPropagation() // Prevent triggering the parent onClick
-    if (images.length > 0) {
-      setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length)
+    if (imgs.length > 0) {
+      setCurrentImageIndex((prev) => (prev - 1 + imgs.length) % imgs.length)
     }
   }
 
@@ -205,54 +204,52 @@ export function DirectPropertyPreview({ activeField, currentStep = 1 }:DirectPro
   // Fonction pour naviguer vers la page de détails de prévisualisation
   const navigateToPreviewDetails = () => {
     try {
-      // Create a minimal data object without images
+      // Create a minimal data object without imgs
       const baseData = {
-        title: title || defaultTitle,
+        titre: titre || defaulttitre,
         description: description
           ? description.length > 500
             ? description.substring(0, 500) + "..."
             : description
           : "",
-        propertyType,
-        tenantType,
-        city: city || defaultCity,
-        district,
-        address,
-        bedrooms: bedrooms || defaultBedrooms,
+        type,
+        typesLocaires,
+        ville: ville || defaultville,
+        localisation,
+        adresse,
+        nbrchambre: nbrchambre || defaultnbrchambre,
         bathrooms: bathrooms || defaultBathrooms,
-        area: area || defaultArea,
-        price: price || defaultPrice,
+        surface: surface || defaultsurface,
+        prixParMois: prixParMois || defaultprixParMois,
         currentStep: currentStep,
-        hasImages: images && images.length > 0,
+        hasimgs: imgs && imgs.length > 0,
       }
 
       // Store the basic data
       localStorage.setItem("propertyPreviewData", JSON.stringify(baseData))
 
       // Store only image metadata and indices, not the actual image data
-      if (images && images.length > 0) {
-        // Store the number of images
-        localStorage.setItem("propertyPreviewImageCount", String(images.length))
+      if (imgs && imgs.length > 0) {
+        // Store the number of imgs
+        localStorage.setItem("propertyPreviewImageCount", String(imgs.length))
 
         // Store image indices in a global window variable that will be accessible
         // from the preview page (this avoids localStorage quota issues)
         if (typeof window !== "undefined") {
           // @ts-ignore - Adding a custom property to window
-          window.propertyPreviewImages = images
+          window.propertyPreviewimgs = imgs
         }
       }
-
       // Navigate to preview page
       router.visit("/property/preview")
     } catch (error) {
       console.error("Error navigating to preview:", error)
-
       // Fallback with minimal data
       try {
         const minimalData = {
-          title: title || defaultTitle,
-          city: city || defaultCity,
-          price: price || defaultPrice,
+          titre: titre || defaulttitre,
+          ville: ville || defaultville,
+          prixParMois: prixParMois || defaultprixParMois,
           currentStep: currentStep,
         }
         localStorage.setItem("propertyPreviewData", JSON.stringify(minimalData))
@@ -260,12 +257,11 @@ export function DirectPropertyPreview({ activeField, currentStep = 1 }:DirectPro
       } catch (fallbackError) {
         console.error("Fallback navigation failed:", fallbackError)
         alert(
-          "Impossible d'accéder à la prévisualisation. Veuillez réessayer avec moins d'images ou des images plus petites.",
+          "Impossible d'accéder à la prévisualisation. Veuillez réessayer avec moins d'imgs ou des imgs plus petites.",
         )
       }
     }
   }
-
   // Fonction pour générer la classe CSS en fonction de la section en surbrillance
   const getHighlightClass = (section:string) => {
     if (highlightedSection === "all") {
@@ -276,9 +272,9 @@ export function DirectPropertyPreview({ activeField, currentStep = 1 }:DirectPro
     }
     return ""
   }
-  type PropertyTypeKey = keyof typeof propertyTypeIcons; // هذا النوع = المفاتيح الموجودة في propertyTypeIcons
+  type typeKey = keyof typeof typeIcons; // هذا النوع = المفاتيح الموجودة في typeIcons
 
-  const propertyType = watch("propertyType") as PropertyTypeKey | undefined;
+  const type = watch("type") as typeKey | undefined;
   return (
     <div className="bg-white rounded-xl border shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden">
       <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4 text-white">
@@ -295,14 +291,14 @@ export function DirectPropertyPreview({ activeField, currentStep = 1 }:DirectPro
       <div className="overflow-hidden rounded-xl border bg-white shadow-sm hover:shadow-md transition-all duration-300">
         {/* Image principale avec carousel */}
         <div
-          className={`relative w-full h-64 overflow-hidden cursor-pointer ${getHighlightClass("images")}`}
+          className={`relative w-full h-64 overflow-hidden cursor-pointer ${getHighlightClass("imgs")}`}
           onClick={navigateToPreviewDetails}
         >
-          {images && images.length > 0 && images[currentImageIndex]?.preview ? (
+          {imgs && imgs.length > 0 && imgs[currentImageIndex]?.preview ? (
             <div className="w-full h-full group">
               {/* Current image */}
               <img
-                      src={images[currentImageIndex]?.preview || "/placeholder.svg?text=Image+Preview"}
+                      src={imgs[currentImageIndex]?.preview || "/placeholder.svg?text=Image+Preview"}
                       alt={`Photo ${currentImageIndex + 1}`}
                       className="object-cover transition-transform duration-300 hover:scale-105"
                       sizes="(max-width: 768px) 100vw, 50vw"
@@ -310,17 +306,17 @@ export function DirectPropertyPreview({ activeField, currentStep = 1 }:DirectPro
 
 
               {/* Indicateur de prévisualisation */}
-              {images[currentImageIndex]?.preview?.includes("blob:") && (
+              {imgs[currentImageIndex]?.preview?.includes("blob:") && (
                 <div className="absolute top-3 right-3 bg-blue-600 text-white text-xs px-2 py-1 rounded-md z-10">
                   Image sélectionnée
                 </div>
               )}
 
               {/* Overlay subtil au survol */}
-              <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity duration-300 pointer-events-none"></div>
+              <div className="absolute inset-0 bg-black opaville-0 group-hover:opaville-10 transition-opaville duration-300 pointer-events-none"></div>
 
               {/* Navigation arrows */}
-              {images.length > 1 && (
+              {imgs.length > 1 && (
                 <>
                   <button
                     onClick={goToPrevImage}
@@ -341,13 +337,13 @@ export function DirectPropertyPreview({ activeField, currentStep = 1 }:DirectPro
 
               {/* Image counter */}
               <div className="absolute top-3 left-3 bg-black/50 text-white text-xs px-2 py-1 rounded-md">
-                {currentImageIndex + 1}/{images.length}
+                {currentImageIndex + 1}/{imgs.length}
               </div>
 
               {/* Navigation dots */}
-              {images.length > 1 && (
+              {imgs.length > 1 && (
                 <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-1.5">
-                  {images.map((_:string, index:number) => (
+                  {imgs.map((_:string, index:number) => (
                     <button
                       key={index}
                       onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
@@ -364,10 +360,10 @@ export function DirectPropertyPreview({ activeField, currentStep = 1 }:DirectPro
               )}
 
               {/* Highlight overlay */}
-              {highlightedSection === "images" && (
-                <div className="absolute inset-0 bg-blue-500 bg-opacity-10 flex items-center justify-center">
+              {highlightedSection === "imgs" && (
+                <div className="absolute inset-0 bg-blue-500 bg-opaville-10 flex items-center justify-center">
                   <div className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
-                    Images sélectionnées
+                    imgs sélectionnées
                   </div>
                 </div>
               )}
@@ -396,21 +392,20 @@ export function DirectPropertyPreview({ activeField, currentStep = 1 }:DirectPro
               </div>
             </div>
           )}
-
           {/* Badge du type de bien */}
-          <div className={`absolute bottom-3 left-3 z-20 flex flex-wrap gap-1.5 ${getHighlightClass("propertyType")}`}>
+          <div className={`absolute bottom-3 left-3 z-20 flex flex-wrap gap-1.5 ${getHighlightClass("type")}`}>
             <Badge className="bg-white/90 backdrop-blur-sm font-medium px-2.5 py-1 flex items-center">
-              {propertyType && propertyTypeIcons[propertyType] ? (
-                propertyTypeIcons[propertyType]
+              {type && typeIcons[type] ? (
+                typeIcons[type]
               ) : (
                 <Home className="h-4 w-4 mr-1" />
               )}
-              {propertyType ? getPropertyTypeLabel(propertyType) : "Propriété"}
+              {type ? gettypeLabel(type) : "Propriété"}
             </Badge>
 
             <Badge className="bg-blue-100/90 text-blue-700 backdrop-blur-sm font-medium px-2.5 py-1 flex items-center">
               <Users className="h-4 w-4 mr-1" />
-              {tenantType && tenantType !== "all" ? `Pour ${getTenantTypeLabel(tenantType)}` : "Pour tous"}
+              {typesLocaires && typesLocaires !== "all" ? `Pour ${gettypesLocairesLabel(typesLocaires)}` : "Pour tous"}
             </Badge>
           </div>
 
@@ -445,9 +440,9 @@ export function DirectPropertyPreview({ activeField, currentStep = 1 }:DirectPro
 
         <div className="flex flex-col space-y-2">
           {/* Titre et évaluation */}
-          <div className={`flex justify-between items-start ${getHighlightClass("title")}`}>
+          <div className={`flex justify-between items-start ${getHighlightClass("titre")}`}>
             <h3 className="font-medium text-gray-900 line-clamp-1">
-              {title || (highlightedSection === "title" ? "Saisissez le titre ici..." : defaultTitle)}
+              {titre || (highlightedSection === "titre" ? "Saisissez le titre ici..." : defaulttitre)}
             </h3>
             <div className="flex items-center">
               <Star className="h-4 w-4 text-amber-500 fill-amber-500 mr-1" />
@@ -459,17 +454,17 @@ export function DirectPropertyPreview({ activeField, currentStep = 1 }:DirectPro
           <p className={`text-sm text-gray-500 flex items-center ${getHighlightClass("location")}`}>
             <MapPin className="mr-1 h-4 w-4 inline text-gray-400 flex-shrink-0" />
             <span className="truncate">
-              {district && district !== "no-district"
-                ? `${district.replace(/-/g, " ").replace(/\b\w/g, (l:string) => l.toUpperCase())}, ${city || defaultCity}`
-                : city || (highlightedSection === "location" ? "Saisissez la ville ici..." : defaultCity)}
+              {localisation && localisation !== "no-localisation"
+                ? `${localisation.replace(/-/g, " ").replace(/\b\w/g, (l:string) => l.toUpperCase())}, ${ville || defaultville}`
+                : ville || (highlightedSection === "location" ? "Saisissez la ville ici..." : defaultville)}
             </span>
           </p>
 
           {/* Adresse */}
-          {(address || highlightedSection === "location") && (
+          {(adresse || highlightedSection === "location") && (
             <p className={`text-xs text-gray-500 flex items-center ${getHighlightClass("location")}`}>
               <span className="truncate">
-                {address || (highlightedSection === "location" ? "Saisissez l'adresse ici..." : "")}
+                {adresse || (highlightedSection === "location" ? "Saisissez l'adresse ici..." : "")}
               </span>
             </p>
           )}
@@ -479,8 +474,8 @@ export function DirectPropertyPreview({ activeField, currentStep = 1 }:DirectPro
             <div className="flex items-center">
               <Bed className="h-4 w-4 mr-1 text-gray-400" />
               <span>
-                {bedrooms || (highlightedSection === "features" ? "?" : defaultBedrooms)}{" "}
-                {(bedrooms || defaultBedrooms) > 1 ? "chambres" : "chambre"}
+                {nbrchambre || (highlightedSection === "features" ? "?" : defaultnbrchambre)}{" "}
+                {(nbrchambre || defaultnbrchambre) > 1 ? "chambres" : "chambre"}
               </span>
             </div>
 
@@ -494,11 +489,11 @@ export function DirectPropertyPreview({ activeField, currentStep = 1 }:DirectPro
 
             <div className="flex items-center">
               <Square className="h-4 w-4 mr-1 text-gray-400" />
-              <span>{area || (highlightedSection === "features" ? "?" : defaultArea)} m²</span>
+              <span>{surface || (highlightedSection === "features" ? "?" : defaultsurface)} m²</span>
             </div>
           </div>
 
-          {/* Propriétaire et prix */}
+          {/* Propriétaire et prixParMois */}
           <div className="flex justify-between items-center pt-2">
             <div className="flex items-center gap-2">
               <div className="flex-shrink-0 w-8 h-8 relative rounded-full overflow-hidden border border-gray-200 bg-gray-100">
@@ -506,8 +501,8 @@ export function DirectPropertyPreview({ activeField, currentStep = 1 }:DirectPro
               </div>
               <span className="text-xs text-gray-500 truncate max-w-[100px]">Vous</span>
             </div>
-            <div className={`text-gray-900 font-bold text-lg ${getHighlightClass("price")}`}>
-              {price || (highlightedSection === "price" ? "?" : defaultPrice)}{" "}
+            <div className={`text-gray-900 font-bold text-lg ${getHighlightClass("prixParMois")}`}>
+              {prixParMois || (highlightedSection === "prixParMois" ? "?" : defaultprixParMois)}{" "}
               <span className="text-sm font-medium text-gray-500">MAD/mois</span>
             </div>
           </div>

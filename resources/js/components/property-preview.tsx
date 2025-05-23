@@ -1,4 +1,3 @@
-
 import { useMemo } from "react"
 import { useFormContext } from "react-hook-form"
 import { PropertyTypeIcon } from "@/components/illustrations/property-type-icon"
@@ -7,14 +6,11 @@ import { Badge } from "@/components/ui/badge"
 import { Bed, Bath, Users, MapPin, Calendar, Clock, Ban, Wifi } from "lucide-react"
 import { format } from "date-fns"
 import { fr } from "date-fns/locale"
-
 // Importons les composants nécessaires de Framer Motion
 import { motion } from "framer-motion"
-
 export function PropertyPreview() {
   // Vérifier si le contexte du formulaire est disponible
   const formContext = useFormContext()
-
   // Valeurs par défaut pour la prévisualisation
   const defaultValues = {
     title: "Titre de votre annonce",
@@ -34,19 +30,16 @@ export function PropertyPreview() {
     amenities: [],
     rules: [],
   }
-
   // Observer les valeurs du formulaire si le contexte est disponible
   // Utiliser useMemo pour éviter les recalculs inutiles
   const previewData = useMemo(() => {
     return formContext ? { ...defaultValues, ...formContext.watch() } : defaultValues
   }, [formContext])
-
   // Fonction pour tronquer le texte
   const truncateText = (text:string, maxLength:number) => {
     if (!text) return ""
     return text.length > maxLength ? text.substring(0, maxLength) + "..." : text
   }
-
   // Fonction pour obtenir le libellé du type de propriété
   const getPropertyTypeLabel = (type:string) => {
     switch (type) {
@@ -72,7 +65,6 @@ export function PropertyPreview() {
         return type
     }
   }
-
   // Fonction pour obtenir le libellé du type de locataire
   const getTenantTypeLabel = (type:string) => {
     switch (type) {

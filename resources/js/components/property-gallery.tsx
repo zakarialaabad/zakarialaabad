@@ -54,7 +54,7 @@ useEffect(() => {
             <div className="relative col-span-1 row-span-2 md:col-span-2 overflow-hidden group">
               <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.4 }} className="h-full w-full">
               <img
-    src={`/${images[0]}`}
+    src={`${images[0]}`}
     alt={`${title} - Image principale`}
     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700"
     style={{
@@ -74,6 +74,7 @@ useEffect(() => {
 
             {/* Images secondaires avec effet de zoom au survol */}
             {images.slice(1, 5).map((image, index) => (
+              console.log("image", image),
               <div key={index} className="relative hidden md:block overflow-hidden group">
                 <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.4 }} className="h-full w-full">
                   <img
@@ -83,6 +84,7 @@ useEffect(() => {
                     sizes="25vw"
                     loading="lazy" 
                   />
+                  
                 </motion.div>
 
                 {/* Overlay subtil au survol */}

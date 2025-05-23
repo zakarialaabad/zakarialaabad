@@ -1,4 +1,3 @@
-
 import type React from "react"
 import { createContext, useContext, useState, useEffect } from "react"
 import { useAuth } from "@/contexts/auth-context"
@@ -93,13 +92,22 @@ export function NotificationsProvider({ children }: { children: React.ReactNode 
   }, [notifications])
 
   const addNotification = (notification: Omit<Notification, "id" | "date" | "read">) => {
+    console.log("Adding a new notification:", notification); // Log the incoming notification
+
     const newNotification: Notification = {
       ...notification,
       id: Date.now().toString(),
       date: new Date(),
       read: false,
-    }
-    setNotifications((prev) => [newNotification, ...prev])
+    };
+
+    console.log("New notification created:", newNotification); // Log the newly created notification
+
+    setNotifications((prev) => {
+      const updatedNotifications = [newNotification, ...prev];
+      console.log("Updated notifications list:", updatedNotifications); // Log the updated notifications list
+      return updatedNotifications;
+    });
   }
 
   const markAsRead = (id: string) => {

@@ -12,6 +12,6 @@ class Commodite extends Model
         "id"
     ];
     public function proprietes(){
-        $this->belongsT(Propriete::class);
+        $this->belongsToMany(Propriete::class,"Commodites_propreite");
     }
 }

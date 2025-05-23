@@ -10,11 +10,12 @@ class Propriete extends Model
     protected $fillable = [
         'loueur_id', 'titre', 'localisation', 'prixParMois',
         'description', 'disponibilite', 'type', 'nbrchambre',"surface",
-        'condition', 'adresse',"imgs","typesLocaires"
+        'regles', 'adresse',"imgs","typesLocaires"
     ];
     
     protected $casts = [
         'imgs' => 'array',
+        'regles' => 'array',
     ];
     public function photos()
     {
@@ -28,8 +29,8 @@ class Propriete extends Model
     {
         return $this->belongsTo(Admin::class);
     }
-    public function commodite(){
-        return $this->hasMany(Commodite::class);
+    public function commodites(){
+        return $this->belongsToMany(Commodite::class,"Commodites_propreite");
     }
     public function loueur(){
         return $this->belongsTo(Loueur::class);

@@ -295,9 +295,8 @@ import AdminLayout from "../layout";
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <StatsCard
               title="Propriétés totales"
-              value="1,284"
-              description="+12% depuis le mois dernier"
-              trend="up"
+              value="484"
+              description=""
               icon={<Building className="h-5 w-5" />}
               color="blue"
             />
@@ -305,7 +304,6 @@ import AdminLayout from "../layout";
               title="Utilisateurs actifs"
               value="8,549"
               description="+25.8% depuis le mois dernier"
-              trend="up"
               icon={<Users className="h-5 w-5" />}
               color="green"
             />
@@ -313,20 +311,17 @@ import AdminLayout from "../layout";
               title="Réservations"
               value="573"
               description="+4.3% depuis le mois dernier"
-              trend="up"
               icon={<Calendar className="h-5 w-5" />}
               color="amber"
             />
             <StatsCard
               title="Revenus"
-              value="1.2M MAD"
+              value="50000 MAD"
               description="-2.5% depuis le mois dernier"
-              trend="down"
               icon={<DollarSign className="h-5 w-5" />}
               color="rose"
             />
           </div>
-
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
             <Card className="lg:col-span-4">
               <CardHeader>
@@ -377,7 +372,6 @@ import AdminLayout from "../layout";
                 </Button>
               </CardContent>
             </Card>
-
             <Card className="lg:col-span-3">
               <CardHeader>
                 <CardTitle>Propriétés en attente</CardTitle>
@@ -414,7 +408,6 @@ import AdminLayout from "../layout";
               </CardContent>
             </Card>
           </div>
-
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <Card>
               <CardHeader className="pb-2">
@@ -507,12 +500,11 @@ interface StatsCardProps {
   title: string;
   value: string;
   description: string;
-  trend: "up" | "down";
   icon: React.ReactNode;
   color: "blue" | "green" | "amber" | "rose" | "purple";
 }
 
-function StatsCard({ title, value, description, trend, icon, color }: StatsCardProps) {
+function StatsCard({ title, value, description, icon, color }: StatsCardProps) {
   const colorClasses = {
     blue: "bg-blue-50 text-blue-700",
     green: "bg-green-50 text-green-700",
@@ -527,14 +519,7 @@ function StatsCard({ title, value, description, trend, icon, color }: StatsCardP
         <CardContent className="p-6">
           <div className="flex items-center justify-between">
             <div className={`p-2 rounded-full ${colorClasses[color]}`}>{icon}</div>
-            <div className="flex items-center">
-              {trend === "up" ? (
-                <TrendingUp className="h-4 w-4 text-green-500 mr-1" />
-              ) : (
-                <TrendingDown className="h-4 w-4 text-rose-500 mr-1" />
-              )}
-              <span className={trend === "up" ? "text-green-500 text-sm" : "text-rose-500 text-sm"}>{description}</span>
-            </div>
+
           </div>
           <div className="mt-4">
             <h3 className="text-3xl font-bold">{value}</h3>

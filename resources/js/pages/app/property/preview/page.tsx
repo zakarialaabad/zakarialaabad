@@ -259,29 +259,27 @@ export default function PropertyPreviewDetails() {
     setIsLoaded(true);
   }, []);
 
-  // Fonction pour obtenir le nom de l'icône pour un équipement
   const getIconNameForAmenity = (name: string, category: string): string => {
-    // Mapping des équipements aux icônes
     const iconMapping: { [key: string]: string } = {
       // Intérieur
       "Balcon spacieux": "Flower2",
       "Toilette moderne": "Bath",
       "Chauffage central": "Flame",
-      Climatisation: "Wind",
+      "Climatisation": "Wind",
       "Cuisine équipée": "UtensilsCrossed",
       "Placards intégrés": "LayoutGrid",
       "Fenêtres double vitrage": "Square",
-      Dressing: "Armchair",
-      Buanderie: "Droplets",
+      "Dressing": "Armchair",
+      "Buanderie": "Droplets",
       "Internet fibre optique": "Wifi",
-      "Système d'alarme": "Bell",
+      "Système d’alarme": "Bell",
       "Porte blindée": "Lock",
       "Rideaux électriques": "Blinds",
-      Cheminée: "Flame",
-      Ascenseur: "ArrowUpDown",
+      "Cheminée": "Flame",
+      "Ascenseur": "ArrowUpDown",
       "Espace bureau à domicile": "Briefcase",
       "Éclairage encastré": "Lightbulb",
-
+  
       // Extérieur
       "Jardin privé": "Flower2",
       "Piscine privée": "Waves",
@@ -294,35 +292,50 @@ export default function PropertyPreviewDetails() {
       "Garage privé ou fermé": "Car",
       "Aire de jeux pour enfants": "CircleDot",
       "Clôture extérieure": "CircleDot",
-      "Système d'arrosage automatique": "Droplets",
+      "Système d’arrosage automatique": "Droplets",
       "Espace vert partagé": "Sprout",
-      Parking: "ParkingSquare",
-
+      "Parking": "ParkingSquare",
+  
       // À proximité
+      "École": "GraduationCap",
+      "Supermarché": "Store",
       "Transports en commun": "Bus",
-      "Écoles et universités": "GraduationCap",
-      "Commerces et supermarchés": "Store",
-      "Restaurants et cafés": "Coffee",
-      "Parcs et espaces verts": "Trees",
-      "Centres médicaux": "Stethoscope",
-      "Centres sportifs": "Dumbbell",
-      "Centres commerciaux": "ShoppingBag",
-      Plages: "Waves",
-      "Lieux culturels": "Landmark",
-      "Lieux de culte": "Church",
-      Pharmacies: "Pill",
-      Banques: "Building",
-      "Marchés locaux": "Store",
+      "Hôpital proche": "Stethoscope",
+      "Parc public": "Trees",
+      "Salle de sport": "Dumbbell",
+      "Centre commercial": "ShoppingBag",
+      "Pharmacie": "Pill",
+      "Plage": "Waves",
+      "Mosquée ou Église": "Church",
+      "Marché local": "Store",
+      "Café ou restaurant": "Coffee",
+      "Station-service": "Fuel",
+      "Banque ou distributeur": "Building",
+      "Université ou institut": "GraduationCap",
+      "Cinéma proche": "Film",
+      "Bibliothèque municipale": "BookOpen",
+      "Boulangerie ou pâtisserie": "Cake",
+      "Arrêt de tramway": "Tram",
+      "Zone piétonne": "Walk",
+      "Centre culturel": "Landmark",
+      "Piscine municipale": "Waves",
+      "École maternelle": "GraduationCap",
+      "Collège ou lycée": "GraduationCap",
+      "Clinique vétérinaire": "Stethoscope",
+      "Parc pour enfants": "CircleDot",
+      "Centre d’affaires": "Briefcase",
+      "Poste de police": "Shield",
+      "Bureau de poste": "Mail",
+      "Zone industrielle proche": "Factory",
     };
-
+  
     return iconMapping[name] || (category === "Intérieur" ? "Home" : category === "Extérieur" ? "Tree" : "MapPin");
   };
-
   // Si les données ne sont pas encore chargées, afficher un indicateur de chargement
   if (!isLoaded) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#465baa]"></div>
       </div>
     );
   }
@@ -400,7 +413,6 @@ export default function PropertyPreviewDetails() {
         return "Tous types de locataires";
     }
   };
-
   // Variantes d'animation pour les différentes sections
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -524,7 +536,6 @@ export default function PropertyPreviewDetails() {
                   </div>
                 </motion.div>
               </motion.div>
-
               {/* Onglets d'information avec animation */}
               <motion.div variants={itemVariants}>
                 <Tabs defaultValue="description" className="mb-8">
@@ -694,9 +705,7 @@ export default function PropertyPreviewDetails() {
               </motion.div>
 
               {/* Informations sur le propriétaire avec animation */}
-              <motion.div variants={itemVariants}>
-                <PropertyOwner owner={property.owner} />
-              </motion.div>
+             
             </motion.div>
 
             {/* Colonne latérale avec formulaire de réservation */}

@@ -19,8 +19,8 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->boolean('disponibilite')->default(true);
             $table->enum('type', ['Appartement', 'Villa', 'Maison', 'Studio', 'Bureau', 'Magasin', 'Dépôt', 'Garage',"Boutique"]);
-            $table->string('condition')->nullable();
-            $table->string('adresse');
+            $table->json('regles')->nullable();
+           $table->string('adresse');
             $table->unsignedBigInteger('admin_id')->nullable();
             $table->foreign('admin_id')->references('id')->on('admins')->onDelete('cascade');
             $table->timestamps();

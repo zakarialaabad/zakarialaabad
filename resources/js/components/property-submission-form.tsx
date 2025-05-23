@@ -1,61 +1,56 @@
-
 import type React from "react"
-
 import { Checkbox } from "@/components/ui/checkbox"
 import { useFormContext } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
+import { Textarea } from "./ui/textarea" 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { PropertyTypeSelect } from "./property-type-select" 
 import { useState, useEffect } from "react"
 import { X, Upload, ImageIcon } from "lucide-react"
 type PreviewFields =
-  | "title"
+  | "titre"
   | "description"
-  | "propertyType"
-  | "tenantType"
-  | "city"
-  | "district"
+  | "type"
+  | "typesLocaires"
+  | "ville"
+  | "localisation"
   | "address"
-  | "area"
-  | "bedrooms"
+  | "surface"
+  | "nbrchambre"
   | "bathrooms"
-  | "images"
-  | "price"
-  | "minimumStay"
-  | "availableFrom"
-  | "rules.petsAllowed"
-  | "rules.smokingAllowed"
-  | "rules.smallPetsOnly"
-  | "rules.petFee"
-  | "rules.petDeposit"
-  | "rules.noDrugs"
-  | "rules.smokingOutdoorOnly"
-  | "rules.ecigaretteAllowed"
-  | "rules.eventsAllowed"
-  | "rules.partiesAllowed"
-  | "rules.additionalGuestsAllowed"
-  | "rules.guestRegistration"
-  | "rules.quietHours"
-  | "rules.noLoudMusic"
-  | "rules.respectNeighbors"
-  | "rules.noPartiesWeekdays"
-  | "rules.childFriendly"
-  | "rules.babyFriendly"
-  | "rules.familyFriendly"
-  | "rules.childSafetyFeatures"
-  | "rules.noCandles"
-  | "rules.noModifications"
-  | "rules.cleaningRequired"
-  | "rules.trashDisposalRules"
-  | "rules.additionalRules"
-  | 'rules.depositWithheld'
-  | 'rules.earlyTermination'
-  | 'rules.additionalFees'
-  | 'rules.penaltyDetails';
-
+  | "imgs"
+  | "prixParMois"
+  | "regles.petsAllowed"
+  | "regles.smokingAllowed"
+  | "regles.smallPetsOnly"
+  | "regles.petFee"
+  | "regles.petDeposit"
+  | "regles.noDrugs"
+  | "regles.smokingOutdoorOnly"
+  | "regles.ecigaretteAllowed"
+  | "regles.eventsAllowed"
+  | "regles.partiesAllowed"
+  | "regles.additionalGuestsAllowed"
+  | "regles.guestRegistration"
+  | "regles.quietHours"
+  | "regles.noLoudMusic"
+  | "regles.respectNeighbors"
+  | "regles.noPartiesWeekdays"
+  | "regles.childFriendly"
+  | "regles.babyFriendly"
+  | "regles.familyFriendly"
+  | "regles.childSafetyFeatures"
+  | "regles.noCandles"
+  | "regles.noModifications"
+  | "regles.cleaningRequired"
+  | "regles.trashDisposalregles"
+  | "regles.additionalregles"
+  | 'regles.depositWithheld'
+  | 'regles.earlyTermination'
+  | 'regles.additionalFees'
+  | 'regles.penaltyDetails';
 interface PropertySubmissionFormProps {
   onSubmit: (data: any) => void
   onFieldFocus?: (fieldName: PreviewFields) => void
@@ -73,7 +68,6 @@ interface ImagePreview {
     type: string;
   } | null;
 }
-
 const PropertySubmissionForm = ({
   onSubmit,
   onFieldFocus,
@@ -86,14 +80,12 @@ const PropertySubmissionForm = ({
   const methods = useFormContext()
   const [imageFiles, setImageFiles] = useState<File[]>([])
   const [imagePreviews, setImagePreviews] = useState<string[]>([])
-
   // Handle image upload
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const files = Array.from(e.target.files)
       const newFiles = [...imageFiles]
       const newPreviews = [...imagePreviews]
-
       // Only add new files up to a maximum of 5 total
       files.forEach((file) => {
         if (newFiles.length < 5) {
@@ -114,18 +106,16 @@ const PropertySubmissionForm = ({
                   type: newFiles[index].type,
                 },
               }))
-              methods.setValue("images", formImages)
-              onFieldFocus?.("images")
+              methods.setValue("imgs", formImages)
+              onFieldFocus?.("imgs")
             }
           }
           reader.readAsDataURL(file)
         }
       })
-
       setImageFiles(newFiles)
     }
   }
-
   // Remove an image
   const removeImage = (index: number) => {
     const newFiles = [...imageFiles]
@@ -148,12 +138,12 @@ const PropertySubmissionForm = ({
           }
         : null,
     }))
-    methods.setValue("images", formImages)
+    methods.setValue("imgs", formImages)
   }
 
   // Load existing images from form data if available
   useEffect(() => {
-    const existingImages = methods.watch("images") as ImagePreview[] | undefined;
+    const existingImages = methods.watch("") as ImagePreview[] | undefined;
     if (existingImages && existingImages.length > 0) {
       setImagePreviews(existingImages.map((img) => img.preview));
     }
@@ -186,8 +176,8 @@ const PropertySubmissionForm = ({
       {currentStep === 1 && (
         <div>
           <h2>Informations de base</h2>
-          <Label htmlFor="title">Titre de l'annonce</Label>
-          <Input id="title" {...methods.register("title")}            onFocus={() => onFieldFocus?.("title")} onBlur={onFieldBlur} />
+          <Label htmlFor="titre">Titre de l'annonce</Label>
+          <Input id="titre" {...methods.register("titre")}            onFocus={() => onFieldFocus?.("titre")} onBlur={onFieldBlur} />
 
           <Label htmlFor="description">Description</Label>
           <Textarea
@@ -197,22 +187,22 @@ const PropertySubmissionForm = ({
             onBlur={onFieldBlur}
           />
 
-          <Label htmlFor="propertyType">Type de bien</Label>
+          <Label htmlFor="typesLocaires">Type de bien</Label>
           <PropertyTypeSelect
-            value={methods.watch("propertyType")}
-            onValueChange={(value) => methods.setValue("propertyType", value)}
-            onFocus={() => onFieldFocus?.("propertyType")}
+            value={methods.watch("typesLocaires")}
+            onValueChange={(value) => methods.setValue("typesLocaires", value)}
+            onFocus={() => onFieldFocus?.("typesLocaires")}
             onBlur={onFieldBlur}
           />
 
-          <Label htmlFor="tenantType">Type de locataire idéal</Label>
+          <Label htmlFor="type">Type de locataire idéal</Label>
           <Select
-            onValueChange={(value) => methods.setValue("tenantType", value)}
+            onValueChange={(value) => methods.setValue("type", value)}
             onOpenChange={(open) => {
-              if (open) onFieldFocus?.("tenantType")
+              if (open) onFieldFocus?.("type")
               else onFieldBlur?.()
             }}
-            value={methods.watch("tenantType")}
+            value={methods.watch("type")}
           >
             <SelectTrigger data-tenant-type="true">
               <SelectValue placeholder="Sélectionner un type" />
@@ -244,16 +234,16 @@ const PropertySubmissionForm = ({
       {currentStep === 2 && (
         <div>
           <h2>Localisation</h2>
-          <Label htmlFor="city">Ville</Label>
+          <Label htmlFor="ville">Ville</Label>
           <Select
-            onValueChange={(value) => methods.setValue("city", value)}
+            onValueChange={(value) => methods.setValue("ville", value)}
             onOpenChange={(open) => {
-              if (open) onFieldFocus?.("city")
+              if (open) onFieldFocus?.("ville")
               else onFieldBlur?.()
             }}
-            value={methods.watch("city")}
+            value={methods.watch("ville")}
           >
-            <SelectTrigger id="city" className="w-full">
+            <SelectTrigger id="ville" className="w-full">
               <SelectValue placeholder="Sélectionner une ville" />
             </SelectTrigger>
             <SelectContent>
@@ -280,25 +270,25 @@ const PropertySubmissionForm = ({
             </SelectContent>
           </Select>
 
-          <Label htmlFor="district">Quartier</Label>
+          <Label htmlFor="localisation">Quartier</Label>
           <Select
-            onValueChange={(value) => methods.setValue("district", value)}
+            onValueChange={(value) => methods.setValue("localisation", value)}
             onOpenChange={(open) => {
-              if (open) onFieldFocus?.("district")
+              if (open) onFieldFocus?.("localisation")
               else onFieldBlur?.()
             }}
-            value={methods.watch("district")}
-            disabled={!methods.watch("city")}
+            value={methods.watch("localisation")}
+            disabled={!methods.watch("ville")}
           >
             <SelectTrigger id="district" className="w-full">
               <SelectValue
                 placeholder={
-                  methods.watch("city") ? "Sélectionner un quartier" : "Veuillez d'abord sélectionner une ville"
+                  methods.watch("ville") ? "Sélectionner un quartier" : "Veuillez d'abord sélectionner une ville"
                 }
               />
             </SelectTrigger>
             <SelectContent>
-              {methods.watch("city") === "casablanca" && (
+              {methods.watch("ville") === "casablanca" && (
                 <>
                   <SelectItem value="ain_diab">Aïn Diab</SelectItem>
                   <SelectItem value="anfa">Anfa</SelectItem>
@@ -312,7 +302,7 @@ const PropertySubmissionForm = ({
                   <SelectItem value="california">California</SelectItem>
                 </>
               )}
-              {methods.watch("city") === "rabat" && (
+              {methods.watch("ville") === "rabat" && (
                 <>
                   <SelectItem value="agdal">Agdal</SelectItem>
                   <SelectItem value="hay_riad">Hay Riad</SelectItem>
@@ -324,7 +314,7 @@ const PropertySubmissionForm = ({
                   <SelectItem value="ocean">Océan</SelectItem>
                 </>
               )}
-              {methods.watch("city") === "marrakech" && (
+              {methods.watch("ville") === "marrakech" && (
                 <>
                   <SelectItem value="gueliz">Guéliz</SelectItem>
                   <SelectItem value="hivernage">Hivernage</SelectItem>
@@ -336,7 +326,7 @@ const PropertySubmissionForm = ({
                   <SelectItem value="agdal">Agdal</SelectItem>
                 </>
               )}
-              {methods.watch("city") === "fes" && (
+              {methods.watch("ville") === "fes" && (
                 <>
                   <SelectItem value="ville_nouvelle">Ville Nouvelle</SelectItem>
                   <SelectItem value="medina">Médina</SelectItem>
@@ -347,7 +337,7 @@ const PropertySubmissionForm = ({
                   <SelectItem value="rcif">Rcif</SelectItem>
                 </>
               )}
-              {methods.watch("city") === "tanger" && (
+              {methods.watch("ville") === "tanger" && (
                 <>
                   <SelectItem value="centre_ville">Centre Ville</SelectItem>
                   <SelectItem value="malabata">Malabata</SelectItem>
@@ -358,7 +348,7 @@ const PropertySubmissionForm = ({
                   <SelectItem value="medina">Médina</SelectItem>
                 </>
               )}
-              {methods.watch("city") === "agadir" && (
+              {methods.watch("ville") === "agadir" && (
                 <>
                   <SelectItem value="centre_ville">Centre Ville</SelectItem>
                   <SelectItem value="sonaba">Sonaba</SelectItem>
@@ -369,8 +359,8 @@ const PropertySubmissionForm = ({
                   <SelectItem value="tikiouine">Tikiouine</SelectItem>
                 </>
               )}
-              {methods.watch("city") &&
-                !["casablanca", "rabat", "marrakech", "fes", "tanger", "agadir"].includes(methods.watch("city")) && (
+              {methods.watch("ville") &&
+                !["casablanca", "rabat", "marrakech", "fes", "tanger", "agadir"].includes(methods.watch("ville")) && (
                   <SelectItem value="centre_ville">Centre Ville</SelectItem>
                 )}
             </SelectContent>
@@ -389,21 +379,21 @@ const PropertySubmissionForm = ({
       {currentStep === 3 && (
         <div>
           <h2>Caractéristiques</h2>
-          <Label htmlFor="area">Superficie (m²)</Label>
+          <Label htmlFor="surface">Superficie (m²)</Label>
           <Input
-            id="area"
+            id="surface"
             type="number"
-            {...methods.register("area")}
-            onFocus={() => onFieldFocus?.("area")}
+            {...methods.register("surface")}
+            onFocus={() => onFieldFocus?.("surface")}
             onBlur={onFieldBlur}
           />
 
-          <Label htmlFor="bedrooms">Nombre de chambres</Label>
+          <Label htmlFor="nbrchambre">Nombre de chambres</Label>
           <Input
-            id="bedrooms"
+            id="nbrchambre"
             type="number"
-            {...methods.register("bedrooms")}
-            onFocus={() => onFieldFocus?.("bedrooms")}
+            {...methods.register("nbrchambre")}
+            onFocus={() => onFieldFocus?.("nbrchambre")}
             onBlur={onFieldBlur}
           />
 
@@ -425,11 +415,11 @@ const PropertySubmissionForm = ({
             Ajoutez jusqu'à 5 photos de votre bien (la première sera l'image principale)
           </p>
 
-          {/* Image upload area */}
+          {/* Image upload surface */}
           <div
             className="border-2 border-dashed border-gray-300 rounded-lg p-6 mb-4 text-center hover:bg-gray-50 transition-colors cursor-pointer"
             onClick={() => document.getElementById("image-upload")?.click()}
-            onFocus={() => onFieldFocus?.("images")}
+            onFocus={() => onFieldFocus?.("imgs")}
             onBlur={onFieldBlur}
           >
             <input
@@ -473,7 +463,7 @@ const PropertySubmissionForm = ({
                     <button
                       type="button"
                       onClick={() => removeImage(index)}
-                      className="absolute top-2 right-2 bg-white rounded-full p-1 shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="absolute top-2 right-2 bg-white rounded-full p-1 shadow-md opaville-0 group-hover:opaville-100 transition-opaville"
                       aria-label={`Supprimer l'image ${index + 1}`}
                     >
                       <X className="h-4 w-4 text-gray-600" />
@@ -508,32 +498,17 @@ const PropertySubmissionForm = ({
       {currentStep === 5 && (
         <div>
           <h2>Prix et disponibilité</h2>
-          <Label htmlFor="price">Prix</Label>
+          <Label htmlFor="prixParMois">Prix</Label>
           <Input
-            id="price"
+            id="prixParMois"
             type="number"
-            {...methods.register("price")}
-            onFocus={() => onFieldFocus?.("price")}
+            {...methods.register("prixParMois")}
+            onFocus={() => onFieldFocus?.("prixParMois")}
             onBlur={onFieldBlur}
           />
 
           <Label htmlFor="availableFrom">Disponible à partir de</Label>
-          <Input
-            id="availableFrom"
-            type="date"
-            {...methods.register("availableFrom")}
-            onFocus={() => onFieldFocus?.("availableFrom")}
-            onBlur={onFieldBlur}
-          />
-
-          <Label htmlFor="minimumStay">Durée minimum de séjour</Label>
-          <Input
-            id="minimumStay"
-            type="number"
-            {...methods.register("minimumStay")}
-            onFocus={() => onFieldFocus?.("minimumStay")}
-            onBlur={onFieldBlur}
-          />
+          
         </div>
       )}
 
@@ -573,8 +548,8 @@ const PropertySubmissionForm = ({
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     id="petsAllowed"
-                    {...methods.register("rules.petsAllowed")}
-                    onFocus={() => onFieldFocus?.("rules.petsAllowed")}
+                    {...methods.register("regles.petsAllowed")}
+                    onFocus={() => onFieldFocus?.("regles.petsAllowed")}
                     onBlur={onFieldBlur}
                   />
                   <Label htmlFor="petsAllowed" className="font-normal">
@@ -584,8 +559,8 @@ const PropertySubmissionForm = ({
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     id="smallPetsOnly"
-                    {...methods.register("rules.smallPetsOnly")}
-                    onFocus={() => onFieldFocus?.("rules.smallPetsOnly")}
+                    {...methods.register("regles.smallPetsOnly")}
+                    onFocus={() => onFieldFocus?.("regles.smallPetsOnly")}
                     onBlur={onFieldBlur}
                   />
                   <Label htmlFor="smallPetsOnly" className="font-normal">
@@ -595,8 +570,8 @@ const PropertySubmissionForm = ({
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     id="petFee"
-                    {...methods.register("rules.petFee")}
-                    onFocus={() => onFieldFocus?.("rules.petFee")}
+                    {...methods.register("regles.petFee")}
+                    onFocus={() => onFieldFocus?.("regles.petFee")}
                     onBlur={onFieldBlur}
                   />
                   <Label htmlFor="petFee" className="font-normal">
@@ -606,8 +581,8 @@ const PropertySubmissionForm = ({
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     id="petDeposit"
-                    {...methods.register("rules.petDeposit")}
-                    onFocus={() => onFieldFocus?.("rules.petDeposit")}
+                    {...methods.register("regles.petDeposit")}
+                    onFocus={() => onFieldFocus?.("regles.petDeposit")}
                     onBlur={onFieldBlur}
                   />
                   <Label htmlFor="petDeposit" className="font-normal">
@@ -645,8 +620,8 @@ const PropertySubmissionForm = ({
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     id="smokingAllowed"
-                    {...methods.register("rules.smokingAllowed")}
-                    onFocus={() => onFieldFocus?.("rules.smokingAllowed")}
+                    {...methods.register("regles.smokingAllowed")}
+                    onFocus={() => onFieldFocus?.("regles.smokingAllowed")}
                     onBlur={onFieldBlur}
                   />
                   <Label htmlFor="smokingAllowed" className="font-normal">
@@ -656,8 +631,8 @@ const PropertySubmissionForm = ({
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     id="smokingOutdoorOnly"
-                    {...methods.register("rules.smokingOutdoorOnly")}
-                    onFocus={() => onFieldFocus?.("rules.smokingOutdoorOnly")}
+                    {...methods.register("regles.smokingOutdoorOnly")}
+                    onFocus={() => onFieldFocus?.("regles.smokingOutdoorOnly")}
                     onBlur={onFieldBlur}
                   />
                   <Label htmlFor="smokingOutdoorOnly" className="font-normal">
@@ -667,8 +642,8 @@ const PropertySubmissionForm = ({
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     id="ecigaretteAllowed"
-                    {...methods.register("rules.ecigaretteAllowed")}
-                    onFocus={() => onFieldFocus?.("rules.ecigaretteAllowed")}
+                    {...methods.register("regles.ecigaretteAllowed")}
+                    onFocus={() => onFieldFocus?.("regles.ecigaretteAllowed")}
                     onBlur={onFieldBlur}
                   />
                   <Label htmlFor="ecigaretteAllowed" className="font-normal">
@@ -678,8 +653,8 @@ const PropertySubmissionForm = ({
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     id="noDrugs"
-                    {...methods.register("rules.noDrugs")}
-                    onFocus={() => onFieldFocus?.("rules.noDrugs")}
+                    {...methods.register("regles.noDrugs")}
+                    onFocus={() => onFieldFocus?.("regles.noDrugs")}
                     onBlur={onFieldBlur}
                   />
                   <Label htmlFor="noDrugs" className="font-normal">
@@ -724,8 +699,8 @@ const PropertySubmissionForm = ({
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     id="eventsAllowed"
-                    {...methods.register("rules.eventsAllowed")}
-                    onFocus={() => onFieldFocus?.("rules.eventsAllowed")}
+                    {...methods.register("regles.eventsAllowed")}
+                    onFocus={() => onFieldFocus?.("regles.eventsAllowed")}
                     onBlur={onFieldBlur}
                   />
                   <Label htmlFor="eventsAllowed" className="font-normal">
@@ -735,8 +710,8 @@ const PropertySubmissionForm = ({
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     id="partiesAllowed"
-                    {...methods.register("rules.partiesAllowed")}
-                    onFocus={() => onFieldFocus?.("rules.partiesAllowed")}
+                    {...methods.register("regles.partiesAllowed")}
+                    onFocus={() => onFieldFocus?.("regles.partiesAllowed")}
                     onBlur={onFieldBlur}
                   />
                   <Label htmlFor="partiesAllowed" className="font-normal">
@@ -746,8 +721,8 @@ const PropertySubmissionForm = ({
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     id="additionalGuestsAllowed"
-                    {...methods.register("rules.additionalGuestsAllowed")}
-                    onFocus={() => onFieldFocus?.("rules.additionalGuestsAllowed")}
+                    {...methods.register("regles.additionalGuestsAllowed")}
+                    onFocus={() => onFieldFocus?.("regles.additionalGuestsAllowed")}
                     onBlur={onFieldBlur}
                   />
                   <Label htmlFor="additionalGuestsAllowed" className="font-normal">
@@ -757,8 +732,8 @@ const PropertySubmissionForm = ({
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     id="guestRegistration"
-                    {...methods.register("rules.guestRegistration")}
-                    onFocus={() => onFieldFocus?.("rules.guestRegistration")}
+                    {...methods.register("regles.guestRegistration")}
+                    onFocus={() => onFieldFocus?.("regles.guestRegistration")}
                     onBlur={onFieldBlur}
                   />
                   <Label htmlFor="guestRegistration" className="font-normal">
@@ -794,8 +769,8 @@ const PropertySubmissionForm = ({
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     id="quietHours"
-                    {...methods.register("rules.quietHours")}
-                    onFocus={() => onFieldFocus?.("rules.quietHours")}
+                    {...methods.register("regles.quietHours")}
+                    onFocus={() => onFieldFocus?.("regles.quietHours")}
                     onBlur={onFieldBlur}
                   />
                   <Label htmlFor="quietHours" className="font-normal">
@@ -805,8 +780,8 @@ const PropertySubmissionForm = ({
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     id="noLoudMusic"
-                    {...methods.register("rules.noLoudMusic")}
-                    onFocus={() => onFieldFocus?.("rules.noLoudMusic")}
+                    {...methods.register("regles.noLoudMusic")}
+                    onFocus={() => onFieldFocus?.("regles.noLoudMusic")}
                     onBlur={onFieldBlur}
                   />
                   <Label htmlFor="noLoudMusic" className="font-normal">
@@ -816,8 +791,8 @@ const PropertySubmissionForm = ({
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     id="respectNeighbors"
-                    {...methods.register("rules.respectNeighbors")}
-                    onFocus={() => onFieldFocus?.("rules.respectNeighbors")}
+                    {...methods.register("regles.respectNeighbors")}
+                    onFocus={() => onFieldFocus?.("regles.respectNeighbors")}
                     onBlur={onFieldBlur}
                   />
                   <Label htmlFor="respectNeighbors" className="font-normal">
@@ -827,8 +802,8 @@ const PropertySubmissionForm = ({
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     id="noPartiesWeekdays"
-                    {...methods.register("rules.noPartiesWeekdays")}
-                    onFocus={() => onFieldFocus?.("rules.noPartiesWeekdays")}
+                    {...methods.register("regles.noPartiesWeekdays")}
+                    onFocus={() => onFieldFocus?.("regles.noPartiesWeekdays")}
                     onBlur={onFieldBlur}
                   />
                   <Label htmlFor="noPartiesWeekdays" className="font-normal">
@@ -869,8 +844,8 @@ const PropertySubmissionForm = ({
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     id="childFriendly"
-                    {...methods.register("rules.childFriendly")}
-                    onFocus={() => onFieldFocus?.("rules.childFriendly")}
+                    {...methods.register("regles.childFriendly")}
+                    onFocus={() => onFieldFocus?.("regles.childFriendly")}
                     onBlur={onFieldBlur}
                   />
                   <Label htmlFor="childFriendly" className="font-normal">
@@ -880,8 +855,8 @@ const PropertySubmissionForm = ({
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     id="babyFriendly"
-                    {...methods.register("rules.babyFriendly")}
-                    onFocus={() => onFieldFocus?.("rules.babyFriendly")}
+                    {...methods.register("regles.babyFriendly")}
+                    onFocus={() => onFieldFocus?.("regles.babyFriendly")}
                     onBlur={onFieldBlur}
                   />
                   <Label htmlFor="babyFriendly" className="font-normal">
@@ -891,8 +866,8 @@ const PropertySubmissionForm = ({
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     id="familyFriendly"
-                    {...methods.register("rules.familyFriendly")}
-                    onFocus={() => onFieldFocus?.("rules.familyFriendly")}
+                    {...methods.register("regles.familyFriendly")}
+                    onFocus={() => onFieldFocus?.("regles.familyFriendly")}
                     onBlur={onFieldBlur}
                   />
                   <Label htmlFor="familyFriendly" className="font-normal">
@@ -902,8 +877,8 @@ const PropertySubmissionForm = ({
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     id="childSafetyFeatures"
-                    {...methods.register("rules.childSafetyFeatures")}
-                    onFocus={() => onFieldFocus?.("rules.childSafetyFeatures")}
+                    {...methods.register("regles.childSafetyFeatures")}
+                    onFocus={() => onFieldFocus?.("regles.childSafetyFeatures")}
                     onBlur={onFieldBlur}
                   />
                   <Label htmlFor="childSafetyFeatures" className="font-normal">
@@ -938,8 +913,8 @@ const PropertySubmissionForm = ({
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     id="noCandles"
-                    {...methods.register("rules.noCandles")}
-                    onFocus={() => onFieldFocus?.("rules.noCandles")}
+                    {...methods.register("regles.noCandles")}
+                    onFocus={() => onFieldFocus?.("regles.noCandles")}
                     onBlur={onFieldBlur}
                   />
                   <Label htmlFor="noCandles" className="font-normal">
@@ -949,8 +924,8 @@ const PropertySubmissionForm = ({
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     id="noModifications"
-                    {...methods.register("rules.noModifications")}
-                    onFocus={() => onFieldFocus?.("rules.noModifications")}
+                    {...methods.register("regles.noModifications")}
+                    onFocus={() => onFieldFocus?.("regles.noModifications")}
                     onBlur={onFieldBlur}
                   />
                   <Label htmlFor="noModifications" className="font-normal">
@@ -960,8 +935,8 @@ const PropertySubmissionForm = ({
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     id="cleaningRequired"
-                    {...methods.register("rules.cleaningRequired")}
-                    onFocus={() => onFieldFocus?.("rules.cleaningRequired")}
+                    {...methods.register("regles.cleaningRequired")}
+                    onFocus={() => onFieldFocus?.("regles.cleaningRequired")}
                     onBlur={onFieldBlur}
                   />
                   <Label htmlFor="cleaningRequired" className="font-normal">
@@ -970,12 +945,12 @@ const PropertySubmissionForm = ({
                 </div>
                 <div className="flex items-center space-x-2">
                   <Checkbox
-                    id="trashDisposalRules"
-                    {...methods.register("rules.trashDisposalRules")}
-                    onFocus={() => onFieldFocus?.("rules.trashDisposalRules")}
+                    id="trashDisposalregles"
+                    {...methods.register("regles.trashDisposalregles")}
+                    onFocus={() => onFieldFocus?.("regles.trashDisposalregles")}
                     onBlur={onFieldBlur}
                   />
-                  <Label htmlFor="trashDisposalRules" className="font-normal">
+                  <Label htmlFor="trashDisposalregles" className="font-normal">
                     Règles de tri des déchets à respecter
                   </Label>
                 </div>
@@ -1012,11 +987,11 @@ const PropertySubmissionForm = ({
               Ajoutez des règles spécifiques qui ne sont pas couvertes par les catégories ci-dessus.
             </p>
             <Textarea
-              id="additionalRules"
+              id="additionalregles"
               placeholder="Ajoutez d'autres règles ou précisions importantes pour votre propriété..."
               className="min-h-[100px]"
-              {...methods.register("rules.additionalRules")}
-              onFocus={() => onFieldFocus?.("rules.additionalRules")}
+              {...methods.register("regles.additionalregles")}
+              onFocus={() => onFieldFocus?.("regles.additionalregles")}
               onBlur={onFieldBlur}
             />
           </div>
@@ -1048,8 +1023,8 @@ const PropertySubmissionForm = ({
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="depositWithheld"
-                  {...methods.register("rules.depositWithheld")}
-                  onFocus={() => onFieldFocus?.("rules.depositWithheld")}
+                  {...methods.register("regles.depositWithheld")}
+                  onFocus={() => onFieldFocus?.("regles.depositWithheld")}
                   onBlur={onFieldBlur}
                 />
                 <Label htmlFor="depositWithheld" className="font-normal">
@@ -1059,8 +1034,8 @@ const PropertySubmissionForm = ({
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="earlyTermination"
-                  {...methods.register("rules.earlyTermination")}
-                  onFocus={() => onFieldFocus?.("rules.earlyTermination")}
+                  {...methods.register("regles.earlyTermination")}
+                  onFocus={() => onFieldFocus?.("regles.earlyTermination")}
                   onBlur={onFieldBlur}
                 />
                 <Label htmlFor="earlyTermination" className="font-normal">
@@ -1070,8 +1045,8 @@ const PropertySubmissionForm = ({
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="additionalFees"
-                  {...methods.register("rules.additionalFees")}
-                  onFocus={() => onFieldFocus?.("rules.additionalFees")}
+                  {...methods.register("regles.additionalFees")}
+                  onFocus={() => onFieldFocus?.("regles.additionalFees")}
                   onBlur={onFieldBlur}
                 />
                 <Label htmlFor="additionalFees" className="font-normal">
@@ -1082,8 +1057,8 @@ const PropertySubmissionForm = ({
                 id="penaltyDetails"
                 placeholder="Précisez les conséquences en cas de non-respect des règles..."
                 className="mt-2"
-                {...methods.register("rules.penaltyDetails")}
-                onFocus={() => onFieldFocus?.("rules.penaltyDetails")}
+                {...methods.register("regles.penaltyDetails")}
+                onFocus={() => onFieldFocus?.("regles.penaltyDetails")}
                 onBlur={onFieldBlur}
               />
             </div>
