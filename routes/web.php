@@ -1,14 +1,10 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\SocialiteController;
 use App\Http\Controllers\ProprieteContoller;
 use App\Http\Controllers\FavoriteController ;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
-Route::get("/favoris",[FavoriteController::class,"favoris"]);
-Route::post('/favorites/toggle', [FavoriteController::class, 'toggle'])
-    ->middleware('auth');
 Route::get('/', function () {
     return Inertia::render('app/property/page');
 })->name('home');
@@ -60,6 +56,7 @@ Route::get("/devenir-hote/verification",function(){
 Route::get("/devenir-hote/success",function(){
     return Inertia::render("app/devenir-hote/success/page");
 });
+Route::resource("Favorites",FavoriteController::class);
 Route::resource('Proprietes',ProprieteContoller::class)->except("index");
 Route::get("auth/google",[SocialiteController::class,"redirectToGoogle"]);
 Route::get("auth/google/callback",[SocialiteController::class,"handleGoogleCallback"]);

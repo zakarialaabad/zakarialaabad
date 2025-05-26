@@ -14,7 +14,7 @@ import { router } from "@inertiajs/react";
 // Étendre لاجهة Window لتضمين خاصية مخصصة
 declare global {
   interface Window {
-    propertyPreviewImages?: any[];
+    propertyPreviewimgs?: any[];
   }
 }
 
@@ -81,36 +81,38 @@ interface Owner {
 
 interface Property {
   id: string;
-  title: string;
-  location: string;
-  price: number;
-  priceUnit: string;
-  bedrooms: number;
+  titre: string;
+  localisation: string;
+  prixParMois: number;
+  prixParMoisUnit: string;
+  nbrchambre: number;
   bathrooms: number;
   guests: number;
-  area: number;
-  propertyType: string;
-  tenantType: string;
+  surface: number;
+  type: string;
+  typesLocaires: string;
   rating: number;
   reviewCount: number;
   description: string;
   owner: Owner;
   images: any[];
   amenities: Amenity[];
-  rules: string[];
+  standardRegles: string[];
+  additionalRegles: string[];
+  consequences: string[];
   availability: {
     minStay: number;
     maxStay: number;
     availableFrom: Date;
   };
 }
-
 export default function PropertyPreviewDetails() {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [previewData, setPreviewData] = useState<any>(null);
   const [propertyImages, setPropertyImages] = useState<any[]>([]);
   const [selectedAmenities, setSelectedAmenities] = useState<Amenity[]>([]);
-  const [selectedRules, setSelectedRules] = useState<string[]>([]);
+  const [standardRegles, setStandardRegles] = useState<string[]>([]);
+  const [additionalRegles, setAdditionalRegles] = useState<string[]>([]);
   const [consequences, setConsequences] = useState<string[]>([]);
 
   // Charger les données de prévisualisation depuis le localStorage
@@ -126,10 +128,11 @@ export default function PropertyPreviewDetails() {
         const imageCount = localStorage.getItem("propertyPreviewImageCount");
 
         // Récupérer les images depuis la variable window
-        if (typeof window !== "undefined" && window.propertyPreviewImages && imageCount) {
+        if (typeof window !== "undefined" && window.propertyPreviewimgs && imageCount) {
           // @ts-ignore - Accessing custom property from window
-          const imagesFromWindow = window.propertyPreviewImages;
-          setPropertyImages(imagesFromWindow);
+          const imagesFromWindow = window.propertyPreviewimgs;
+          const safeImages = imagesFromWindow.filter((img, idx, arr) => img && img.preview && typeof img.preview === 'string' && arr.indexOf(img) === idx);
+          setPropertyImages(safeImages);
         } else {
           // Fallback pour la compatibilité avec l'ancien code
           try {
@@ -186,70 +189,87 @@ export default function PropertyPreviewDetails() {
           const formData = localStorage.getItem("propertyDraft");
           if (formData) {
             const parsedFormData = JSON.parse(formData);
-            console.log("Données du formulaire pour les règles:", parsedFormData.rules);
+            console.log("Données du formulaire pour les règles:", parsedFormData.regles);
 
-            // Vérifier si l'objet rules existe
-            if (parsedFormData.rules) {
-              // Créer un tableau de règles
-              const rules: string[] = [];
-              // Créer un tableau pour les conséquences
-              const consequences: string[] = [];
+            // Vérifier si l'objet regles existe
+            if (parsedFormData.regles) {
+              // Créer des tableaux séparés pour chaque catégorie
+              const standardReglesList: string[] = [];
+              const additionalReglesList: string[] = [];
+              const consequencesList: string[] = [];
 
-              // Parcourir toutes les propriétés de l'objet rules
-              Object.entries(parsedFormData.rules).forEach(([key, value]: [string, any]) => {
-                // Traiter les règles booléennes principales (petsAllowed, smokingAllowed, eventsAllowed)
-                if (key === "petsAllowed" || key === "smokingAllowed" || key === "eventsAllowed") {
-                  const label = getRuleLabel(key, value);
+              const formRegles = parsedFormData.regles;
+
+              // Process standard boolean rules (checkboxes)
+              const standardRegleKeys = [
+                'petsAllowed', 'smokingAllowed', 'eventsAllowed', 'smallPetsOnly',
+                'petFee', 'petDeposit', 'smokingOutdoorOnly', 'ecigaretteAllowed',
+                'noDrugs', 'partiesAllowed', 'additionalGuestsAllowed', 'guestRegistration',
+                'quietHours', 'noLoudMusic', 'respectNeighbors', 'noPartiesWeekdays',
+                'childFriendly', 'babyFriendly', 'familyFriendly', 'childSafetyFeatures',
+                'noCandles', 'noModifications', 'cleaningRequired', 'trashDisposalregles'
+              ];
+
+              standardRegleKeys.forEach(key => {
+                // Only add the rule if it was checked (has value "on" or true)
+                if (formRegles[key] === "on" || formRegles[key] === true) {
+                  const label = getRuleLabel(key, true);
                   if (label) {
-                    rules.push(label);
+                    standardReglesList.push(label);
                   }
-                }
-                // Traiter les règles additionnelles (texte libre)
-                else if (key === "additionalRules" && typeof value === "string" && value.trim() !== "") {
-                  // Diviser le texte en lignes et ajouter chaque ligne comme une règle supplémentaire
-                  const additionalRulesLines = value.trim().split("\n");
-                  additionalRulesLines.forEach((line: string) => {
-                    if (line.trim() !== "") {
-                      rules.push(`Règle supplémentaire: ${line.trim()}`);
-                    }
-                  });
-                }
-                // Traiter les conséquences
-                else if (key === "depositWithheld" && value === "on") {
-                  consequences.push("Retenue sur caution possible");
-                } else if (key === "earlyTermination" && value === "on") {
-                  consequences.push("Résiliation anticipée possible");
-                } else if (key === "additionalFees" && value === "on") {
-                  consequences.push("Frais supplémentaires applicables");
-                } else if (key === "penaltyDetails" && typeof value === "string" && value.trim() !== "") {
-                  // Diviser le texte en lignes et ajouter chaque ligne comme une conséquence
-                  const penaltyLines = value.trim().split("\n");
-                  penaltyLines.forEach((line: string) => {
-                    if (line.trim() !== "") {
-                      consequences.push(`Détail: ${line.trim()}`);
-                    }
-                  });
-                }
-                // Traiter toutes les autres règles cochées (valeur "on")
-                else if (value === "on" && typeof ruleLabels[key] === 'string') {
-                  rules.push(ruleLabels[key]);
                 }
               });
 
-              console.log("Règles récupérées:", rules);
-              console.log("Conséquences récupérées:", consequences);
-              setSelectedRules(rules);
-              // Ajouter un état pour les conséquences
-              setConsequences(consequences);
-            } else {
-              console.log("Aucune règle trouvée dans les données du formulaire");
-              setSelectedRules([]);
-              setConsequences([]);
-            }
+              // Process additional rules (textarea)
+              if (typeof formRegles.additionalregles === 'string' && formRegles.additionalregles.trim() !== '') {
+                const additionalreglesLines = formRegles.additionalregles.trim().split('\n');
+                additionalreglesLines.forEach((line: string) => {
+                  if (line.trim() !== '') {
+                    additionalReglesList.push(`Règle supplémentaire: ${line.trim()}`);
+                  }
+                });
+              }
+
+              // Process boolean consequences (checkboxes)
+               const consequenceKeys = ['depositWithheld', 'earlyTermination', 'additionalFees'];
+
+               consequenceKeys.forEach(key => {
+                 // Only add the consequence if it was checked (has value "on" or true)
+                 if (formRegles[key] === "on" || formRegles[key] === true) {
+                   const label = getRuleLabel(key, true);
+                   if (label) {
+                     consequencesList.push(label);
+                   }
+                 }
+               });
+
+               // Process penalty details (textarea)
+               if (typeof formRegles.penaltyDetails === 'string' && formRegles.penaltyDetails.trim() !== '') {
+                 const penaltyLines = formRegles.penaltyDetails.trim().split('\n');
+                 penaltyLines.forEach((line: string) => {
+                   if (line.trim() !== '') {
+                     consequencesList.push(`Détail: ${line.trim()}`);
+                   }
+                 });
+               }
+
+               console.log("Règles standard récupérées:", standardReglesList);
+               console.log("Règles supplémentaires récupérées:", additionalReglesList);
+               console.log("Conséquences récupérées:", consequencesList);
+               setStandardRegles(standardReglesList);
+               setAdditionalRegles(additionalReglesList);
+               setConsequences(consequencesList);
+             } else {
+               console.log("Aucune règle trouvée dans les données du formulaire. Initialisation des listes vides.");
+               setStandardRegles([]);
+               setAdditionalRegles([]);
+               setConsequences([]);
+             }
           }
-        } catch (rulesError) {
-          console.error("Erreur lors du chargement des règles:", rulesError);
-          setSelectedRules([]);
+        } catch (reglesError) {
+          console.error("Erreur lors du chargement des règles:", reglesError);
+          setStandardRegles([]);
+          setAdditionalRegles([]);
           setConsequences([]);
         }
       }
@@ -272,14 +292,14 @@ export default function PropertyPreviewDetails() {
       "Dressing": "Armchair",
       "Buanderie": "Droplets",
       "Internet fibre optique": "Wifi",
-      "Système d’alarme": "Bell",
+      "Système d'alarme": "Bell",
       "Porte blindée": "Lock",
       "Rideaux électriques": "Blinds",
       "Cheminée": "Flame",
       "Ascenseur": "ArrowUpDown",
       "Espace bureau à domicile": "Briefcase",
       "Éclairage encastré": "Lightbulb",
-  
+
       // Extérieur
       "Jardin privé": "Flower2",
       "Piscine privée": "Waves",
@@ -292,10 +312,10 @@ export default function PropertyPreviewDetails() {
       "Garage privé ou fermé": "Car",
       "Aire de jeux pour enfants": "CircleDot",
       "Clôture extérieure": "CircleDot",
-      "Système d’arrosage automatique": "Droplets",
+      "Système d'arrosage automatique": "Droplets",
       "Espace vert partagé": "Sprout",
       "Parking": "ParkingSquare",
-  
+
       // À proximité
       "École": "GraduationCap",
       "Supermarché": "Store",
@@ -323,14 +343,15 @@ export default function PropertyPreviewDetails() {
       "Collège ou lycée": "GraduationCap",
       "Clinique vétérinaire": "Stethoscope",
       "Parc pour enfants": "CircleDot",
-      "Centre d’affaires": "Briefcase",
+      "Centre d'affaires": "Briefcase",
       "Poste de police": "Shield",
       "Bureau de poste": "Mail",
       "Zone industrielle proche": "Factory",
     };
-  
+
     return iconMapping[name] || (category === "Intérieur" ? "Home" : category === "Extérieur" ? "Tree" : "MapPin");
   };
+
   // Si les données ne sont pas encore chargées, afficher un indicateur de chargement
   if (!isLoaded) {
     return (
@@ -358,23 +379,23 @@ export default function PropertyPreviewDetails() {
   // Données pour la prévisualisation
   const property: Property = {
     id: "preview",
-    title: previewData.title || "Titre de votre annonce",
-    location: previewData.district
+    titre: previewData.titre || "Titre de votre annonce",
+    localisation: previewData.district
       ? `${previewData.district.replace(/-/g, " ").replace(/\b\w/g, (l: string) => l.toUpperCase())}, ${previewData.city}`
       : previewData.city,
-    price: previewData.price || 1500,
-    priceUnit: "MAD/mois",
-    bedrooms: previewData.bedrooms || 1,
+    prixParMois: previewData.prixParMois || 1500,
+    prixParMoisUnit: "MAD/mois",
+    nbrchambre: previewData.nbrchambre || 1,
     bathrooms: previewData.bathrooms || 1,
     guests: previewData.maxGuests || 2,
-    area: previewData.area || 50,
-    propertyType: previewData.propertyType || "Appartement",
-    tenantType: previewData.tenantType || "tous",
+    surface: previewData.surface || 50,
+    type: previewData.type || "Appartement",
+    typesLocaires: previewData.typesLocaires || "tous",
     rating: 4.8,
     reviewCount: 32,
     description:
       previewData.description ||
-      "Magnifique appartement moderne situé dans un quartier calme et sécurisé. Profitez d'une vue imprenable sur la ville depuis le balcon spacieux. L'appartement est entièrement meublé et équipé pour vous offrir un confort optimal. Idéal pour les familles ou les professionnels en quête d'un logement de qualité pour une location longue durée.",
+      "Magnifique appartement moderne situé dans un quartier calme et sécurisé. Profitez d'une vue imprenable sur la ville depuis le balcon spacieux. L'appartement est entièrement meublé et équipé pour vous offrir un confort optimal. Idéal pour les familles ou les professionnels en quête d'un logement de qualité pour une localisation longue durée.",
     owner: {
       id: "owner1",
       name: "Vous (Propriétaire)",
@@ -385,8 +406,10 @@ export default function PropertyPreviewDetails() {
       joinedDate: "Janvier 2023",
     },
     images: propertyImages,
-    amenities: selectedAmenities, // Utiliser les caractéristiques sélectionnées
-    rules: selectedRules,
+    amenities: selectedAmenities,
+    standardRegles: standardRegles,
+    additionalRegles: additionalRegles,
+    consequences: consequences,
     availability: {
       minStay: previewData.minStay || 1,
       maxStay: previewData.maxStay || 12,
@@ -395,7 +418,7 @@ export default function PropertyPreviewDetails() {
   };
 
   // Fonction pour obtenir le libellé du type de locataire
-  const getTenantTypeLabel = (type: string): string => {
+  const gettypesLocairesLabel = (type: string): string => {
     switch (type) {
       case "tous":
         return "Tous types de locataires";
@@ -413,6 +436,7 @@ export default function PropertyPreviewDetails() {
         return "Tous types de locataires";
     }
   };
+
   // Variantes d'animation pour les différentes sections
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -433,6 +457,8 @@ export default function PropertyPreviewDetails() {
       transition: { duration: 0.5 },
     },
   };
+
+  console.log("الصور الممررة للمعرض:", property.images);
 
   return (
     <AnimatePresence>
@@ -459,7 +485,16 @@ export default function PropertyPreviewDetails() {
           </div>
 
           {/* Galerie de photos - déjà animée dans le composant */}
-          <PropertyGallery images={property.images} title={property.title} />
+          <PropertyGallery
+            title={property.titre}
+            images={property.images.map((img) =>
+              img && typeof img.preview === 'string'
+                ? img.preview
+                : typeof img === 'string'
+                  ? img
+                  : '/placeholder.svg'
+            )}
+          />
 
           {/* Contenu principal avec animations séquentielles */}
           <motion.div
@@ -474,11 +509,11 @@ export default function PropertyPreviewDetails() {
                 <div className="flex items-start justify-between">
                   <div>
                     <motion.h1 variants={itemVariants} className="text-2xl font-bold text-gray-900 md:text-3xl">
-                      {property.title}
+                      {property.titre}
                     </motion.h1>
                     <motion.div variants={itemVariants} className="mt-2 flex items-center text-sm text-gray-600">
                       <MapPin className="mr-1 h-4 w-4 text-gray-400" />
-                      <span>{property.location}</span>
+                      <span>{property.localisation}</span>
                     </motion.div>
                   </div>
                   <motion.div variants={itemVariants} className="flex space-x-2">
@@ -520,18 +555,18 @@ export default function PropertyPreviewDetails() {
                       className="flex items-center gap-1 rounded-full border-purple-300 bg-purple-50 px-3 py-1 text-purple-700"
                     >
                       <Users className="h-3.5 w-3.5 text-purple-500" />
-                      <span className="font-medium">{getTenantTypeLabel(property.tenantType)}</span>
+                      <span className="font-medium">{gettypesLocairesLabel(property.typesLocaires)}</span>
                     </Badge>
                   </div>
 
                   <div className="flex items-center text-sm text-gray-600">
-                    <span className="font-medium">{property.bedrooms}</span>
-                    <span className="mx-1">chambre{property.bedrooms > 1 ? "s" : ""}</span>
+                    <span className="font-medium">{property.nbrchambre}</span>
+                    <span className="mx-1">chambre{property.nbrchambre > 1 ? "s" : ""}</span>
                     <span className="mx-2">•</span>
                     <span className="font-medium">{property.bathrooms}</span>
                     <span className="mx-1">salle{property.bathrooms > 1 ? "s" : ""} de bain</span>
                     <span className="mx-2">•</span>
-                    <span className="font-medium">{property.area}</span>
+                    <span className="font-medium">{property.surface}</span>
                     <span className="mx-1">m²</span>
                   </div>
                 </motion.div>
@@ -542,10 +577,10 @@ export default function PropertyPreviewDetails() {
                   <TabsList className="grid w-full grid-cols-4">
                     <TabsTrigger value="description">Description</TabsTrigger>
                     <TabsTrigger value="amenities">Caractéristiques</TabsTrigger>
-                    <TabsTrigger value="rules">Règles</TabsTrigger>
-                    <TabsTrigger value="location">Emplacement</TabsTrigger>
+                    <TabsTrigger value="regles">Règles</TabsTrigger>
+                    <TabsTrigger value="localisation">Emplacement</TabsTrigger>
                   </TabsList>
-                  <AnimatePresence mode="wait">
+                  <AnimatePresence>
                     <TabsContent value="description" className="mt-6">
                       <motion.div
                         initial={{ opacity: 0, y: 10 }}
@@ -562,7 +597,7 @@ export default function PropertyPreviewDetails() {
                               <h4 className="font-medium text-blue-800">Informations importantes</h4>
                               <p className="mt-1 text-sm text-blue-700">
                                 Ce logement est disponible pour une durée de {property.availability.minStay} à{" "}
-                                {property.availability.maxStay} mois. Contrat de location et dépôt de garantie requis.
+                                {property.availability.maxStay} mois. Contrat de localisation et dépôt de garantie requis.
                               </p>
                             </div>
                           </div>
@@ -580,7 +615,7 @@ export default function PropertyPreviewDetails() {
                         <PropertyPreviewAmenities amenities={selectedAmenities} previewData={previewData} />
                       </motion.div>
                     </TabsContent>
-                    <TabsContent value="rules" className="mt-6">
+                    <TabsContent value="regles" className="mt-6">
                       <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -589,34 +624,37 @@ export default function PropertyPreviewDetails() {
                         className="space-y-4"
                       >
                         <h3 className="text-lg font-medium text-gray-900">Règles du logement</h3>
-                        {selectedRules.length > 0 ? (
+                        {(standardRegles.length > 0 || additionalRegles.length > 0 || consequences.length > 0) ? (
                           <div className="space-y-4">
                             {/* Règles standard */}
-                            <ul className="space-y-2">
-                              {selectedRules
-                                .filter((rule) => !rule.startsWith("Règle supplémentaire:"))
-                                .map((rule, index) => (
-                                  <motion.li
-                                    key={index}
-                                    initial={{ opacity: 0, x: -10 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: index * 0.1 }}
-                                    className="flex items-center text-gray-700"
-                                  >
-                                    <div className="mr-3 h-1.5 w-1.5 rounded-full bg-primary"></div>
-                                    {rule}
-                                  </motion.li>
-                                ))}
-                            </ul>
+                            {standardRegles.length > 0 && (
+                              <div className="space-y-2">
+                                <h4 className="text-md font-medium text-gray-800 mb-2">Règles générales</h4>
+                                <ul className="space-y-2">
+                                  {standardRegles
+                                    .map((regle: string, index: number) => (
+                                      <motion.li
+                                        key={index}
+                                        initial={{ opacity: 0, x: -10 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        transition={{ delay: index * 0.1 }}
+                                        className="flex items-center text-gray-700"
+                                      >
+                                        <div className="mr-3 h-1.5 w-1.5 rounded-full bg-primary"></div>
+                                        {regle}
+                                      </motion.li>
+                                    ))}
+                                </ul>
+                              </div>
+                            )}
 
                             {/* Règles supplémentaires */}
-                            {selectedRules.some((rule) => rule.startsWith("Règle supplémentaire:")) && (
+                            {additionalRegles.length > 0 && (
                               <div className="mt-4 pt-4 border-t border-gray-200">
                                 <h4 className="text-md font-medium text-gray-800 mb-2">Règles supplémentaires</h4>
                                 <ul className="space-y-2">
-                                  {selectedRules
-                                    .filter((rule) => rule.startsWith("Règle supplémentaire:"))
-                                    .map((rule, index) => (
+                                  {additionalRegles
+                                    .map((regle: string, index: number) => (
                                       <motion.li
                                         key={`additional-${index}`}
                                         initial={{ opacity: 0, x: -10 }}
@@ -625,7 +663,7 @@ export default function PropertyPreviewDetails() {
                                         className="flex items-center text-gray-700"
                                       >
                                         <div className="mr-3 h-1.5 w-1.5 rounded-full bg-amber-500"></div>
-                                        {rule.replace("Règle supplémentaire:", "").trim()}
+                                        {regle.replace("Règle supplémentaire:", "").trim()}
                                       </motion.li>
                                     ))}
                                 </ul>
@@ -690,30 +728,27 @@ export default function PropertyPreviewDetails() {
                         )}
                       </motion.div>
                     </TabsContent>
-                    <TabsContent value="location" className="mt-6">
+                    <TabsContent value="localisation" className="mt-6">
                       <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
                         transition={{ duration: 0.3 }}
                       >
-                        <PropertyMap location={property.location} />
+                        <PropertyMap location={property.localisation} />
                       </motion.div>
                     </TabsContent>
                   </AnimatePresence>
                 </Tabs>
               </motion.div>
-
               {/* Informations sur le propriétaire avec animation */}
-             
             </motion.div>
-
             {/* Colonne latérale avec formulaire de réservation */}
             <motion.div variants={itemVariants} className="md:col-span-1">
               <div className="sticky top-24">
                 <PropertyReservationForm
-                  price={property.price}
-                  priceUnit={property.priceUnit}
+                  price={property.prixParMois}
+                  priceUnit={property.prixParMoisUnit}
                   maxGuests={property.guests}
                   owner={property.owner}
                 />

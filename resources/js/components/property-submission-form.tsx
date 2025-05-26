@@ -1,14 +1,15 @@
-import type React from "react"
-import { Checkbox } from "@/components/ui/checkbox"
-import { useFormContext } from "react-hook-form"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "./ui/textarea" 
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { PropertyTypeSelect } from "./property-type-select" 
-import { useState, useEffect } from "react"
-import { X, Upload, ImageIcon } from "lucide-react"
+import type React from "react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { useFormContext } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { PropertyTypeSelect } from "./property-type-select";
+import { useState, useEffect } from "react";
+import { X, Upload, ImageIcon } from "lucide-react";
+
 type PreviewFields =
   | "titre"
   | "description"
@@ -22,6 +23,8 @@ type PreviewFields =
   | "bathrooms"
   | "imgs"
   | "prixParMois"
+  | "minimumStay"
+  | "availableFrom"
   | "regles.petsAllowed"
   | "regles.smokingAllowed"
   | "regles.smallPetsOnly"
@@ -51,15 +54,17 @@ type PreviewFields =
   | 'regles.earlyTermination'
   | 'regles.additionalFees'
   | 'regles.penaltyDetails';
+
 interface PropertySubmissionFormProps {
-  onSubmit: (data: any) => void
-  onFieldFocus?: (fieldName: PreviewFields) => void
-  onFieldBlur?: () => void
-  currentStep?: number
-  goToNextStep?: () => void
-  goToPreviousStep?: () => void
-  totalSteps?: number
+  onSubmit: (data: any) => void;
+  onFieldFocus?: (fieldName: PreviewFields) => void;
+  onFieldBlur?: () => void;
+  currentStep?: number;
+  goToNextStep?: () => void;
+  goToPreviousStep?: () => void;
+  totalSteps?: number;
 }
+
 interface ImagePreview {
   preview: string;
   fileInfo: {
@@ -68,6 +73,7 @@ interface ImagePreview {
     type: string;
   } | null;
 }
+
 const PropertySubmissionForm = ({
   onSubmit,
   onFieldFocus,
@@ -77,55 +83,63 @@ const PropertySubmissionForm = ({
   goToPreviousStep,
   totalSteps = 8,
 }: PropertySubmissionFormProps) => {
-  const methods = useFormContext()
-  const [imageFiles, setImageFiles] = useState<File[]>([])
-  const [imagePreviews, setImagePreviews] = useState<string[]>([])
+  const methods = useFormContext();
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+
   // Handle image upload
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      const files = Array.from(e.target.files)
-      const newFiles = [...imageFiles]
-      const newPreviews = [...imagePreviews]
-      // Only add new files up to a maximum of 5 total
+      const files = Array.from(e.target.files);
+      const newFiles = [...imageFiles];
+      const newPreviews = [...imagePreviews];
+      const formImages: { preview: string; fileInfo: { name: string; size: number; type: string } }[] = [];
+
+      let filesProcessed = 0;
+
       files.forEach((file) => {
         if (newFiles.length < 5) {
-          newFiles.push(file)
-          const reader = new FileReader()
+          newFiles.push(file);
+          const reader = new FileReader();
           reader.onload = () => {
             if (reader.result) {
-              newPreviews.push(reader.result.toString())
-              setImagePreviews([...newPreviews])
-
-              // Update form data with image previews only (not file objects)
-              const formImages = newPreviews.map((preview, index) => ({
-                preview,
-                // Store file name and size instead of the full file object
+              newPreviews.push(reader.result.toString());
+              formImages.push({
+                preview: reader.result.toString(),
                 fileInfo: {
-                  name: newFiles[index].name,
-                  size: newFiles[index].size,
-                  type: newFiles[index].type,
+                  name: file.name,
+                  size: file.size,
+                  type: file.type,
                 },
-              }))
-              methods.setValue("imgs", formImages)
-              onFieldFocus?.("imgs")
+              });
             }
-          }
-          reader.readAsDataURL(file)
+            filesProcessed++;
+            // When all files are processed, update state and form
+            if (filesProcessed === files.length) {
+              setImageFiles([...newFiles]);
+              setImagePreviews([...newPreviews]);
+              methods.setValue("imgs", formImages);
+              onFieldFocus?.("imgs");
+            }
+          };
+          reader.readAsDataURL(file);
+        } else {
+          filesProcessed++;
         }
-      })
-      setImageFiles(newFiles)
+      });
     }
-  }
+  };
+
   // Remove an image
   const removeImage = (index: number) => {
-    const newFiles = [...imageFiles]
-    const newPreviews = [...imagePreviews]
+    const newFiles = [...imageFiles];
+    const newPreviews = [...imagePreviews];
 
-    newFiles.splice(index, 1)
-    newPreviews.splice(index, 1)
+    newFiles.splice(index, 1);
+    newPreviews.splice(index, 1);
 
-    setImageFiles(newFiles)
-    setImagePreviews(newPreviews)
+    setImageFiles(newFiles);
+    setImagePreviews(newPreviews);
 
     // Update form data with remaining images
     const formImages = newPreviews.map((preview, idx) => ({
@@ -137,39 +151,34 @@ const PropertySubmissionForm = ({
             type: newFiles[idx].type,
           }
         : null,
-    }))
-    methods.setValue("imgs", formImages)
-  }
+    }));
+    methods.setValue("imgs", formImages);
+  };
 
   // Load existing images from form data if available
   useEffect(() => {
-    const existingImages = methods.watch("") as ImagePreview[] | undefined;
+    const existingImages = methods.watch("imgs") as ImagePreview[] | undefined;
     if (existingImages && existingImages.length > 0) {
       setImagePreviews(existingImages.map((img) => img.preview));
     }
-  }, [methods])
+  }, [methods]);
 
-  // Fonction pour gérer la navigation entre les étapes en sautant l'étape 6
+  // Function to handle navigation between steps by skipping step 6
   const handleNext = () => {
-    // Si nous sommes à l'étape 5, passer directement à l'étape 7
-    if (currentStep === 5) {
-      goToNextStep?.()
-      goToNextStep?.()
-    } else {
-      goToNextStep?.()
-    }
-  }
+    goToNextStep?.();
 
-  // Fonction pour gérer le retour en arrière en sautant l'étape 6
+  };
+
+  // Function to handle going back by skipping step 6
   const handlePrevious = () => {
-    // Si nous sommes à l'étape 7, revenir directement à l'étape 5
+    // If we are at step 7, go back directly to step 5
     if (currentStep === 7) {
-      goToPreviousStep?.()
-      goToPreviousStep?.()
+      goToPreviousStep?.();
+      goToPreviousStep?.();
     } else {
-      goToPreviousStep?.()
+      goToPreviousStep?.();
     }
-  }
+  };
 
   return (
     <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6">
@@ -177,7 +186,7 @@ const PropertySubmissionForm = ({
         <div>
           <h2>Informations de base</h2>
           <Label htmlFor="titre">Titre de l'annonce</Label>
-          <Input id="titre" {...methods.register("titre")}            onFocus={() => onFieldFocus?.("titre")} onBlur={onFieldBlur} />
+          <Input id="titre" {...methods.register("titre")} onFocus={() => onFieldFocus?.("titre")} onBlur={onFieldBlur} />
 
           <Label htmlFor="description">Description</Label>
           <Textarea
@@ -187,22 +196,22 @@ const PropertySubmissionForm = ({
             onBlur={onFieldBlur}
           />
 
-          <Label htmlFor="typesLocaires">Type de bien</Label>
+          <Label htmlFor="type">Type de bien</Label>
           <PropertyTypeSelect
-            value={methods.watch("typesLocaires")}
-            onValueChange={(value) => methods.setValue("typesLocaires", value)}
-            onFocus={() => onFieldFocus?.("typesLocaires")}
+            value={methods.watch("type")}
+            onValueChange={(value) => methods.setValue("type", value)}
+            onFocus={() => onFieldFocus?.("type")}
             onBlur={onFieldBlur}
           />
 
-          <Label htmlFor="type">Type de locataire idéal</Label>
+          <Label htmlFor="typesLocaires">Type de locataire idéal</Label>
           <Select
-            onValueChange={(value) => methods.setValue("type", value)}
+            onValueChange={(value) => methods.setValue("typesLocaires", value)}
             onOpenChange={(open) => {
-              if (open) onFieldFocus?.("type")
-              else onFieldBlur?.()
+              if (open) onFieldFocus?.("typesLocaires");
+              else onFieldBlur?.();
             }}
-            value={methods.watch("type")}
+            value={methods.watch("typesLocaires")}
           >
             <SelectTrigger data-tenant-type="true">
               <SelectValue placeholder="Sélectionner un type" />
@@ -238,8 +247,8 @@ const PropertySubmissionForm = ({
           <Select
             onValueChange={(value) => methods.setValue("ville", value)}
             onOpenChange={(open) => {
-              if (open) onFieldFocus?.("ville")
-              else onFieldBlur?.()
+              if (open) onFieldFocus?.("ville");
+              else onFieldBlur?.();
             }}
             value={methods.watch("ville")}
           >
@@ -274,13 +283,13 @@ const PropertySubmissionForm = ({
           <Select
             onValueChange={(value) => methods.setValue("localisation", value)}
             onOpenChange={(open) => {
-              if (open) onFieldFocus?.("localisation")
-              else onFieldBlur?.()
+              if (open) onFieldFocus?.("localisation");
+              else onFieldBlur?.();
             }}
             value={methods.watch("localisation")}
             disabled={!methods.watch("ville")}
           >
-            <SelectTrigger id="district" className="w-full">
+            <SelectTrigger id="localisation" className="w-full">
               <SelectValue
                 placeholder={
                   methods.watch("ville") ? "Sélectionner un quartier" : "Veuillez d'abord sélectionner une ville"
@@ -506,9 +515,6 @@ const PropertySubmissionForm = ({
             onFocus={() => onFieldFocus?.("prixParMois")}
             onBlur={onFieldBlur}
           />
-
-          <Label htmlFor="availableFrom">Disponible à partir de</Label>
-          
         </div>
       )}
 
@@ -834,7 +840,7 @@ const PropertySubmissionForm = ({
                     <path d="M9 12h.01" />
                     <path d="M15 12h.01" />
                     <path d="M10 16c.5.3 1.5.5 2 .5s1.5-.2 2-.5" />
-                    <path d="M19 6.3a9 9 0 0 1 1.8 3.9 2 2 0 0 1 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 1 0-3.6A9 9 0 0 1 5 6.3" />
+                    <path d="M19 6.3a9 9 0 0 1 1.8 3.9 2 2 0 0 0 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 0 0-3.6A9 9 0 0 1 5 6.3" />
                     <path d="M6 9a6 6 0 0 1 12 0" />
                   </svg>
                 </span>
@@ -1066,7 +1072,7 @@ const PropertySubmissionForm = ({
         </div>
       )}
 
-      {/* L'étape 8 est masquée conformément à la demande */}
+      {/* Step 8 is hidden as per the request */}
 
       <div className="flex justify-between">
         {currentStep > 1 && (
@@ -1083,9 +1089,9 @@ const PropertySubmissionForm = ({
         )}
       </div>
     </form>
-  )
-}
+  );
+};
 
-// Ajouter à la fois l'export nommé et l'export par défaut
-export { PropertySubmissionForm }
-export default PropertySubmissionForm
+// Export both named and default exports
+export { PropertySubmissionForm };
+export default PropertySubmissionForm;

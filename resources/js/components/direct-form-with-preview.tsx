@@ -93,7 +93,7 @@ export interface FormValues {
   typesLocaires: string;
   ville: string;
   localisation: string;
-  address: string;
+  adresse: string;
   surface: number;
   rooms: number;
   nbrchambre: number;
@@ -115,14 +115,13 @@ export  function DirectFormWithPreview() {
   // Prévisualisation toujours active
   const [showPreview] = useState(true)
   type PreviewFields =
- 
   | "titre"
   | "description"
   | "type"
   | "typesLocaires"
   | "ville"
   | "localisation"
-  | "address"
+  | "adresse"
   | "surface"
   | "nbrchambre"
   | "bathrooms"
@@ -153,7 +152,7 @@ export  function DirectFormWithPreview() {
     "typesLocaires",
     "ville",
     "localisation",
-    "address",
+    "adresse",
     "surface",
     "nbrchambre",
     "bathrooms",
@@ -182,7 +181,7 @@ export  function DirectFormWithPreview() {
       typesLocaires: "all",
       ville: "",
       localisation: "no-localisation",
-      address: "",
+      adresse: "",
       surface: 0,
       rooms: 1,
       nbrchambre: 1,
@@ -237,6 +236,10 @@ export  function DirectFormWithPreview() {
             parsedDraft.availableFrom = new Date(parsedDraft.availableFrom);
           }
 
+          if (parsedDraft.imgs && Array.isArray(parsedDraft.imgs)) {
+            parsedDraft.imgs = parsedDraft.imgs.filter(img => img && img.preview);
+          }
+
           (Object.entries(parsedDraft) as [keyof FormValues, any][]).forEach(
             ([key, value]) => {
               methods.setValue(key, value);
@@ -283,68 +286,35 @@ export  function DirectFormWithPreview() {
     setTimeout(() => setActiveField(null), 500)
   }
 
-  // Fonction pour passer à l'étape suivante
-  const goToNextStep = () => {
+ // Fonction pour passer à l'étape suivante
+ const goToNextStep = () => {
     try {
       // Sauvegarder l'état actuel du formulaire
-      const currentFormData = methods.getValues()
-
-      // Créer une copie sécurisée pour la sérialisation
-      const safeFormData = { ...currentFormData }
-
-      // Traiter les imgs pour éviter les erreurs de sérialisation
-      if (safeFormData.imgs && Array.isArray(safeFormData.imgs)) {
-        // Stocker uniquement les URLs des imgs, pas les objets File
-        safeFormData.imgs = safeFormData.imgs.map((img) => ({
-          preview: typeof img.preview === "string" ? img.preview : null,
-          // Ne pas inclure l'objet File qui n'est pas sérialisable
-        }))
-      }
-
-      // Convertir les dates en chaînes de caractères
-      if (safeFormData.availableFrom instanceof Date) {
-        safeFormData.availableFrom = safeFormData.availableFrom.toISOString()
-      }
-
-      // Sauvegarder les données sécurisées
+      const currentFormData = methods.getValues();
+      // Exclure les images et documents du brouillon pour éviter le quota exceeded
+      const minimalData: any = { ...currentFormData };
+      delete minimalData.imgs;
+      delete minimalData.documents;
       try {
-        localStorage.setItem("propertyDraft", JSON.stringify(safeFormData))
-        localStorage.setItem("lastFormStep", currentStep.toString())
-      } catch (storageError) {
-        console.warn("Impossible de sauvegarder le brouillon complet:", storageError)
-
-        // Essayer de sauvegarder une version minimale sans les imgs
-        try {
-          const minimalData = { ...safeFormData }
-          delete minimalData.imgs
-          localStorage.setItem("propertyDraft", JSON.stringify(minimalData))
-          localStorage.setItem("lastFormStep", currentStep.toString())
-        } catch (minimalStorageError) {
-          console.error("Impossible de sauvegarder même les données minimales:", minimalStorageError)
-          // Continuer sans sauvegarder
-        }
+        localStorage.setItem("propertyDraft", JSON.stringify(minimalData));
+        localStorage.setItem("lastFormStep", currentStep.toString());
+      } catch (e) {
+        console.warn("Impossible de sauvegarder le brouillon complet:", e);
       }
-
-      // Mettre à jour l'étape - Assurons-nous de passer à l'étape suivante sans en sauter
+      // Mettre à jour l'étape
       if (currentStep < totalSteps) {
-        // Incrémenter l'étape de 1 (sans sauter d'étapes)
-        const nextStep = currentStep + 1
-        console.log(`Passage de l'étape ${currentStep} à l'étape ${nextStep}`)
-        setCurrentStep(nextStep)
-
+        setCurrentStep((prev) => prev + 1);
         // Forcer la mise à jour de la prévisualisation
-        const previewElement = document.getElementById("property-preview")
+        const previewElement = document.getElementById("property-preview");
         if (previewElement) {
-          previewElement.scrollIntoView({ behavior: "smooth", block: "center" })
+          previewElement.scrollIntoView({ behavior: "smooth", block: "center" });
         }
       }
     } catch (error) {
-      console.error("Erreur lors du passage à l'étape suivante:", error)
+      console.error("Erreur lors du passage à l'étape suivante:", error);
       // Continuer à l'étape suivante même en cas d'erreur
       if (currentStep < totalSteps) {
-        const nextStep = currentStep + 1
-        console.log(`Passage à l'étape ${nextStep} malgré une erreur`)
-        setCurrentStep(nextStep)
+        setCurrentStep((prev) => prev + 1);
       }
     }
   }
@@ -406,7 +376,8 @@ export  function DirectFormWithPreview() {
       const newInvoices = [...uploadedFiles.invoices]
       files.forEach((file) => {
         if (newInvoices.length < 3) {
-          newInvoices.push(file)
+          const preview = URL.createObjectURL(file);
+          newInvoices.push({ preview, fileInfo: { name: file.name, size: file.size } })
         }
       })
       setUploadedFiles({ ...uploadedFiles, invoices: newInvoices })
@@ -418,8 +389,9 @@ export  function DirectFormWithPreview() {
   const handleIdCardUpload = (e: React.ChangeEvent<HTMLInputElement>): void =>  {
     const files = Array.from(e.target.files || [])
     if (files.length > 0) {
-      setUploadedFiles({ ...uploadedFiles, idCard: files[0] })
-      methods.setValue("documents.idCard", files[0])
+      const preview = URL.createObjectURL(files[0]);
+      setUploadedFiles({ ...uploadedFiles, idCard: { preview, fileInfo: { name: files[0].name, size: files[0].size } } })
+      methods.setValue("documents.idCard", { preview, fileInfo: { name: files[0].name, size: files[0].size } })
     }
   }
 
@@ -444,67 +416,6 @@ export  function DirectFormWithPreview() {
     handleFieldBlur,
     activeField,
   }
-
-  const getIconForAmenity = (name: string, category: string): string => {
-    const iconMapping: { [key: string]: string } = {
-      "Balcon spacieux": "Flower2",
-      "Toilette moderne": "Bath",
-      "Chauffage central": "Flame",
-      Climatisation: "Wind",
-      "Cuisine équipée": "UtensilsCrossed",
-      "Placards intégrés": "LayoutGrid",
-      "Fenêtres double vitrage": "Square",
-      Dressing: "Armchair",
-      Buanderie: "Droplets",
-      "Internet fibre optique": "Zap",
-      "Système d'alarme": "Bell",
-      "Porte blindée": "Lock",
-      "Rideaux électriques": "Blinds",
-      Cheminée: "Flame",
-      Ascenseur: "ArrowUpDown",
-      "Espace bureau à domicile": "Briefcase",
-      "Éclairage encastré": "Lightbulb",
-      "Jardin privé": "Flower2",
-      "Piscine privée": "SwimmingPool",
-      "Terrasse ou patio": "Sun",
-      "Cour intérieure": "Trees",
-      "Espace barbecue": "Flame",
-      "Toit exploitable": "Home",
-      "Grandes fenêtres extérieures": "Square",
-      "Façade sur mer / montagne": "Mountain",
-      "Garage privé ou fermé": "Car",
-      "Aire de jeux pour enfants": "CircleDot",
-      "Clôture extérieure": "CircleDot",
-      "Système d'arrosage automatique": "Droplets",
-      "Espace vert partagé": "Sprout",
-      Parking: "ParkingSquare",
-      "Transports en commun": "Bus",
-      "Écoles et universités": "GraduationCap",
-      "Commerces et supermarchés": "Store",
-      "Restaurants et cafés": "Coffee",
-      "Parcs et espaces verts": "Trees",
-      "Centres médicaux": "Stethoscope",
-      "Centres sportifs": "Dumbbell",
-      "Centres commerciaux": "ShoppingBag",
-      Plages: "Waves",
-      "Lieux culturels": "Landmark",
-      "Lieux de culte": "Church",
-      Pharmacies: "Pill",
-      Banques: "Building",
-      "Marchés locaux": "Store",
-    };
-
-    return (
-      iconMapping[name] ||
-      (category === "Intérieur"
-        ? "DoorOpen"
-        : category === "Extérieur"
-        ? "TreePine"
-        : "MapPin")
-    );
-  };
-
-
   // Navigate to dashboard
   const navigateToDashboard = () => {
     router.visit("/dashboard")
@@ -1046,7 +957,6 @@ export  function DirectFormWithPreview() {
                               'Caractéristiques' de la page de prévisualisation, regroupé par catégorie.
                             </p>
                           </div>
-
                           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
                             {[
                               { name: "Balcon spacieux", icon: <Flower2 size={16} /> },

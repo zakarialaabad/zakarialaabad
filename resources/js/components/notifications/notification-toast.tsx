@@ -128,7 +128,7 @@ export function NotificationToast({
             </div>
             {autoClose && (
               <div
-                className="absolute bottom-0 left-0 h-1 bg-primary"
+                className="absolute bottom-0 left-0 h-1 bg-[#465baa]"
                 style={{ width: `${progress}%`, transition: "width 100ms linear" }}
               />
             )}

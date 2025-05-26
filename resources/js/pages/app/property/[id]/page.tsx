@@ -282,6 +282,22 @@ export default function PropertyDetails({ propriete }: InertiaPageProps) {
     },
   };
 
+  let regles: string[] = [];
+  try {
+    if (typeof propriete.regles === "string") {
+      const temp = JSON.parse(propriete.regles);
+      if (Array.isArray(temp)) {
+        regles = temp;
+      }
+    } else if (Array.isArray(propriete.regles)) {
+      regles = propriete.regles;
+    } else {
+      regles = [];
+    }
+  } catch (e) {
+    regles = [];
+  }
+
   if (!isLoaded) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -447,7 +463,7 @@ export default function PropertyDetails({ propriete }: InertiaPageProps) {
                         >
                           <h3 className="text-lg font-medium text-gray-900">Règles du logement</h3>
                           <ul className="space-y-2">
-                            {propriete.regles.map((rule, index) => (
+                            {regles.map((rule, index) => (
                               <motion.li
                                 key={index}
                                 initial={{ opacity: 0, x: -10 }}

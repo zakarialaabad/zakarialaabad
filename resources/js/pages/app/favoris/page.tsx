@@ -14,9 +14,7 @@ import { usePage } from "@inertiajs/react"
 type Propriete = {
   id: number;
   loueur_id: number;
-  ville:string;
   titre: string;
-  typesLocaires:string;
   localisation: string;
   prixParMois: number;
   imgs: string[];
@@ -38,22 +36,47 @@ type Propriete = {
       profile: string;
     };
   };
+  commodites: {
+    id: number;
+    commodite: string;
+    categorie: string;
+  }[];
+};
+type User = {
+  id: number;
+  name: string;
+  email: string;
+};
+
+type PageProps = {
+  auth: {
+    user: User | null;
+  };
 };
 type InertiaPageProps = {
   proprietes: Propriete[];
 };
 export default function FavoritesPage() {
-  const { favorites } = useFavorites()
-  const { proprietes } = usePage<InertiaPageProps>().props;
-  const { isAuthenticated } = useAuth()
+const {
+  auth = { user: null },            // تعيين قيمة افتراضية ل auth.user = null
+  proprietes = [],                  // تعيين قيمة افتراضية لمصفوفة propriete
+  favoriteIds = [],                 // تعيين قيمة افتراضية لمصفوفة favoriteIds
+} = usePage<{
+  proprietes: Propriete[],
+  favoriteIds: number[],
+  auth: { user: User | null }
+}>().props;
   const [favoriteProperties, setFavoriteProperties] = useState<Propriete[]>([])
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
   useEffect(() => { 
      console.log(proprietes)
-    // Filtrer les propriétés qui sont dans les favoris
-    const favProps = proprietes.filter((propriete) => favorites.includes(propriete.id))
+     if(auth.user && favoriteIds.length>0){
+  const favProps = proprietes.filter((propriete) => favoriteIds.includes(propriete.id))
     setFavoriteProperties(favProps)
-  }, [favorites])
+     }
+    // Filtrer les propriétés qui sont dans les favoris
+  
+  }, [favoriteIds, proprietes, auth.user])
   const container = {
     hidden: { opacity: 0 },
     show: {
@@ -89,11 +112,11 @@ export default function FavoritesPage() {
 
       <div className="container mx-auto px-4 py-8 flex-1">
         <div className="flex items-center mb-8">
-          <Heart className="h-6 w-6 text-primary mr-3" />
+          <Heart className="h-6 w-6 text-[#465baa] mr-3" />
           <h1 className="text-2xl font-bold text-gray-900">Mes Favoris</h1>
         </div>
 
-        {isAuthenticated ? (
+        {auth.user ? (
           favoriteProperties.length > 0 ? (
             <motion.div
               variants={container}
@@ -118,7 +141,7 @@ export default function FavoritesPage() {
                 Explorez nos logements et ajoutez-les à vos favoris pour les retrouver facilement ici.
               </p>
               <Button
-                className="bg-primary hover:bg-primary/90 text-white"
+                className="bg-[#465baa] hover:bg-[#465baa]/90 text-white"
                 onClick={() => (window.location.href = "/")}
               >
                 Explorer les logements
@@ -134,7 +157,7 @@ export default function FavoritesPage() {
             <p className="text-gray-600 mb-6 max-w-md mx-auto">
               Connectez-vous pour ajouter des logements à vos favoris et les retrouver facilement.
             </p>
-            <Button className="bg-primary hover:bg-primary/90 text-white" onClick={() => setIsAuthModalOpen(true)}>
+            <Button className="bg-[#465baa] hover:bg-[#465baa]/90 text-white" onClick={() => setIsAuthModalOpen(true)}>
               Se connecter
             </Button>
           </div>

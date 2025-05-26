@@ -5,6 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { Link } from "@inertiajs/react";
 import { ImageCarousel } from "@/components/image-carousel";
 import { motion } from "framer-motion";
+import { router } from "@inertiajs/react";
+import { usePage } from "@inertiajs/react";
 import { useAuth } from "@/contexts/auth-context";
 import { useFavorites } from "@/contexts/favorites-context";
 import { AuthAlert } from "@/components/auth/auth-alert";
@@ -39,6 +41,17 @@ type Propriete = {
     categorie: string;
   }[];
 };
+type User = {
+  id: number;
+  name: string;
+  email: string;
+};
+
+type PageProps = {
+  auth: {
+    user: User | null;
+  };
+};
 // دالة عادية بدل دالة سهمية
 function PropertyCard({ propriete }: { propriete: Propriete }) {
   const {
@@ -54,18 +67,23 @@ function PropertyCard({ propriete }: { propriete: Propriete }) {
     surface,
     loueur,
   } = propriete;
-  const { isAuthenticated } = useAuth();
   const { isFavorite, toggleFavorite } = useFavorites();
   const [showAuthAlert, setShowAuthAlert] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+    const { auth } = usePage<PageProps>().props;
+  
   const [isHeartAnimating, setIsHeartAnimating] = useState(false);
  const handleFavoriteClick = (e: React.MouseEvent) => {
   e.preventDefault();
   e.stopPropagation();
   
-  if (isAuthenticated) {
+  if (auth.user) {
     setIsHeartAnimating(true);
     toggleFavorite(propriete.id); // التبديل بين إضافة/إزالة من المفضلة
+    router.post("/favorites/toggle",{
+      user_id:auth.user.id,
+      propriete_id:propriete.id
+    })
     setTimeout(() => setIsHeartAnimating(false), 1000); // إنهاء الأنيميشن بعد ثانية
   } else {
     setShowAuthAlert(true); // إظهار تنبيه تسجيل الدخول
@@ -169,6 +187,7 @@ function PropertyCard({ propriete }: { propriete: Propriete }) {
           </div>
         </div>
       </motion.div>
+           {!auth.user && (
 
       <AuthAlert
         isOpen={showAuthAlert}
@@ -177,6 +196,7 @@ function PropertyCard({ propriete }: { propriete: Propriete }) {
         onAutoClose={() => setIsAuthModalOpen(true)}
         autoCloseDelay={3000}
       />
+           )}
     </>
   );
 }

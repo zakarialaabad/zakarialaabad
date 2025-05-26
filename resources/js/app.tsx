@@ -7,7 +7,7 @@ import { createRoot } from 'react-dom/client';
 import { initializeTheme } from './hooks/use-appearance';
 import Layout from './layouts/layout'; // 🟡 استيراد الـ Layout الافتراضي
 
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+const appName = import.meta.env.VITE_APP_NAME || 'E-jar';
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
@@ -28,7 +28,7 @@ createInertiaApp({
     },
 
     progress: {
-        color: '#4B5563',
+        color: '#465baa',
         delay: 250,
 
     },

@@ -330,7 +330,6 @@ const SidebarInset = React.forwardRef<
   )
 })
 SidebarInset.displayName = "SidebarInset"
-
 const SidebarInput = React.forwardRef<
   React.ElementRef<typeof Input>,
   React.ComponentProps<typeof Input>
@@ -470,7 +469,6 @@ const SidebarGroupAction = React.forwardRef<
   )
 })
 SidebarGroupAction.displayName = "SidebarGroupAction"
-
 const SidebarGroupContent = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div">

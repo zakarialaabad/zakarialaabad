@@ -1006,7 +1006,7 @@ export function FilterSidebar({
                       max={5000}
                       step={100}
                       onValueChange={handlePriceChange}
-                      className="[&>.bg-primary]:bg-[#4153a4]"
+                      className="[&>.bg-[#465baa]]:bg-[#4153a4]"
                     />
                   </div>
 

@@ -197,8 +197,12 @@ export function Header() {
         </div>
       </header>
       <NotificationsPanel isOpen={isNotificationsPanelOpen} onClose={() => setIsNotificationsPanelOpen(false)} />
+           {!auth.user && (
+
       <AuthModal isOpen={isAuthModalOpen} onClose={handleCloseAuthModal} />
-      <AuthAlert
+     
+               )
+               } <AuthAlert
         isOpen={showAuthAlert}
         onClose={() => setShowAuthAlert(false)}
         message="Vous devez être connecté pour accéder à vos favoris."

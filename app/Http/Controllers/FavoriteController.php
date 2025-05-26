@@ -23,10 +23,14 @@ class FavoriteController extends Controller
                 'user_id' => $user->id,
                 'propriete_id' => $request->propriete_id,
             ]);
-            return back()->with('message', 'Added to favorites');
+            return redirect()->back()->with('message', 'Added to favorites');
         }
     }
     public function favoris(){
-        return Inertia::render("/app/favoris/page");
+            $user = Auth::user();
+     // جلب جميع المفضلات للمستخدم مع بيانات العقار
+           $favorites = Favorite::with('propriete')->where('user_id', $user->id)->get();
+  
+        return Inertia::render("app/favoris/page",compact('favorites'));
     }
 }

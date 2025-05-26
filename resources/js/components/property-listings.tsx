@@ -638,7 +638,7 @@ export function PropertyListings({ proprietes = [] }: InertiaPageProps) {
                 <Filter className="h-4 w-4" />
                 Filtres
                 {activeFiltersCount > 0 && (
-                  <span className="bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  <span className="bg-[#465baa] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                     {activeFiltersCount}
                   </span>
                 )}
@@ -658,8 +658,8 @@ export function PropertyListings({ proprietes = [] }: InertiaPageProps) {
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="flex flex-col items-center">
                 <div className="relative h-16 w-16">
-                  <div className="absolute inset-0 rounded-full border-4 border-primary/20"></div>
-                  <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-primary animate-spin"></div>
+                  <div className="absolute inset-0 rounded-full border-4 border-[#465baa]/20"></div>
+                  <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-[#465baa] animate-spin"></div>
                 </div>
                 <p className="text-gray-600 text-sm mt-4 font-medium">Chargement...</p>
               </div>

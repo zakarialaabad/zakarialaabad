@@ -1,4 +1,3 @@
-
 import { useFormContext } from "react-hook-form"
 import { Badge } from "@/components/ui/badge"
 import {
@@ -18,7 +17,7 @@ import {
 import { router } from "@inertiajs/react"
 import { useState, useEffect } from "react"
 type PreviewFields =
-| "titre"
+  | "titre"
   | "description"
   | "type"
   | "typesLocaires"
@@ -116,6 +115,13 @@ export function DirectPropertyPreview({ activeField, currentStep = 1 }:DirectPro
   const prixParMois = watch("prixParMois")
   const imgs = watch("imgs") || []
 
+  // Filter out invalid images
+  const validImgs = Array.isArray(imgs)
+    ? imgs.filter(img => img && typeof img.preview === 'string' && img.preview.trim() !== '' && (
+        img.preview.startsWith('data:image') || img.preview.startsWith('blob:') || img.preview.startsWith('http')
+      ))
+    : [];
+
   // Mettre à jour la section en surbrillance en fonction du champ actif
   useEffect(() => {
     if (activeField && fieldToPreviewSection[activeField]) {
@@ -136,10 +142,10 @@ export function DirectPropertyPreview({ activeField, currentStep = 1 }:DirectPro
     }, 1000)
   }, [currentStep])
 
-  // Reset current image index when imgs change
+  // Reset current image index when validImgs change
   useEffect(() => {
     setCurrentImageIndex(0)
-  }, [imgs.length])
+  }, [validImgs.length])
 
   // Valeurs par défaut pour la prévisualisation
   const defaulttitre = "Titre de votre annonce"
@@ -176,15 +182,15 @@ export function DirectPropertyPreview({ activeField, currentStep = 1 }:DirectPro
   // Navigation functions for image carousel
   const goToNextImage = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.stopPropagation()
-    if (imgs.length > 0) {
-      setCurrentImageIndex((prev) => (prev + 1) % imgs.length)
+    if (validImgs.length > 0) {
+      setCurrentImageIndex((prev) => (prev + 1) % validImgs.length)
     }
   }
 
   const goToPrevImage = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.stopPropagation() // Prevent triggering the parent onClick
-    if (imgs.length > 0) {
-      setCurrentImageIndex((prev) => (prev - 1 + imgs.length) % imgs.length)
+    if (validImgs.length > 0) {
+      setCurrentImageIndex((prev) => (prev - 1 + validImgs.length) % validImgs.length)
     }
   }
 
@@ -287,36 +293,35 @@ export function DirectPropertyPreview({ activeField, currentStep = 1 }:DirectPro
         </div>
         <p className="text-blue-100 text-sm">Voici comment votre annonce apparaîtra aux locataires</p>
       </div>
-
       <div className="overflow-hidden rounded-xl border bg-white shadow-sm hover:shadow-md transition-all duration-300">
         {/* Image principale avec carousel */}
         <div
           className={`relative w-full h-64 overflow-hidden cursor-pointer ${getHighlightClass("imgs")}`}
           onClick={navigateToPreviewDetails}
         >
-          {imgs && imgs.length > 0 && imgs[currentImageIndex]?.preview ? (
+          {validImgs && validImgs.length > 0 ? (
             <div className="w-full h-full group">
               {/* Current image */}
               <img
-                      src={imgs[currentImageIndex]?.preview || "/placeholder.svg?text=Image+Preview"}
-                      alt={`Photo ${currentImageIndex + 1}`}
-                      className="object-cover transition-transform duration-300 hover:scale-105"
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                    />
-
+                src={validImgs[currentImageIndex]?.preview || '/placeholder.svg'}
+                onError={e => { e.currentTarget.src = '/placeholder.svg'; }}
+                alt={`Photo ${currentImageIndex + 1}`}
+                className="object-cover transition-transform duration-300 hover:scale-105"
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
 
               {/* Indicateur de prévisualisation */}
-              {imgs[currentImageIndex]?.preview?.includes("blob:") && (
+              {validImgs[currentImageIndex]?.preview?.includes("blob:") && (
                 <div className="absolute top-3 right-3 bg-blue-600 text-white text-xs px-2 py-1 rounded-md z-10">
                   Image sélectionnée
                 </div>
               )}
 
               {/* Overlay subtil au survol */}
-              <div className="absolute inset-0 bg-black opaville-0 group-hover:opaville-10 transition-opaville duration-300 pointer-events-none"></div>
+              <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity duration-300 pointer-events-none"></div>
 
               {/* Navigation arrows */}
-              {imgs.length > 1 && (
+              {validImgs.length > 1 && (
                 <>
                   <button
                     onClick={goToPrevImage}
@@ -337,13 +342,13 @@ export function DirectPropertyPreview({ activeField, currentStep = 1 }:DirectPro
 
               {/* Image counter */}
               <div className="absolute top-3 left-3 bg-black/50 text-white text-xs px-2 py-1 rounded-md">
-                {currentImageIndex + 1}/{imgs.length}
+                {currentImageIndex + 1}/{validImgs.length}
               </div>
 
               {/* Navigation dots */}
-              {imgs.length > 1 && (
+              {validImgs.length > 1 && (
                 <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-1.5">
-                  {imgs.map((_:string, index:number) => (
+                  {validImgs.map((_:string, index:number) => (
                     <button
                       key={index}
                       onClick={(e: React.MouseEvent<HTMLButtonElement>) => {

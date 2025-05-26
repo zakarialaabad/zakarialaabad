@@ -1,4 +1,3 @@
-
 import { useState } from "react"
 import { MapPin, Plus, Minus, Maximize } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -77,7 +76,9 @@ export function PropertyMap({ location }: PropertyMapProps) {
       <div className="flex items-start gap-3 rounded-lg bg-blue-50 p-4 text-blue-800">
         <MapPin className="mt-0.5 h-5 w-5 flex-shrink-0 text-blue-500" />
         <div>
-          <p className="font-medium">Quartier {location.split(",")[0]}</p>
+          <p className="font-medium">
+            Quartier {typeof location === 'string' && location ? location.split(",")[0] : "Non spécifié"}
+          </p>
           <p className="mt-1 text-sm text-blue-700">
             L'emplacement exact sera communiqué après la réservation pour des raisons de sécurité. Le logement est situé
             dans un quartier calme et sécurisé, à proximité des commerces et des transports.

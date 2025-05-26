@@ -132,7 +132,7 @@ export function PropertyReservationForm({ price, priceUnit, maxGuests, owner }: 
 
         <div className="rounded-lg bg-gray-50 p-4 space-y-3">
           <div className="flex items-start gap-2">
-            <div className="mt-0.5 text-primary">
+            <div className="mt-0.5 text-[#465baa]">
               <Calendar className="h-4 w-4" />
             </div>
             <p className="text-sm text-gray-700">
@@ -141,8 +141,8 @@ export function PropertyReservationForm({ price, priceUnit, maxGuests, owner }: 
             </p>
           </div>
 
-          <div className="flex items-center gap-2 bg-primary/10 p-2 rounded-md">
-            <div className="text-primary">
+          <div className="flex items-center gap-2 bg-[#465baa]/10 p-2 rounded-md">
+            <div className="text-[#465baa]">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -158,7 +158,7 @@ export function PropertyReservationForm({ price, priceUnit, maxGuests, owner }: 
                 <path d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"></path>
               </svg>
             </div>
-            <p className="text-sm font-medium text-primary">
+            <p className="text-sm font-medium text-[#465baa]">
               E-JAR ne prend aucune commission — notre plateforme est entièrement gratuite.
             </p>
           </div>
@@ -166,7 +166,7 @@ export function PropertyReservationForm({ price, priceUnit, maxGuests, owner }: 
 
         {/* Boutons d'action */}
         <Button
-          className="w-full bg-primary py-6 text-base font-medium text-white hover:bg-primary/90"
+          className="w-full bg-[#465baa] py-6 text-base font-medium text-white hover:bg-[#465baa]/90"
           onClick={() => setIsAppointmentModalOpen(true)}
         >
           Réserver un rendez-vous
@@ -225,7 +225,7 @@ export function PropertyReservationForm({ price, priceUnit, maxGuests, owner }: 
             <Button
               variant="outline"
               onClick={() => setIsAppointmentModalOpen(false)}
-              className="flex-1 border-primary text-primary hover:bg-primary/10"
+              className="flex-1 border-[#465baa] text-[#465baa] hover:bg-[#465baa]/10"
             >
               Annuler
             </Button>
@@ -233,7 +233,7 @@ export function PropertyReservationForm({ price, priceUnit, maxGuests, owner }: 
               onClick={handleConfirm}
               disabled={!isFormValid}
               className={`flex-1 py-2 text-base font-medium text-white ${
-                isFormValid ? "bg-primary hover:bg-primary/90" : "bg-gray-400 cursor-not-allowed"
+                isFormValid ? "bg-[#465baa] hover:bg-[#465baa]/90" : "bg-gray-400 cursor-not-allowed"
               }`}
             >
               Confirmer

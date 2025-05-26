@@ -234,7 +234,7 @@ class PropreiteSeeder extends Seeder
                 'titre' => 'Bureau spacieux à Casablanca, Maarif',
                 'localisation' => 'Casablanca, Maarif',
                 'prixParMois' => 10000,
-                'imgs' =>json_encode($this->getRandomImages('Bureau')),
+                'imgs' => json_encode($this->getRandomImages('Bureau')),
                 'description' => 'Bureau de 100 m² au cœur de Casablanca, bien situé dans un quartier d\'affaires. Parfait pour les entreprises recherchant un environnement professionnel.',
                 'disponibilite' => true,
                 'type' => 'Bureau',

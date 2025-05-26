@@ -1,4 +1,3 @@
-
 import type React from "react"
 import { useState, useCallback, useEffect } from "react"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
@@ -12,20 +11,37 @@ interface PropertyGalleryProps {
   title: string
 }
 
-export function PropertyGallery({ images, title }: PropertyGalleryProps) {
+export function PropertyGallery({ images = [], title }: PropertyGalleryProps) {
   const [showAllPhotos, setShowAllPhotos] = useState(false)
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0)
   const [isHovering, setIsHovering] = useState(false)
-useEffect(() => {
-  console.log("list of images:", images);
-})
+
+  useEffect(() => {
+    console.log("list of images:", images);
+  }, [images])
+
+  // تحويل كل صورة إلى رابط صالح للعرض
+  const normalizeImage = (img: any) => {
+    if (typeof img === 'string' && img.trim() !== '') {
+      return img;
+    }
+    if (img && typeof img.preview === 'string' && img.preview.trim() !== '') {
+      return img.preview;
+    }
+    return "/placeholder.svg";
+  };
+
+  const displayImages = Array.isArray(images) && images.length > 0
+    ? images.map(normalizeImage)
+    : Array(5).fill("/placeholder.svg"); // لعرض 5 صور افتراضية إذا لم توجد صور
+
   const handlePrevious = useCallback(() => {
-    setCurrentPhotoIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1))
-  }, [images.length])
+    setCurrentPhotoIndex((prev) => (prev === 0 ? displayImages.length - 1 : prev - 1))
+  }, [displayImages.length])
 
   const handleNext = useCallback(() => {
-    setCurrentPhotoIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1))
-  }, [images.length])
+    setCurrentPhotoIndex((prev) => (prev === displayImages.length - 1 ? 0 : prev + 1))
+  }, [displayImages.length])
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
@@ -45,6 +61,7 @@ useEffect(() => {
         className="relative mb-8 overflow-hidden"
       >
         <div className="container px-4 md:px-6">
+        
           <div
             className="relative grid h-[400px] grid-cols-1 gap-2 overflow-hidden rounded-xl md:grid-cols-4 md:grid-rows-2 lg:h-[500px]"
             onMouseEnter={() => setIsHovering(true)}
@@ -53,14 +70,14 @@ useEffect(() => {
             {/* Image principale avec effet de zoom au survol */}
             <div className="relative col-span-1 row-span-2 md:col-span-2 overflow-hidden group">
               <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.4 }} className="h-full w-full">
-              <img
-    src={`${images[0]}`}
-    alt={`${title} - Image principale`}
-    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700"
-    style={{
-      objectFit: 'cover',
-    }}
-  />
+                <img
+                  src={displayImages[0]}
+                  alt={`${title} - Image principale`}
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700"
+                  style={{
+                    objectFit: 'cover',
+                  }}
+                />
               </motion.div>
 
               {/* Overlay subtil au survol */}
@@ -73,18 +90,17 @@ useEffect(() => {
             </div>
 
             {/* Images secondaires avec effet de zoom au survol */}
-            {images.slice(1, 5).map((image, index) => (
+            {displayImages.slice(1, 5).map((image, index) => (
               console.log("image", image),
               <div key={index} className="relative hidden md:block overflow-hidden group">
                 <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.4 }} className="h-full w-full">
                   <img
-                  src={`/${image}`}
+                    src={image}
                     alt={`${title} - Image ${index + 2}`}
-                    className="absolute inset-0 bg-black pointer-events-none object-cover transition-transform duration-700"
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700"
                     sizes="25vw"
-                    loading="lazy" 
+                    loading="lazy"
                   />
-                  
                 </motion.div>
 
                 {/* Overlay subtil au survol */}
@@ -151,10 +167,9 @@ useEffect(() => {
                 className="relative h-full w-full flex items-center justify-center"
               >
                 <img
-                  src={`/${images[currentPhotoIndex]}` || "/placeholder.svg"}
+                  src={displayImages[currentPhotoIndex]}
                   alt={`${title} - Photo ${currentPhotoIndex + 1}`}
-                  className="absolute inset-0 bg-black pointer-events-none object-contain"
-
+                  className="absolute inset-0 bg-black pointer-events-none h-full w-full object-contain"
                   sizes="100vw"
                 />
               </motion.div>
@@ -200,10 +215,10 @@ useEffect(() => {
                 className="flex items-center gap-2 rounded-full bg-black/50 px-4 py-2 backdrop-blur-sm"
               >
                 <span className="text-sm font-medium text-white">
-                  {currentPhotoIndex + 1} / {images.length}
+                  {currentPhotoIndex + 1} / {displayImages.length}
                 </span>
                 <div className="flex gap-1">
-                  {images.map((_, idx) => (
+                  {displayImages.map((_, idx) => (
                     <button
                       key={idx}
                       onClick={() => setCurrentPhotoIndex(idx)}
