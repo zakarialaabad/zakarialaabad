@@ -26,6 +26,11 @@ class InertiaServiceProvider extends ServiceProvider
             'auth' => fn () => [
                 'user' => Auth::user(),
             ],
+            "favorites" => fn () => auth()->check()
+                ? auth()->user()->favorites()->pluck('propriete_id')->toArray()
+                : [],
+            
         ]);
+      
     }
 }

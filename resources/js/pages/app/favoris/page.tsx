@@ -69,7 +69,8 @@ const {
   const [favoriteProperties, setFavoriteProperties] = useState<Propriete[]>([])
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
   useEffect(() => { 
-     console.log(proprietes)
+     console.log("auth.user", auth.user)
+     console.log("favoriteIds", favoriteIds)
      if(auth.user && favoriteIds.length>0){
   const favProps = proprietes.filter((propriete) => favoriteIds.includes(propriete.id))
     setFavoriteProperties(favProps)

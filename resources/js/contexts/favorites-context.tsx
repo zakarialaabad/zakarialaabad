@@ -16,14 +16,10 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
   // Charger les favoris depuis le localStorage au démarrage
   useEffect(() => {
     if (isAuthenticated) {
-          const savedFavorites = localStorage.getItem("favorites");
-    if (savedFavorites) {
-      setFavorites(JSON.parse(savedFavorites).map(Number)); // يحول القيم إلى أرقام
-    }
-
-    } else {
-      // Réinitialiser les favoris si l'utilisateur n'est pas connecté
-      setFavorites([])
+      const stored = localStorage.getItem("favorites")
+      if (stored) {
+        setFavorites(JSON.parse(stored))
+      }
     }
   }, [isAuthenticated])
 

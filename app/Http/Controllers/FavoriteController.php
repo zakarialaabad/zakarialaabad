@@ -3,34 +3,34 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Favorite;
+use App\Models\Propriete;
+
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 class FavoriteController extends Controller
 {
+   
     public function toggle(Request $request)
     {
         $user = Auth::user();
+        $propertyId = $request->input('propriete_id');
 
-        $existing = Favorite::where('user_id', $user->id)
-            ->where('propriete_id', $request->propriete_id)
-            ->first();
-
-        if ($existing) {
-            $existing->delete();
-            return back()->with('message', 'Removed from favorites');
+        if ($user->favorites()->where('propriete_id', $propertyId)->exists()) {
+            // Remove from favorites
+            $user->favorites()->detach($propertyId);
         } else {
-            Favorite::create([
-                'user_id' => $user->id,
-                'propriete_id' => $request->propriete_id,
-            ]);
-            return redirect()->back()->with('message', 'Added to favorites');
+            // Add to favorites
+            $user->favorites()->attach($propertyId);
         }
+
     }
     public function favoris(){
-            $user = Auth::user();
-     // جلب جميع المفضلات للمستخدم مع بيانات العقار
-           $favorites = Favorite::with('propriete')->where('user_id', $user->id)->get();
+        
+    $user = Auth::user();
+    $properties = Propriete::all();
+    $favoriteIds = $user ? $user->favorites()->pluck('propriete_id')->toArray() : [];
+        // جلب جميع المفضلات للمستخدم مع بيانات العقار
   
-        return Inertia::render("app/favoris/page",compact('favorites'));
+        return Inertia::render("app/favoris/page",compact('favoriteIds', 'properties' ,"user"));
     }
 }

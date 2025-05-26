@@ -5,6 +5,8 @@ use App\Http\Controllers\SocialiteController;
 use App\Http\Controllers\ProprieteContoller;
 use App\Http\Controllers\FavoriteController ;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+Route::get("/favoris",[FavoriteController::class,"favoris"])->name("favoris");
+Route::post('/favorites/toggle', [FavoriteController::class, 'toggle']);
 Route::get('/', function () {
     return Inertia::render('app/property/page');
 })->name('home');

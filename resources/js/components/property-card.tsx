@@ -80,10 +80,13 @@ function PropertyCard({ propriete }: { propriete: Propriete }) {
   if (auth.user) {
     setIsHeartAnimating(true);
     toggleFavorite(propriete.id); // التبديل بين إضافة/إزالة من المفضلة
-    router.post("/favorites/toggle",{
-      user_id:auth.user.id,
-      propriete_id:propriete.id
-    })
+    router.post("/favorites/toggle", {
+  propriete_id: propriete.id
+}, {
+  onSuccess: () => {
+    router.reload(); // إعادة تحميل الصفحة لتحديث favoriteIds من الخادم
+  }
+})
     setTimeout(() => setIsHeartAnimating(false), 1000); // إنهاء الأنيميشن بعد ثانية
   } else {
     setShowAuthAlert(true); // إظهار تنبيه تسجيل الدخول

@@ -17,6 +17,7 @@ class ProprieteContoller extends Controller
         $proprietes = Propriete::with('loueur.user')
         ->with("commodites")
         ->latest()->get();
+        
         return Inertia::render("app/property/page",compact("proprietes"));
     }
     /**

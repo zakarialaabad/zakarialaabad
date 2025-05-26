@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
+import React, { ReactNode } from "react";
 import { FormProvider, useForm } from "react-hook-form"
-import { router } from "@inertiajs/react";
+import { router } from "@inertiajs/react"
 import PropertySubmissionForm from "@/components/property-submission-form"
 import { DirectPropertyPreview } from "@/components/direct-property-preview"
 import {
@@ -53,143 +54,105 @@ import {
   FileX,
 } from "lucide-react"
 import * as LucideIcons from "lucide-react"
+
 type Amenity = {
   name: string;
   category: string;
   icon: string;
 };
-
 type Amenities = {
-  interior: string[];
-  exterior: string[];
-  proximity: string[];
-};
-
-type regles = {
-  petsAllowed: boolean;
-  smokingAllowed: boolean;
-  eventsAllowed: boolean;
-  additionalregles: string;
-};
+  interior: string[]
+  exterior: string[]
+  proximity: string[]
+}
+type Rules = {
+  petsAllowed: boolean
+  smokingAllowed: boolean
+  eventsAllowed: boolean
+  additionalRules: string
+}
 
 type OwnerInfo = {
-  contactPreference: "both" | "email" | "phone";
-  availabilityForVisits: string;
-  additionalInfo: string;
-};
+  contactPreference: "both" | "email" | "phone"
+  availabilityForVisits: string
+  additionalInfo: string
+}
 
 type PropertyDetails = {
-  amenities: Amenity[];
-};
+  amenities: Amenity[]
+}
 
 type Documents = {
-  invoices: any[];
-  idCard: any | null;
-};
-export interface FormValues {
-  titre: string;
-  description: string;
-  type: string;
-  typesLocaires: string;
-  ville: string;
-  localisation: string;
-  adresse: string;
-  surface: number;
-  rooms: number;
-  nbrchambre: number;
-  bathrooms: number;
-  floor: number;
-  totalFloors: number;
-  imgs?: any[];
-  prixParMois: number;
-  availableFrom: Date | string;
-  minimumStay: number;
-  furnished: boolean;
-  amenities: Amenities;
-  regles: regles;
-  ownerInfo: OwnerInfo;
-  propertyDetails: PropertyDetails;
-  documents: Documents;
+  invoices: any[]   // عدل حسب نوع الملفات المرفوعة
+  idCard: any | null
 }
-export  function DirectFormWithPreview() {
+
+export interface FormValues {
+  title: string
+  description: string
+  propertyType: string
+  tenantType: string
+  city: string
+  district: string
+  address: string
+  area: number
+  rooms: number
+  bedrooms: number
+  bathrooms: number
+  floor: number
+  totalFloors: number
+  images?: any[]    // عدل حسب نوع الصور
+  price: number
+  availableFrom: Date | string
+  minimumStay: number
+  furnished: boolean
+  amenities: Amenities
+  rules: Rules
+  ownerInfo: OwnerInfo
+  propertyDetails: PropertyDetails
+  documents: Documents
+}
+export  function DirectFormWithPreview(){
   // Prévisualisation toujours active
   const [showPreview] = useState(true)
-  type PreviewFields =
-  | "titre"
-  | "description"
-  | "type"
-  | "typesLocaires"
-  | "ville"
-  | "localisation"
-  | "adresse"
-  | "surface"
-  | "nbrchambre"
-  | "bathrooms"
-  | "imgs"
-  | "prixParMois"
-
+  type PreviewFields = "title" | "description" | "propertyType" | "tenantType" | "city" | "district" | "address" | "area" | "bedrooms" | "bathrooms" | "images" | "price";
   const [activeField, setActiveField] = useState<PreviewFields | null>(null);
-  const [currentStep, setCurrentStep] = useState(1)
+    const [currentStep, setCurrentStep] = useState(1)
   const totalSteps = 8 // Réduit de 9 à 8 pour supprimer l'étape "Information"
-  const [expandedCategory, setExpandedCategory] = useState<string | null>(
-    "interior"
-  );
-  const [uploadedFiles, setUploadedFiles] = useState<{
-    invoices: any[];
-    idCard: any | null;
-  }>({
+const [expandedCategory, setExpandedCategory] = useState<string | null>("interior")
+  const [uploadedFiles, setUploadedFiles] = useState<{invoices: any[]; idCard: any | null}>({
     invoices: [],
     idCard: null,
-  });
-  ;
+  })
 
-  const [showConfirmation, setShowConfirmation] = useState(false);
-  const [submittedData, setSubmittedData] = useState<FormValues | null>(null);
-  const previewFields: PreviewFields[] = [
-    "titre",
-    "description",
-    "type",
-    "typesLocaires",
-    "ville",
-    "localisation",
-    "adresse",
-    "surface",
-    "nbrchambre",
-    "bathrooms",
-    "imgs",
-    "prixParMois",
-  ];
+  // Ajouter après les autres états
+  const [showConfirmation, setShowConfirmation] = useState(false)
+  const [submittedData, setSubmittedData] = useState<FormValues | null>(null)
+const previewFields: PreviewFields[] = ["title", "description", "propertyType", "tenantType", "city", "district", "address", "area", "bedrooms", "bathrooms", "images", "price"];
 
-
-  // Ajouter cet effet après les autres useEffect
-  useEffect(() => {
-    console.log(`Étape actuelle: ${currentStep} - ${getStepName(currentStep)}`)
-  }, [currentStep])
+function isValidPreviewField(field: string | null): field is PreviewFields {
+  return field !== null && previewFields.includes(field as PreviewFields);
+}
 
   // Initialiser React Hook Form sans validation pour la prévisualisation
-
-  function isValidPreviewField(field: string | null): field is PreviewFields {
-    return field !== null && previewFields.includes(field as PreviewFields);
-  }
-
   const methods = useForm<FormValues>({
     mode: "onChange",
     defaultValues: {
-      titre: "",
+      title: "",
       description: "",
-      type: "apartment",
-      typesLocaires: "all",
-      ville: "",
-      localisation: "no-localisation",
-      adresse: "",
-      surface: 0,
+      propertyType: "apartment",
+      tenantType: "all",
+      city: "",
+      district: "no-district",
+      address: "",
+      area: 0,
       rooms: 1,
-      nbrchambre: 1,
+      bedrooms: 1,
       bathrooms: 1,
       floor: 0,
       totalFloors: 1,
-      imgs: [],
-      prixParMois: 0,
+      images: [],
+      price: 0,
       availableFrom: new Date(),
       minimumStay: 1,
       furnished: false,
@@ -198,11 +161,11 @@ export  function DirectFormWithPreview() {
         exterior: [],
         proximity: [],
       },
-      regles: {
+      rules: {
         petsAllowed: false,
         smokingAllowed: false,
         eventsAllowed: false,
-        additionalregles: "",
+        additionalRules: "",
       },
       ownerInfo: {
         contactPreference: "both",
@@ -217,68 +180,68 @@ export  function DirectFormWithPreview() {
         idCard: null,
       },
     },
-  });
-
+  })
+  // Fonction de soumission du formulaire
   const onSubmit = (data: FormValues) => {
-    console.log("Formulaire soumis:", data);
-    setSubmittedData(data);
-    setShowConfirmation(true);
-  };
+    console.log("Formulaire soumis:", data)
+    setSubmittedData(data)
+    setShowConfirmation(true)
+    // API call can be made here
+  }
+
+
   // Charger le brouillon et la dernière étape au montage
   useEffect(() => {
     const loadDraft = () => {
       try {
-        const savedDraft = localStorage.getItem("propertyDraft");
+        const savedDraft = localStorage.getItem("propertyDraft")
         if (savedDraft) {
-          const parsedDraft: Partial<FormValues> = JSON.parse(savedDraft);
+          const parsedDraft: Partial<FormValues> = JSON.parse(savedDraft)
 
           if (parsedDraft.availableFrom) {
-            parsedDraft.availableFrom = new Date(parsedDraft.availableFrom);
+            parsedDraft.availableFrom = new Date(parsedDraft.availableFrom)
           }
 
-          if (parsedDraft.imgs && Array.isArray(parsedDraft.imgs)) {
-            parsedDraft.imgs = parsedDraft.imgs.filter(img => img && img.preview);
-          }
-
-          (Object.entries(parsedDraft) as [keyof FormValues, any][]).forEach(
-            ([key, value]) => {
-              methods.setValue(key, value);
-            }
-          );
+          // تأكد من نوع كل مفتاح قبل التعيين
+          (Object.entries(parsedDraft) as [keyof FormValues, any][]).forEach(([key, value]) => {
+            methods.setValue(key, value)
+          })
         }
       } catch (error) {
-        console.error("Erreur lors du chargement du brouillon:", error);
+        console.error("Erreur lors du chargement du brouillon:", error)
       }
-    };
-    loadDraft();
+    }
+
+    loadDraft()
+
+    // Récupérer la dernière étape si disponible
     try {
-      const lastStep = localStorage.getItem("lastFormStep");
+      const lastStep = localStorage.getItem("lastFormStep")
       if (lastStep) {
-        const stepNumber = Number.parseInt(lastStep, 10);
+        const stepNumber = Number.parseInt(lastStep, 10)
         if (!isNaN(stepNumber) && stepNumber >= 1 && stepNumber <= totalSteps) {
-          setCurrentStep(stepNumber);
-          console.log("Dernière étape récupérée:", stepNumber);
+          setCurrentStep(stepNumber)
+          console.log("Dernière étape récupérée:", stepNumber)
         }
-        localStorage.removeItem("lastFormStep");
+        // Effacer après utilisation
+        localStorage.removeItem("lastFormStep")
       }
     } catch (error) {
-      console.error(
-        "Erreur lors de la récupération de la dernière étape:",
-        error
-      );
+      console.error("Erreur lors de la récupération de la dernière étape:", error)
     }
-  }, [methods, totalSteps]);
+  }, [methods, totalSteps])
+
   // Fonction pour suivre le champ actif
-  const handleFieldFocus = (fieldName:PreviewFields) => {
-    setActiveField(fieldName)
-    // Scroll to the preview section if on mobile
+  const handleFieldFocus = (fieldName: PreviewFields) => {
+    setActiveField(fieldName);
     if (window.innerWidth < 1024) {
-      const previewElement = document.getElementById("property-preview")
+      const previewElement = document.getElementById("property-preview");
       if (previewElement) {
-        previewElement.scrollIntoView({ behavior: "smooth", block: "center" })
+        previewElement.scrollIntoView({ behavior: "smooth", block: "center" });
       }
     }
-  }
+  };
+  
 
   // Fonction pour effacer le champ actif
   const handleFieldBlur = () => {
@@ -286,38 +249,68 @@ export  function DirectFormWithPreview() {
     setTimeout(() => setActiveField(null), 500)
   }
 
- // Fonction pour passer à l'étape suivante
- const goToNextStep = () => {
+  // Fonction pour passer à l'étape suivante
+  const goToNextStep = () => {
     try {
       // Sauvegarder l'état actuel du formulaire
-      const currentFormData = methods.getValues();
-      // Exclure les images et documents du brouillon pour éviter le quota exceeded
-      const minimalData: any = { ...currentFormData };
-      delete minimalData.imgs;
-      delete minimalData.documents;
-      try {
-        localStorage.setItem("propertyDraft", JSON.stringify(minimalData));
-        localStorage.setItem("lastFormStep", currentStep.toString());
-      } catch (e) {
-        console.warn("Impossible de sauvegarder le brouillon complet:", e);
+      const currentFormData = methods.getValues()
+  
+      // Créer une copie sécurisée pour la sérialisation
+      const safeFormData = { ...currentFormData }
+  
+      // Traiter les images pour éviter les erreurs de sérialisation
+      if (safeFormData.images && Array.isArray(safeFormData.images)) {
+        // Stocker uniquement les URLs des images, pas les objets File
+        safeFormData.images = safeFormData.images.map((img) => ({
+          preview: typeof img.preview === "string" ? img.preview : null,
+          // Ne pas inclure l'objet File qui n'est pas sérialisable
+        }))
       }
+  
+      // Convertir les dates en chaînes de caractères
+      if (safeFormData.availableFrom instanceof Date) {
+        safeFormData.availableFrom = safeFormData.availableFrom.toISOString()
+      }
+  
+      // Sauvegarder les données sécurisées
+      try {
+        localStorage.setItem("propertyDraft", JSON.stringify(safeFormData))
+        localStorage.setItem("lastFormStep", currentStep.toString())
+      } catch (storageError) {
+        console.warn("Impossible de sauvegarder le brouillon complet:", storageError)
+  
+        // Essayer de sauvegarder une version minimale sans les images
+        try {
+          // Utilisation de destructuring pour enlever images
+          const { images, ...minimalData } = safeFormData
+          localStorage.setItem("propertyDraft", JSON.stringify(minimalData))
+          localStorage.setItem("lastFormStep", currentStep.toString())
+        } catch (minimalStorageError) {
+          console.error("Impossible de sauvegarder même les données minimales:", minimalStorageError)
+          // Continuer sans sauvegarder
+        }
+      }
+  
       // Mettre à jour l'étape
       if (currentStep < totalSteps) {
-        setCurrentStep((prev) => prev + 1);
+        setCurrentStep((prev) => prev + 1)
+  
         // Forcer la mise à jour de la prévisualisation
-        const previewElement = document.getElementById("property-preview");
+        const previewElement = document.getElementById("property-preview")
         if (previewElement) {
-          previewElement.scrollIntoView({ behavior: "smooth", block: "center" });
+          previewElement.scrollIntoView({ behavior: "smooth", block: "center" })
         }
       }
     } catch (error) {
-      console.error("Erreur lors du passage à l'étape suivante:", error);
+      console.error("Erreur lors du passage à l'étape suivante:", error)
       // Continuer à l'étape suivante même en cas d'erreur
       if (currentStep < totalSteps) {
-        setCurrentStep((prev) => prev + 1);
+        setCurrentStep((prev) => prev + 1)
       }
     }
   }
+  
+
   // Fonction pour revenir à l'étape précédente
   const goToPreviousStep = () => {
     if (currentStep > 1) {
@@ -326,74 +319,76 @@ export  function DirectFormWithPreview() {
   }
 
   // Function to get step name based on current step
-
-  const getStepName = (step: number): string => {
+  const getStepName = (step:number):string => {
     switch (step) {
       case 1:
-        return "Informations de base";
+        return "Informations de base"
       case 2:
-        return "Localisation";
+        return "Localisation"
       case 3:
-        return "Caractéristiques";
+        return "Caractéristiques"
       case 4:
-        return "Photos";
+        return "Photos"
       case 5:
-        return "Prix et disponibilité";
+        return "Prix et disponibilité"
       case 6:
-        return "Équipements";
+        return "Équipements"
       case 7:
-        return "Règles";
+        return "Règles"
       case 8:
-        return "Documents";
+        return "Documents"
       default:
-        return "Étape";
+        return "Étape"
     }
-  };
+  }
 
-  // Fonction pour basculer l'état d'expansion d'une catégorie
-  const toggleCategory = (category:string) => {
+  const toggleCategory = (category: string) => {
     setExpandedCategory(expandedCategory === category ? null : category)
   }
-  type AmenityCategory = "interior" | "exterior" | "proximity";
+  type AmenityCategory = "interior" | "exterior" | "proximity"
 
-  // Fonction pour sélectionner/désélectionner tous les équipements d'une catégorie
-  const toggleAllInCategory = (category:AmenityCategory, items: string[]) => {
-    const currentItems = methods.watch(`amenities.${category}`) || []
-    if (currentItems.length === items.length) {
-      // Si tous sont sélectionnés, désélectionner tous
-      methods.setValue(`amenities.${category}`, [])
-    } else {
-      // Sinon, sélectionner tous
-      methods.setValue(`amenities.${category}`, items)
-    }
+const toggleAllInCategory = (category: AmenityCategory, items: string[]) => {
+  const currentItems = methods.watch(`amenities.${category}`) || []
+  const mutableCurrentItems = [...currentItems]  // copie mutable
+
+  if (mutableCurrentItems.length === items.length) {
+    methods.setValue(`amenities.${category}`, [])
+  } else {
+    methods.setValue(`amenities.${category}`, items)
   }
+}
+
+  
 
   // Gérer le téléchargement des factures
-  const handleInvoiceUpload = (e: React.ChangeEvent<HTMLInputElement>): void =>  {
-    const files = Array.from(e.target.files || [])
+  const handleInvoiceUpload = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const files = e.target.files ? Array.from(e.target.files) : []
+  
     if (files.length > 0) {
       // Limiter à 3 factures maximum
       const newInvoices = [...uploadedFiles.invoices]
       files.forEach((file) => {
         if (newInvoices.length < 3) {
-          const preview = URL.createObjectURL(file);
-          newInvoices.push({ preview, fileInfo: { name: file.name, size: file.size } })
+          newInvoices.push(file)
         }
       })
       setUploadedFiles({ ...uploadedFiles, invoices: newInvoices })
       methods.setValue("documents.invoices", newInvoices)
     }
   }
+  
 
   // Gérer le téléchargement de la carte nationale
-  const handleIdCardUpload = (e: React.ChangeEvent<HTMLInputElement>): void =>  {
-    const files = Array.from(e.target.files || [])
-    if (files.length > 0) {
-      const preview = URL.createObjectURL(files[0]);
-      setUploadedFiles({ ...uploadedFiles, idCard: { preview, fileInfo: { name: files[0].name, size: files[0].size } } })
-      methods.setValue("documents.idCard", { preview, fileInfo: { name: files[0].name, size: files[0].size } })
-    }
+ // Gérer le téléchargement de la carte nationale
+const handleIdCardUpload = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  const files = e.target.files ? Array.from(e.target.files) : []
+
+  if (files.length > 0) {
+    setUploadedFiles({ ...uploadedFiles, idCard: files[0] })
+    methods.setValue("documents.idCard", files[0])
   }
+}
+
 
   // Supprimer une facture
   const removeInvoice = (index:number) => {
@@ -416,12 +411,74 @@ export  function DirectFormWithPreview() {
     handleFieldBlur,
     activeField,
   }
+
+  // Fonction utilitaire pour associer les icônes appropriées
+  const getIconForAmenity = (name:string, category:string) => {const iconMapping: { [key: string]: string } = {
+    // Intérieur
+    "Balcon spacieux": "Flower2",
+    "Toilette moderne": "Bath",
+    "Chauffage central": "Flame",
+    Climatisation: "Wind",
+    "Cuisine équipée": "UtensilsCrossed",
+    "Placards intégrés": "LayoutGrid",
+    "Fenêtres double vitrage": "Square",
+    Dressing: "Armchair",
+    Buanderie: "Droplets",
+    "Internet fibre optique": "Zap",
+    "Système d'alarme": "Bell",
+    "Porte blindée": "Lock",
+    "Rideaux électriques": "Blinds",
+    Cheminée: "Flame",
+    Ascenseur: "ArrowUpDown",
+    "Espace bureau à domicile": "Briefcase",
+    "Éclairage encastré": "Lightbulb",
+  
+    // Extérieur
+    "Jardin privé": "Flower2",
+    "Piscine privée": "SwimmingPool",
+    "Terrasse ou patio": "Sun",
+    "Cour intérieure": "Trees",
+    "Espace barbecue": "Flame",
+    "Toit exploitable": "Home",
+    "Grandes fenêtres extérieures": "Square",
+    "Façade sur mer / montagne": "Mountain",
+    "Garage privé ou fermé": "Car",
+    "Aire de jeux pour enfants": "CircleDot",
+    "Clôture extérieure": "CircleDot",
+    "Système d'arrosage automatique": "Droplets",
+    "Espace vert partagé": "Sprout",
+    Parking: "ParkingSquare",
+  
+    // À proximité
+    "Transports en commun": "Bus",
+    "Écoles et universités": "GraduationCap",
+    "Commerces et supermarchés": "Store",
+    "Restaurants et cafés": "Coffee",
+    "Parcs et espaces verts": "Trees",
+    "Centres médicaux": "Stethoscope",
+    "Centres sportifs": "Dumbbell",
+    "Centres commerciaux": "ShoppingBag",
+    Plages: "Waves",
+    "Lieux culturels": "Landmark",
+    "Lieux de culte": "Church",
+    Pharmacies: "Pill",
+    Banques: "Building",
+    "Marchés locaux": "Store",
+  }
+  
+  const getIconForAmenity = (name: string, category: string): string => {
+    return iconMapping[name] || 
+           (category === "Intérieur" ? "DoorOpen" : 
+            category === "Extérieur" ? "TreePine" : "MapPin")
+           }  
+
   // Navigate to dashboard
   const navigateToDashboard = () => {
     router.visit("/dashboard")
   }
 
   return (
+    
     <FormProvider {...formContextWithTracking}>
       <div className="container mx-auto px-4 py-8">
         {/* Step Progress Indicator */}
@@ -447,15 +504,15 @@ export  function DirectFormWithPreview() {
                       className={`w-8 h-8 flex items-center justify-center rounded-full z-10 
                         ${
                           isCompleted
-                            ? "bg-[#465baa] text-white"
+                            ? "bg-primary text-white"
                             : isCurrent
-                              ? "bg-[#465baa] text-white"
+                              ? "bg-primary text-white"
                               : "bg-gray-200 text-gray-500"
                         }`}
                     >
                       {stepNumber}
                     </div>
-                    <span className={`text-xs mt-1 font-medium ${isCurrent ? "text-[#465baa]" : "text-gray-500"}`}>
+                    <span className={`text-xs mt-1 font-medium ${isCurrent ? "text-primary" : "text-gray-500"}`}>
                       {getStepName(stepNumber).split(" ")[0]}
                     </span>
                   </div>
@@ -465,7 +522,7 @@ export  function DirectFormWithPreview() {
               {/* Progress line connecting the steps */}
               <div className="absolute top-4 left-0 right-0 h-0.5 bg-gray-200 -z-10"></div>
               <div
-                className="absolute top-4 left-0 h-0.5 bg-[#465baa] -z-10 transition-all duration-300 ease-in-out"
+                className="absolute top-4 left-0 h-0.5 bg-primary -z-10 transition-all duration-300 ease-in-out"
                 style={{ width: `${((currentStep - 1) / (totalSteps - 1)) * 100}%` }}
               ></div>
             </div>
@@ -510,10 +567,10 @@ export  function DirectFormWithPreview() {
                   </p>
 
                   {/* Alerte informative si aucune règle n'est sélectionnée */}
-                  {!methods.watch("regles.petsAllowed") &&
-                    !methods.watch("regles.smokingAllowed") &&
-                    !methods.watch("regles.eventsAllowed") &&
-                    !methods.watch("regles.additionalregles") && (
+                  {!methods.watch("rules.petsAllowed") &&
+                    !methods.watch("rules.smokingAllowed") &&
+                    !methods.watch("rules.eventsAllowed") &&
+                    !methods.watch("rules.additionalRules") && (
                       <div className="bg-amber-50 border border-amber-200 rounded-md p-4 mb-4">
                         <div className="flex">
                           <div className="flex-shrink-0">
@@ -548,14 +605,14 @@ export  function DirectFormWithPreview() {
                     )}
 
                   {/* Affichage des règles sélectionnées */}
-                  {(methods.watch("regles.petsAllowed") ||
-                    methods.watch("regles.smokingAllowed") ||
-                    methods.watch("regles.eventsAllowed") ||
-                    methods.watch("regles.additionalregles")) && (
+                  {(methods.watch("rules.petsAllowed") ||
+                    methods.watch("rules.smokingAllowed") ||
+                    methods.watch("rules.eventsAllowed") ||
+                    methods.watch("rules.additionalRules")) && (
                     <div className="bg-white border border-gray-200 rounded-md p-4 mb-4">
                       <h4 className="font-medium text-gray-800 mb-2">Règles sélectionnées:</h4>
                       <ul className="space-y-2">
-                        {methods.watch("regles.petsAllowed") && (
+                        {methods.watch("rules.petsAllowed") && (
                           <li className="flex items-center text-gray-700">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -579,7 +636,7 @@ export  function DirectFormWithPreview() {
                             Animaux autorisés
                           </li>
                         )}
-                        {methods.watch("regles.smokingAllowed") && (
+                        {methods.watch("rules.smokingAllowed") && (
                           <li className="flex items-center text-gray-700">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -602,7 +659,7 @@ export  function DirectFormWithPreview() {
                             Fumeurs autorisés
                           </li>
                         )}
-                        {methods.watch("regles.eventsAllowed") && (
+                        {methods.watch("rules.eventsAllowed") && (
                           <li className="flex items-center text-gray-700">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -623,7 +680,7 @@ export  function DirectFormWithPreview() {
                             Événements autorisés
                           </li>
                         )}
-                        {methods.watch("regles.additionalregles") && (
+                        {methods.watch("rules.additionalRules") && (
                           <li className="flex items-start text-gray-700">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -646,7 +703,7 @@ export  function DirectFormWithPreview() {
                             <div>
                               <span className="font-medium">Règles supplémentaires:</span>
                               <p className="text-sm mt-1 whitespace-pre-wrap">
-                                {methods.watch("regles.additionalregles")}
+                                {methods.watch("rules.additionalRules")}
                               </p>
                             </div>
                           </li>
@@ -687,7 +744,8 @@ export  function DirectFormWithPreview() {
                       onClick={() => {
                         const input = document.getElementById("id-card-upload");
                         if (input) input.click();
-                      }}                    >
+                      }}
+                                          >
                       <input
                         type="file"
                         id="invoice-upload"
@@ -763,7 +821,8 @@ export  function DirectFormWithPreview() {
                         onClick={() => {
                           const input = document.getElementById("id-card-upload");
                           if (input) input.click();
-                        }}                      >
+                        }}
+                                              >
                         <input
                           type="file"
                           id="id-card-upload"
@@ -957,6 +1016,7 @@ export  function DirectFormWithPreview() {
                               'Caractéristiques' de la page de prévisualisation, regroupé par catégorie.
                             </p>
                           </div>
+
                           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
                             {[
                               { name: "Balcon spacieux", icon: <Flower2 size={16} /> },
@@ -1387,12 +1447,14 @@ export  function DirectFormWithPreview() {
                                       const currentProximity = methods.watch("amenities.proximity") || []
                                       if (e.target.checked) {
                                         methods.setValue("amenities.proximity", [...currentProximity, item.name])
+
                                         // Mettre à jour les amenities pour la prévisualisation
                                         const currentAmenities = methods.watch("propertyDetails.amenities") || []
                                         const iconName =
                                           Object.keys(LucideIcons).find(
                                             (key) => LucideIcons[key as keyof typeof LucideIcons] === item.icon.type,
                                           ) || "CircleDot"
+
                                         methods.setValue("propertyDetails.amenities", [
                                           ...currentAmenities,
                                           {
@@ -1445,6 +1507,7 @@ export  function DirectFormWithPreview() {
                   </div>
                 </div>
               )}
+
               <PropertySubmissionForm
                 onSubmit={methods.handleSubmit(onSubmit)}
                 onFieldFocus={handleFieldFocus}
@@ -1454,6 +1517,7 @@ export  function DirectFormWithPreview() {
                 goToPreviousStep={goToPreviousStep}
                 totalSteps={totalSteps}
               />
+
               {/* Indicateur de progression */}
               <div className="mt-8">
                 <div className="flex justify-between text-xs text-gray-500 mb-2">
@@ -1471,33 +1535,37 @@ export  function DirectFormWithPreview() {
               </div>
             </div>
           </div>
+
           {/* Prévisualisation (occupe 1/3 de l'écran sur grand écran) */}
           {showPreview && (
             <div className="lg:col-span-1">
               <div className="sticky top-24" id="property-preview">
                 <h2 className="text-xl font-semibold mb-4">Prévisualisation en temps réel</h2>
                 {/* Log pour déboguer les équipements */}
-                <DirectPropertyPreview
-                  activeField={activeField}
-                  currentStep={currentStep}
-                  formAmenities={{
-                    interior: methods.watch("amenities.interior") || [],
-                    exterior: methods.watch("amenities.exterior") || [],
-                    proximity: methods.watch("amenities.proximity") || [],
-                  }}
-                  useFormData={true}
-                />
+
+                 {/* الكود JSX الخاص بك */}
+      <DirectPropertyPreview
+        activeField={isValidPreviewField(activeField) ? activeField : null}
+        currentStep={currentStep}
+        formAmenities={{
+          interior: methods.watch("amenities.interior") || [],
+          exterior: methods.watch("amenities.exterior") || [],
+          proximity: methods.watch("amenities.proximity") || [],
+        }}
+        useFormData={true}
+      />
               </div>
             </div>
           )}
         </div>
       </div>
+
       {/* Alerte de confirmation après soumission */}
       {showConfirmation && (
-        <div className="fixed inset-0 bg-black bg-opaville-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl p-6 max-w-md w-full">
             <div className="text-center mb-4">
-              <div className="bg-[#465baa]/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="bg-primary/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="32"
@@ -1508,7 +1576,7 @@ export  function DirectFormWithPreview() {
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className="text-[#465baa]"
+                  className="text-primary"
                 >
                   <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
                   <polyline points="22 4 12 14.01 9 11.01"></polyline>
@@ -1532,7 +1600,7 @@ export  function DirectFormWithPreview() {
               </button>
               <button
                 onClick={navigateToDashboard}
-                className="flex-1 px-4 py-2 bg-[#465baa] text-white rounded-md hover:bg-[#465baa]/90 transition-colors"
+                className="flex-1 px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors"
               >
                 Voir mon tableau de bord
               </button>
@@ -1542,4 +1610,5 @@ export  function DirectFormWithPreview() {
       )}
     </FormProvider>
   )
+}
 }
