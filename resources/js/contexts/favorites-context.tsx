@@ -1,6 +1,6 @@
 import type React from "react"
 import { createContext, useContext, useState, useEffect } from "react"
-import { useAuth } from "@/contexts/auth-context"
+import { usePage } from "@inertiajs/react"
 interface FavoritesContextType {
   favorites: number[] // Change string[] to number[]
   addFavorite: (propertyId: number) => void // Change Number to number
@@ -8,27 +8,38 @@ interface FavoritesContextType {
   isFavorite: (propertyId: number) => boolean // Change Number to number
   toggleFavorite: (propertyId: number) => void // Change Number to number
 }
+type User = {
+  id: number;
+  name: string;
+  email: string;
+};
+type PageProps = {
+  auth: {
+    user: User | null;
+  };
+};
 const FavoritesContext = createContext<FavoritesContextType | undefined>(undefined)
 export function FavoritesProvider({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated } = useAuth()
+  const { auth } = usePage<PageProps>().props;
+  
   const [favorites, setFavorites] = useState<number[]>([]) // Change string[] to number[]
 
   // Charger les favoris depuis le localStorage au démarrage
   useEffect(() => {
-    if (isAuthenticated) {
+    if (auth.user) {
       const stored = localStorage.getItem("favorites")
       if (stored) {
         setFavorites(JSON.parse(stored))
       }
     }
-  }, [isAuthenticated])
+  }, [auth])
 
   // Sauvegarder les favoris dans le localStorage à chaque changement
   useEffect(() => {
-    if (isAuthenticated && favorites.length > 0) {
+    if (auth.user && favorites.length > 0) {
       localStorage.setItem("favorites", JSON.stringify(favorites))
     }
-  }, [favorites, isAuthenticated])
+  }, [favorites, auth])
 
   const addFavorite = (propertyId: number) => { // Change Number to number
     if (!favorites.includes(propertyId)) {

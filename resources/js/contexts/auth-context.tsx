@@ -16,13 +16,10 @@ interface AuthContextType {
   login: () => void
   logout: () => void
 }
-
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
-
 export function AuthProvider({ children }: { children: React.ReactNode }){
   const [user, setUser] = useState<User | null>(null)
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
-
   // Simuler la vérification de l'authentification au chargement
   useEffect(() => {
     // Ici, vous pourriez vérifier un token dans localStorage ou faire une requête API
@@ -38,7 +35,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }){
         })
       }
     }
-
     checkAuth()
   }, [])
 

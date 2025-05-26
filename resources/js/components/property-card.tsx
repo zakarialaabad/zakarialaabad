@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Heart, MapPin, Star, Bed, Square } from "lucide-react";
+import { Heart, MapPin, Bed, Square } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "@inertiajs/react";
@@ -7,7 +7,6 @@ import { ImageCarousel } from "@/components/image-carousel";
 import { motion } from "framer-motion";
 import { router } from "@inertiajs/react";
 import { usePage } from "@inertiajs/react";
-import { useAuth } from "@/contexts/auth-context";
 import { useFavorites } from "@/contexts/favorites-context";
 import { AuthAlert } from "@/components/auth/auth-alert";
 type Propriete = {
