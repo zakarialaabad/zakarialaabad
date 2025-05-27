@@ -69,28 +69,35 @@ function PropertyCard({ propriete }: { propriete: Propriete }) {
   const { isFavorite, toggleFavorite } = useFavorites();
   const [showAuthAlert, setShowAuthAlert] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-    const { auth } = usePage<PageProps>().props;
-  
+  const { auth } = usePage<PageProps>().props;
   const [isHeartAnimating, setIsHeartAnimating] = useState(false);
- const handleFavoriteClick = (e: React.MouseEvent) => {
+const handleFavoriteClick = (e: React.MouseEvent) => {
   e.preventDefault();
   e.stopPropagation();
   
-  if (auth.user) {
-    setIsHeartAnimating(true);
-    toggleFavorite(propriete.id); // التبديل بين إضافة/إزالة من المفضلة
-    router.post("/favorites/toggle", {
-  propriete_id: propriete.id
-}, {
-  onSuccess: () => {
-    router.reload(); // إعادة تحميل الصفحة لتحديث favoriteIds من الخادم
+  if (!auth.user) {
+    setShowAuthAlert(true);
+    return;
   }
-})
-    setTimeout(() => setIsHeartAnimating(false), 1000); // إنهاء الأنيميشن بعد ثانية
-  } else {
-    setShowAuthAlert(true); // إظهار تنبيه تسجيل الدخول
-  }
+
+  setIsHeartAnimating(true);
+  
+  // Optimistically update the UI
+  toggleFavorite(propriete.id);
+
+  // Send request to server
+  router.post("/favorites/toggle", {
+    propriete_id: propriete.id,
+  }, {
+    preserveScroll: true,
+    onFinish: () => setIsHeartAnimating(false),
+    onError: () => {
+      // Revert the optimistic update on error
+      toggleFavorite(propriete.id);
+    }
+  });
 };
+
 
 
   const isFav = isFavorite(propriete.id);
@@ -121,22 +128,26 @@ function PropertyCard({ propriete }: { propriete: Propriete }) {
                 priority={id === 1}
               />
             </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handleFavoriteClick}
-              className={`absolute right-3 top-3 z-20 h-9 w-9 rounded-full backdrop-blur-sm shadow-sm transition-all duration-300 ${
-                isFav
-                  ? "bg-white/90 text-rose-500 hover:bg-white hover:text-rose-600 hover:scale-110"
-                  : "bg-white/90 text-gray-500 hover:text-gray-700 hover:bg-gray-100 hover:scale-110"
-              }`}
-              aria-label={isFav ? "Retirer des favoris" : "Ajouter aux favoris"}
-            >
-              <motion.div variants={heartVariants} animate={isHeartAnimating ? "animate" : "initial"}>
-                <Heart className={`h-5 w-5 ${isFav ? "fill-current" : ""}`} />
-              </motion.div>
-            </Button>
-
+              <Button
+      variant="ghost"
+      size="icon"
+      onClick={handleFavoriteClick}
+      className={`absolute right-3 top-3 z-20 h-9 w-9 rounded-full backdrop-blur-sm shadow-sm transition-all duration-300
+        ${isFav
+          ? "bg-white/90 hover:bg-white hover:scale-110"
+          : "bg-white/90 hover:bg-gray-100 hover:scale-110"
+        }`}
+      aria-label={isFav ? "Retirer des favoris" : "Ajouter aux favoris"}
+    >
+      <motion.div
+        variants={heartVariants}
+        animate={isHeartAnimating ? "animate" : "initial"}
+      >
+        <Heart
+          className={`h-5 w-5 ${isFav ? "text-rose-500 fill-current" : "text-gray-500"}`}
+        />
+      </motion.div>
+    </Button>
             <div className="absolute bottom-3 left-3 z-20 flex flex-wrap gap-1.5">
               <Badge variant="secondary" className="bg-white/90 backdrop-blur-sm font-medium px-2.5 py-1">
                 {type}

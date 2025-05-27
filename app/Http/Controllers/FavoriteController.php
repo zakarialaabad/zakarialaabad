@@ -24,13 +24,11 @@ class FavoriteController extends Controller
         }
 
     }
-    public function favoris(){
-        
+    public function favoris(){  
     $user = Auth::user();
     $properties = Propriete::all();
     $favoriteIds = $user ? $user->favorites()->pluck('propriete_id')->toArray() : [];
-        // جلب جميع المفضلات للمستخدم مع بيانات العقار
-  
-        return Inertia::render("app/favoris/page",compact('favoriteIds', 'properties' ,"user"));
+    // جلب جميع المفضلات للمستخدم مع بيانات العقار
+    return Inertia::render("app/favoris/page",compact('favoriteIds', 'properties' ,"user"));
     }
 }
