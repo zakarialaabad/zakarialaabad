@@ -133,18 +133,18 @@ const handleFavoriteClick = (e: React.MouseEvent) => {
       size="icon"
       onClick={handleFavoriteClick}
       className={`absolute right-3 top-3 z-20 h-9 w-9 rounded-full backdrop-blur-sm shadow-sm transition-all duration-300
-        ${isFav
+        ${isFavorite(propriete.id)
           ? "bg-white/90 hover:bg-white hover:scale-110"
           : "bg-white/90 hover:bg-gray-100 hover:scale-110"
         }`}
-      aria-label={isFav ? "Retirer des favoris" : "Ajouter aux favoris"}
+      aria-label={isFavorite(propriete.id) ? "Retirer des favoris" : "Ajouter aux favoris"}
     >
       <motion.div
         variants={heartVariants}
         animate={isHeartAnimating ? "animate" : "initial"}
       >
         <Heart
-          className={`h-5 w-5 ${isFav ? "text-rose-500 fill-current" : "text-gray-500"}`}
+          className={`h-5 w-5 ${isFavorite(propriete.id) ? "text-rose-500 fill-current" : "text-gray-500"}`}
         />
       </motion.div>
     </Button>

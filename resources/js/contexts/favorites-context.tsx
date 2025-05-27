@@ -29,12 +29,12 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
   const { auth, favoriteIds = [] } = usePage<PageProps>().props;
   const [favorites, setFavorites] = useState<number[]>(favoriteIds)
 
-  // Initialize favorites from server data only once
+  // Initialize favorites from server data
   useEffect(() => {
     if (auth.user && favoriteIds.length > 0) {
       setFavorites(favoriteIds)
     }
-  }, []) // Empty dependency array means this runs once on mount
+  }, [auth.user, favoriteIds])
 
   const addFavorite = useCallback((propertyId: number) => {
     setFavorites(prev => {
