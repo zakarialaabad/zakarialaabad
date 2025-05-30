@@ -15,7 +15,7 @@ export default function DeposerAnnonce() {
           <Button
             variant="ghost"
             className="mb-4 flex items-center gap-2 text-gray-600 hover:text-gray-900"
-            onClick={() => router.restore()}
+            onClick={() => window.history.back()}  
           >
             <ArrowLeft className="h-4 w-4" />
             Retour

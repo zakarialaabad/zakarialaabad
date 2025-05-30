@@ -16,7 +16,6 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import AdminLayout from "@/layouts/layoutAdmin";
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
@@ -30,9 +29,8 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { allProperties } from "@/data/properties";
 import { motion } from "framer-motion";
-import { router } from "@inertiajs/react";
+import { router, usePage } from "@inertiajs/react";
 import { useNotifications } from "@/contexts/notifications-context";
 import {
   Dialog,
@@ -43,54 +41,83 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+type Propriete = {
+  id: number;
+  loueur_id: number;
+  titre: string;
+  localisation: string;
+  prixParMois: number;
+  imgs: string[];
+  description: Text;
+  disponibilite: boolean;
+  type: string;
+  nbrchambre: number;
+  surface: number;
+  adresse: string;
+  created_at: string;
+  admin_id: number;
+  updated_at: string;
+  loueur: {
+    id: number;
+    user: {
+      name: string;
+      email: string;
+      prenom: string;
+      genre: string;
+      telephone: string;
+      profile: string;
+    };
+  };
+  status: "approved" | "pending" | "rejected" | "expired";
+  commodites: {
+    id: number;
+    commodite: string;
+    categorie: string;
+  }[];
+};
+export function Adminproprietes() {
 
 // Extended property type for admin features
-interface AdminProperty {
-  id: string;
-  title: string;
-  location: string;
-  price: number;
-  bedrooms: number;
-  propertyType: string;
-  area: number;
-  images: string[];
-  owner: {
-    name: string;
-    image: string;
-    location: string;
-  };
-  rating: number;
-  status: "approved" | "pending" | "rejected" | "draft" | "expired";
-  createdAt: string;
-  updatedAt: string;
-  featured: boolean;
-}
+  const { proprietes } = usePage<{ proprietes: Propriete[] }>().props || { proprietes: [] };
+  console.log('proprietes data:', proprietes);
 
-// Convert the existing properties to admin properties
-const adminProperties: AdminProperty[] = allProperties.map((property, index) => {
+
+// Convert the existing proprietes to admin proprietes
+  const adminproprietes: Propriete[] = (proprietes || []).map((property, index) => {
   // Generate random status based on index
-  const statuses: AdminProperty["status"][] = ["approved", "pending", "rejected", "draft", "expired"];
+  const statuses: Propriete["status"][] = ["approved", "pending", "rejected", "expired"];
   const status = statuses[index % 5];
-
   // Generate dates
   const createdAt = new Date(Date.now() - Math.floor(Math.random() * 90) * 24 * 60 * 60 * 1000).toISOString();
   const updatedAt = new Date(Date.now() - Math.floor(Math.random() * 30) * 24 * 60 * 60 * 1000).toISOString();
 
   return {
-    ...property,
-    status,
-    createdAt,
-    updatedAt,
-    featured: index % 7 === 0, // Every 7th property is featured
+    id: property.id,
+    loueur_id: property.loueur_id,
+    titre: property.titre,
+    localisation: property.localisation,
+    prixParMois: property.prixParMois,
+    imgs: property.imgs,
+    description: property.description,
+    disponibilite: property.disponibilite,
+    type: property.type,
+    nbrchambre: property.nbrchambre,
+    surface: property.surface,
+    adresse: property.adresse,
+    created_at: createdAt,
+    admin_id: property.admin_id,
+    updated_at: updatedAt,
+    loueur: property.loueur,
+    status: status,
+    commodites: property.commodites,
   };
 });
 
-export function AdminProperties() {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState("")
+  const [proprietesUpadte, setproprietes] = useState<Propriete[]>(proprietes);
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const [selectedType, setSelectedType] = useState<string>("all");
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
-  const [properties, setProperties] = useState<AdminProperty[]>(adminProperties);
+  const [selectedItems, setSelectedItems] = useState<number[]>([]);
   const [isAdvancedFiltersOpen, setIsAdvancedFiltersOpen] = useState(false);
   const [advancedFilters, setAdvancedFilters] = useState({
     priceRange: { min: 0, max: 20000 },
@@ -101,27 +128,29 @@ export function AdminProperties() {
 
   const { addNotification } = useNotifications();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [propertyToDelete, setPropertyToDelete] = useState<AdminProperty | null>(null);
-  const [deleteState, setDeleteState] = useState({ id: '', loading: false });
+  const [propertyToDelete, setPropertyToDelete] = useState<Propriete | null>(null);
+  const [deleteState, setDeleteState] = useState({ id: 0, loading: false });
 
   // Reset function to clean up state
   const resetDeleteState = useCallback(() => {
     setIsDeleteDialogOpen(false);
     setPropertyToDelete(null);
-    setDeleteState({ id: '', loading: false });
+    setDeleteState({ id: 0, loading: false });
     document.body.style.cursor = "default";
   }, []);
 
-  // Filter properties based on search query and filters
-  const filteredProperties = useMemo(() => {
-    return properties.filter((property) => {
+  // Filter proprietes based on search query and filters
+  const filteredproprietes = useMemo(() => {
+      if (!proprietes || !Array.isArray(proprietes)) return [];
+
+    return proprietes.filter((property) => {
       // Filter by search query
       if (
         searchQuery &&
-        !property.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
-        !property.location.toLowerCase().includes(searchQuery.toLowerCase()) &&
-        !property.propertyType.toLowerCase().includes(searchQuery.toLowerCase()) &&
-        !property.owner.name.toLowerCase().includes(searchQuery.toLowerCase())
+        !property.titre.toLowerCase().includes(searchQuery.toLowerCase()) &&
+        !property.localisation.toLowerCase().includes(searchQuery.toLowerCase()) &&
+        !property.type.toLowerCase().includes(searchQuery.toLowerCase()) &&
+        !property.loueur.user.name.toLowerCase().includes(searchQuery.toLowerCase())
       ) {
         return false;
       }
@@ -132,49 +161,49 @@ export function AdminProperties() {
       }
 
       // Filter by property type
-      if (selectedType !== "all" && property.propertyType !== selectedType) {
+      if (selectedType !== "all" && property.type !== selectedType) {
         return false;
       }
 
       // Advanced filters
       // Price range
-      if (property.price < advancedFilters.priceRange.min || property.price > advancedFilters.priceRange.max) {
+      if (property.prixParMois < advancedFilters.priceRange.min || property.prixParMois > advancedFilters.priceRange.max) {
         return false;
       }
 
       // Bedrooms
-      if (property.bedrooms < advancedFilters.bedrooms.min || property.bedrooms > advancedFilters.bedrooms.max) {
+      if (property.nbrchambre < advancedFilters.bedrooms.min || property.nbrchambre > advancedFilters.bedrooms.max) {
         return false;
       }
 
       // Area
-      if (property.area < advancedFilters.area.min || property.area > advancedFilters.area.max) {
+      if (property.surface < advancedFilters.area.min || property.surface > advancedFilters.area.max) {
         return false;
       }
 
       // Featured
-      if (advancedFilters.featured && !property.featured) {
+      if (advancedFilters.featured && !property.commodites) {
         return false;
       }
 
       return true;
     });
-  }, [properties, searchQuery, selectedStatus, selectedType, advancedFilters]);
+  }, [proprietes, searchQuery, selectedStatus, selectedType, advancedFilters]);
+  if (!proprietes || !Array.isArray(proprietes)) return [];
 
   // Get unique property types
-  const propertyTypes = useMemo(() => Array.from(new Set(properties.map((p) => p.propertyType))), [properties]);
+  const propertyTypes = useMemo(() => Array.from(new Set(proprietes.map((p) => p.type))), [proprietes]);
 
   // Handle select all checkbox
   const handleSelectAll = () => {
-    if (selectedItems.length === filteredProperties.length) {
+    if (selectedItems.length === filteredproprietes.length) {
       setSelectedItems([]);
     } else {
-      setSelectedItems(filteredProperties.map((p) => p.id));
+      setSelectedItems(filteredproprietes.map((p) => p.id));
     }
   };
-
   // Handle individual checkbox
-  const handleSelectItem = (id: string) => {
+  const handleSelectItem = (id: number) => {
     if (selectedItems.includes(id)) {
       setSelectedItems(selectedItems.filter((item) => item !== id));
     } else {
@@ -193,7 +222,7 @@ export function AdminProperties() {
   };
 
   // Get status badge
-  const getStatusBadge = (status: AdminProperty["status"]) => {
+  const getStatusBadge = (status: Propriete["status"]) => {
     switch (status) {
       case "approved":
         return (
@@ -216,13 +245,7 @@ export function AdminProperties() {
             Refusée
           </Badge>
         );
-      case "draft":
-        return (
-          <Badge className="bg-gray-100 text-gray-800 hover:bg-gray-100">
-            <FileText className="h-3 w-3 mr-1" />
-            Brouillon
-          </Badge>
-        );
+      
       case "expired":
         return (
           <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-100">
@@ -234,7 +257,7 @@ export function AdminProperties() {
   };
 
   // View property details
-  const handleViewProperty = (id: string) => {
+  const handleViewProperty = (id: number) => {
     router.visit(`/property/${id}`);
     addNotification({
       title: "Affichage de la propriété",
@@ -244,8 +267,8 @@ export function AdminProperties() {
   };
 
   // Edit property
-  const handleEditProperty = (id: string) => {
-    router.visit(`/admin/properties/edit/${id}`);
+  const handleEditProperty = (id: number) => {
+    router.visit(`/admin/proprietes/edit/${id}`);
     addNotification({
       title: "Modification de la propriété",
       message: "Redirection vers le formulaire d'édition",
@@ -254,7 +277,7 @@ export function AdminProperties() {
   };
 
   // Open delete confirmation dialog
-  const openDeleteDialog = (property: AdminProperty) => {
+  const openDeleteDialog = (property: Propriete) => {
     if (deleteState.loading) return;
     setPropertyToDelete(property);
     setIsDeleteDialogOpen(true);
@@ -271,10 +294,10 @@ export function AdminProperties() {
       await new Promise(resolve => setTimeout(resolve, 1000));
 
       // Create a new array without the deleted property
-      const updatedProperties = properties.filter((p) => p.id !== propertyToDelete.id);
+      const updatedproprietes = proprietes.filter((p) => p.id !== propertyToDelete.id);
 
       // Update the state with the new array
-      setProperties(updatedProperties);
+      setproprietes(updatedproprietes);
 
       // Clear selected items that might reference the deleted property
       const updatedSelectedItems = selectedItems.filter((id) => id !== propertyToDelete.id);
@@ -302,13 +325,13 @@ export function AdminProperties() {
   };
 
   // Approve property
-  const handleApproveProperty = (id: string) => {
+  const handleApproveProperty = (id: number) => {
     setDeleteState({ id, loading: true });
 
     // Simulate API call
     setTimeout(() => {
-      setProperties(properties.map((p) => (p.id === id ? { ...p, status: "approved" } : p)));
-      setDeleteState({ id: '', loading: false });
+      setproprietes(proprietes.map((p) => (p.id === id ? { ...p, status: "approved" } : p)));
+      setDeleteState({ id: 0, loading: false });
 
       addNotification({
         title: "Propriété approuvée",
@@ -319,13 +342,13 @@ export function AdminProperties() {
   };
 
   // Reject property
-  const handleRejectProperty = (id: string) => {
+  const handleRejectProperty = (id:number ) => {
     setDeleteState({ id, loading: true });
 
     // Simulate API call
     setTimeout(() => {
-      setProperties(properties.map((p) => (p.id === id ? { ...p, status: "rejected" } : p)));
-      setDeleteState({ id: '', loading: false });
+      setproprietes(proprietes.map((p) => (p.id === id ? { ...p, status: "rejected" } : p)));
+      setDeleteState({ id: 0, loading: false });
 
       addNotification({
         title: "Propriété rejetée",
@@ -335,13 +358,13 @@ export function AdminProperties() {
     }, 1000);
   };
 
-  // Export properties
+  // Export proprietes
   const handleExport = () => {
-    setDeleteState({ id: '', loading: true });
+    setDeleteState({ id: 0, loading: true });
 
     // Simulate export process
     setTimeout(() => {
-      setDeleteState({ id: '', loading: false });
+      setDeleteState({ id: 0, loading: false });
       addNotification({
         title: "Export réussi",
         message: "Les données ont été exportées au format CSV",
@@ -350,13 +373,13 @@ export function AdminProperties() {
     }, 1500);
   };
 
-  // Refresh properties
+  // Refresh proprietes
   const handleRefresh = () => {
-    setDeleteState({ id: '', loading: true });
+    setDeleteState({ id: 0, loading: true });
 
     // Simulate refresh
     setTimeout(() => {
-      setDeleteState({ id: '', loading: false });
+      setDeleteState({ id: 0, loading: false });
       addNotification({
         title: "Données actualisées",
         message: "La liste des propriétés a été mise à jour",
@@ -386,16 +409,17 @@ export function AdminProperties() {
   useEffect(() => {
     return () => {
       // Reset any loading states and cursor when component unmounts
-      setDeleteState({ id: '', loading: false });
+      setDeleteState({ id: 0, loading: false });
       document.body.style.cursor = "default";
     };
   }, []);
 
   // Add error handling for unhandled exceptions
   useEffect(() => {
+    
     const handleError = () => {
       // Reset states on error
-      setDeleteState({ id: '', loading: false });
+      setDeleteState({ id: 0, loading: false });
       setIsDeleteDialogOpen(false);
       document.body.style.cursor = "default";
     };
@@ -420,10 +444,6 @@ export function AdminProperties() {
           <Button variant="outline" size="sm" className="hidden md:flex" onClick={handleExport} disabled={deleteState.loading}>
             {deleteState.loading ? <RefreshCw className="h-4 w-4 mr-2 animate-spin" /> : <Download className="h-4 w-4 mr-2" />}
             Exporter
-          </Button>
-          <Button variant="outline" size="sm" className="hidden md:flex" onClick={handleRefresh} disabled={deleteState.loading}>
-            <RefreshCw className={`h-4 w-4 mr-2 ${deleteState.loading ? "animate-spin" : ""}`} />
-            Actualiser
           </Button>
           <Button size="sm" className="bg-[#465baa] hover:bg-[#465baa]/90" onClick={handleAddProperty}>
             <Plus className="h-4 w-4 mr-2" />
@@ -471,11 +491,6 @@ export function AdminProperties() {
                 ))}
               </SelectContent>
             </Select>
-
-            <Button variant="outline" className="flex-shrink-0" onClick={() => setIsAdvancedFiltersOpen(true)}>
-              <Filter className="h-4 w-4 mr-2" />
-              Plus de filtres
-            </Button>
           </div>
         </div>
 
@@ -487,7 +502,7 @@ export function AdminProperties() {
                   <th className="h-12 px-4 text-left align-middle font-medium text-gray-500">
                     <div className="flex items-center space-x-2">
                       <Checkbox
-                        checked={selectedItems.length === filteredProperties.length && filteredProperties.length > 0}
+                        checked={selectedItems.length === filteredproprietes.length && filteredproprietes.length > 0}
                         onCheckedChange={handleSelectAll}
                         aria-label="Select all"
                       />
@@ -503,8 +518,8 @@ export function AdminProperties() {
                 </tr>
               </thead>
               <tbody className="divide-y">
-                {filteredProperties.length > 0 ? (
-                  filteredProperties.map((property) => (
+                {filteredproprietes.length > 0 ? (
+                  filteredproprietes.map((property) => (
                     <motion.tr
                       key={property.id}
                       initial={{ opacity: 0 }}
@@ -517,44 +532,40 @@ export function AdminProperties() {
                           <Checkbox
                             checked={selectedItems.includes(property.id)}
                             onCheckedChange={() => handleSelectItem(property.id)}
-                            aria-label={`Select ${property.title}`}
+                            aria-label={`Select ${property.titre}`}
                           />
                           <div className="h-12 w-12 relative rounded-md overflow-hidden">
                             <img
-                              src={property.images[0] || "/placeholder.svg"}
-                              alt={property.title}
+                              src={property.imgs[2] || "/placeholder.svg"}
+                              alt={property.titre}
                               className="object-cover w-full h-full"
                             />
-                            {property.featured && (
-                              <div className="absolute top-0 right-0 bg-[#465baa] text-white text-[10px] px-1 py-0.5">
-                                Featured
-                              </div>
-                            )}
+                         
                           </div>
                           <div>
-                            <div className="font-medium">{property.title}</div>
-                            <div className="text-xs text-gray-500">{property.location}</div>
+                            <div className="font-medium">{property.titre}</div>
+                            <div className="text-xs text-gray-500">{property.localisation}</div>
                           </div>
                         </div>
                       </td>
                       <td className="p-4 align-middle">
-                        <Badge variant="outline">{property.propertyType}</Badge>
+                        <Badge variant="outline">{property.type}</Badge>
                       </td>
-                      <td className="p-4 align-middle font-medium">{property.price} MAD/mois</td>
+                      <td className="p-4 align-middle font-medium">{property.prixParMois} MAD/mois</td>
                       <td className="p-4 align-middle">
                         <div className="flex items-center gap-2">
                           <div className="h-8 w-8 relative rounded-full overflow-hidden">
                             <img
-                              src={property.owner.image || "/placeholder.svg"}
-                              alt={property.owner.name}
+                              src={property.loueur.user.profile || "/placeholder.svg"}
+                              alt={property.loueur.user.name}
                               className="object-cover w-full h-full"
                             />
                           </div>
-                          <div className="text-sm">{property.owner.name}</div>
+                          <div className="text-sm">{property.loueur.user.name}</div>
                         </div>
                       </td>
                       <td className="p-4 align-middle">{getStatusBadge(property.status)}</td>
-                      <td className="p-4 align-middle text-sm text-gray-500">{formatDate(property.createdAt)}</td>
+                      <td className="p-4 align-middle text-sm text-gray-500">{formatDate(property.created_at)}</td>
                       <td className="p-4 align-middle">
                         <div className="flex items-center gap-2">
                           <Button
@@ -625,7 +636,7 @@ export function AdminProperties() {
 
         <div className="flex items-center justify-between mt-4">
           <div className="text-sm text-gray-500">
-            Affichage de {filteredProperties.length} sur {properties.length} propriétés
+            Affichage de {filteredproprietes.length} sur {proprietes.length} propriétés
           </div>
           <div className="flex items-center space-x-2">
             <Button variant="outline" size="sm" disabled>
@@ -660,7 +671,7 @@ export function AdminProperties() {
           <DialogHeader>
             <DialogTitle>Confirmer la suppression</DialogTitle>
             <DialogDescription>
-              Êtes-vous sûr de vouloir supprimer la propriété "{propertyToDelete?.title}" ? Cette action est
+              Êtes-vous sûr de vouloir supprimer la propriété "{propertyToDelete?.titre}" ? Cette action est
               irréversible.
             </DialogDescription>
           </DialogHeader>
@@ -836,4 +847,4 @@ export function AdminProperties() {
 }
 
 
-export default AdminProperties;
+export default Adminproprietes;

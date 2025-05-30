@@ -390,9 +390,9 @@ export default function PropertyDetails({ propriete }: InertiaPageProps) {
                     <div className="flex items-center">
                       <Badge
                         variant="outline"
-                        className="flex items-center gap-1 rounded-full border-primary/30 bg-primary/5 px-3 py-1 text-primary"
+                        className="flex items-center gap-1 rounded-full border-[#465baa]/30 bg-[#465baa]/5 px-3 py-1 text-[#465baa]"
                       >
-                        <Star className="h-3.5 w-3.5 fill-primary text-primary" />
+                        <Star className="h-3.5 w-3.5 fill-[#465baa] text-[#465baa]" />
                         <span className="font-medium">{property.rating}</span>
                         <span className="text-gray-600">({property.reviewCount} avis)</span>
                       </Badge>
@@ -413,11 +413,10 @@ export default function PropertyDetails({ propriete }: InertiaPageProps) {
                 {/* Information tabs with animation */}
                 <motion.div variants={itemVariants}>
                   <Tabs defaultValue="description" className="mb-8">
-                    <TabsList className="grid w-full grid-cols-4">
+                    <TabsList className="grid w-full grid-cols-3">
                       <TabsTrigger value="description">Description</TabsTrigger>
                       <TabsTrigger value="amenities">Caractéristiques</TabsTrigger>
                       <TabsTrigger value="rules">Règles</TabsTrigger>
-                      <TabsTrigger value="location">Emplacement</TabsTrigger>
                     </TabsList>
                     <AnimatePresence mode="wait">
                       <TabsContent value="description" className="mt-6">
@@ -471,21 +470,11 @@ export default function PropertyDetails({ propriete }: InertiaPageProps) {
                                 transition={{ delay: index * 0.1 }}
                                 className="flex items-center text-gray-700"
                               >
-                                <div className="mr-3 h-1.5 w-1.5 rounded-full bg-primary"></div>
+                                <div className="mr-3 h-1.5 w-1.5 rounded-full bg-[#465baa]"></div>
                                 {rule}
                               </motion.li>
                             ))}
                           </ul>
-                        </motion.div>
-                      </TabsContent>
-                      <TabsContent value="location" className="mt-6">
-                        <motion.div
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -10 }}
-                          transition={{ duration: 0.3 }}
-                        >
-                          <PropertyMap location={property.location} />
                         </motion.div>
                       </TabsContent>
                     </AnimatePresence>

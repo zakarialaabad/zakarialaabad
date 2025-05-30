@@ -35,7 +35,7 @@ class PropreiteSeeder extends Seeder
         "Pas de fêtes en semaine",
         "Adapté aux enfants",
         "Adapté aux bébés",
-        "Idéal pour les familles",
+        "Idéal pour les Famille",
         "Équipements de sécurité pour enfants"
     ];
 
@@ -78,7 +78,7 @@ class PropreiteSeeder extends Seeder
                 'localisation' => 'Casablanca, Hay Riad',
                 'prixParMois' => 6000,
                 'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')),
-                'description' => 'Appartement moderne de 90 m² avec une vue imprenable sur la mer. Situé dans un quartier calme, l\'appartement comprend 2 chambres, un salon spacieux et une cuisine équipée. Idéal pour une famille ou des professionnels.',
+                'description' => 'Appartement moderne de 90 m² avec une vue imprenable sur la mer. Situé dans un quartier calme, l\'appartement comprend 2 chambres, un salon spacieux et une cuisine équipée. Idéal pour une famille ou des Fonctionnaire.',
                 'disponibilite' => true,
                 'type' => 'Appartement',
                 'regles' => $this->getRandomRegles(),
@@ -87,7 +87,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => $this->typesLocairesOptions[array_rand($this->typesLocairesOptions)],
-                "ville" => "Casablanca"
+                "ville" => "Casablanca",
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -104,7 +105,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Fonctionnaire',
-                "ville"=>"Marrakech"
+                "ville"=>"Marrakech",
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -112,7 +114,7 @@ class PropreiteSeeder extends Seeder
                 'localisation' => 'Rabat, Centre-ville',
                 'prixParMois' => 4500,
                 'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')),
-                'description' => 'Charmant appartement de 70 m² situé dans le centre-ville de Rabat. Il dispose de 2 chambres, un salon lumineux, et une cuisine équipée. Idéal pour les professionnels ou étudiants.',
+                'description' => 'Charmant appartement de 70 m² situé dans le centre-ville de Rabat. Il dispose de 2 chambres, un salon lumineux, et une cuisine équipée. Idéal pour les Fonctionnaire ou Étudiant.',
                 'disponibilite' => true,
                 'type' => 'Appartement',
                 'regles' => $this->getRandomRegles(),
@@ -121,7 +123,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Étudiant',
-                "ville"=>"Rabat"
+                "ville"=>"Rabat",
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -138,7 +141,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Célibataire',
-                "ville"=>"Tanger"
+                "ville"=>"Tanger",
+                'status' => 'approved'
             ],
 
             // Villa
@@ -148,7 +152,7 @@ class PropreiteSeeder extends Seeder
                 'localisation' => 'Marrakech, Palmeraie',
                 'prixParMois' => 15000,
                 'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')),
-                'description' => 'Villa spacieuse de 300 m² située dans la Palmeraie, avec une piscine privée et un grand jardin. Elle dispose de 4 chambres, un salon majestueux, une cuisine équipée et un garage. Idéale pour les grandes familles.',
+                'description' => 'Villa spacieuse de 300 m² située dans la Palmeraie, avec une piscine privée et un grand jardin. Elle dispose de 4 chambres, un salon majestueux, une cuisine équipée et un garage. Idéale pour les grandes Famille.',
                 'disponibilite' => true,
                 'type' => 'Villa',
                 'regles' => $this->getRandomRegles(),
@@ -157,7 +161,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Famille',
-                "ville"=>"Marrakech"
+                "ville"=>"Marrakech",
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -174,7 +179,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Famille',
-                "ville"=>"Fès"
+                "ville"=>"Fès",
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -191,7 +197,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Famille',
-                "ville"=>"Agadir"
+                "ville"=>"Agadir",
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -208,7 +215,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Essaouira'
+                'ville' => 'Essaouira',
+                'status' => 'approved'
             ],
 
             // Bureau
@@ -227,7 +235,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Fonctionnaire',
-                'ville' => 'Rabat'
+                'ville' => 'Rabat',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -235,7 +244,7 @@ class PropreiteSeeder extends Seeder
                 'localisation' => 'Casablanca, Maarif',
                 'prixParMois' => 10000,
                 'imgs' => json_encode($this->getRandomImages('Bureau')),
-                'description' => 'Bureau de 100 m² au cœur de Casablanca, bien situé dans un quartier d\'affaires. Parfait pour les entreprises recherchant un environnement professionnel.',
+                'description' => 'Bureau de 100 m² au cœur de Casablanca, bien situé dans un quartier d\'affaires. Parfait pour les Fonctionnaire recherchant un environnement professionnel.',
                 'disponibilite' => true,
                 'type' => 'Bureau',
                 'regles' => $this->getRandomRegles(),
@@ -244,15 +253,16 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Fonctionnaire',
-                'ville' => 'Casablanca'
+                'ville' => 'Casablanca',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
-                'titre' => 'Bureau à Tanger, centre commercial',
+                'titre' => 'Bureau à Tanger, centre Magasin',
                 'localisation' => 'Tanger, Centre-ville',
                 'prixParMois' => 12000,
                 'imgs' => json_encode($this->getRandomImages('Bureau')),
-                'description' => 'Bureau de 90 m² dans un centre commercial à Tanger. Il est situé à proximité des commerces et bien desservi par les transports publics.',
+                'description' => 'Bureau de 90 m² dans un centre Magasin à Tanger. Il est situé à proximité des commerces et bien desservi par les transports publics.',
                 'disponibilite' => true,
                 'type' => 'Bureau',
                 'regles' => $this->getRandomRegles(),
@@ -261,7 +271,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Fonctionnaire',
-                'ville' => 'Tanger'
+                'ville' => 'Tanger',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -278,13 +289,14 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Fonctionnaire',
-                'ville' => 'Marrakech'
+                'ville' => 'Marrakech',
+                'status' => 'approved'
             ],
 
             // Magasin
             [
                 'loueur_id' => rand(1, 25),
-                'titre' => 'Magasin commercial à Tanger',
+                'titre' => 'Magasin Magasin à Tanger',
                 'localisation' => 'Tanger, Centre-ville',
                 'prixParMois' => 10000,
                 'imgs' => json_encode($this->getRandomImages('Magasin')),
@@ -297,7 +309,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Tanger'
+                'ville' => 'Tanger',
+                'status' => 'approved'
             ],
             // Entrepôt
             [
@@ -315,7 +328,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Casablanca'
+                'ville' => 'Casablanca',
+                'status' => 'approved'
             ],
             //Boutique
             [
@@ -333,7 +347,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Marrakech'
+                'ville' => 'Marrakech',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -350,7 +365,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Casablanca'
+                'ville' => 'Casablanca',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -367,7 +383,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Rabat'
+                'ville' => 'Rabat',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -384,7 +401,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Tanger'
+                'ville' => 'Tanger',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -401,7 +419,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Famille',
-                'ville' => 'Casablanca'
+                'ville' => 'Casablanca',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -418,7 +437,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Fonctionnaire',
-                'ville' => 'Marrakech'
+                'ville' => 'Marrakech',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -435,7 +455,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Étudiant',
-                'ville' => 'Rabat'
+                'ville' => 'Rabat',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -452,7 +473,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Célibataire',
-                'ville' => 'Tanger'
+                'ville' => 'Tanger',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -469,15 +491,16 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Fonctionnaire',
-                'ville' => 'Fès'
+                'ville' => 'Fès',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
-                'titre' => 'Espace commercial à Boujdour',
+                'titre' => 'Espace Magasin à Boujdour',
                 'localisation' => 'Boujdour',
                 'prixParMois' => 25000,
                 'imgs' => json_encode($this->getRandomImages('Boutique')),
-                'description' => 'Espace commercial dans un Boutique avec des enseignes de renommée. Parfait pour un commerce de détail.',
+                'description' => 'Espace Magasin dans un Boutique avec des enseignes de renommée. Parfait pour un commerce de détail.',
                 'disponibilite' => true,
                 'type' => 'Boutique',
                 'regles' => $this->getRandomRegles(),
@@ -486,7 +509,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Boujdour'
+                'ville' => 'Boujdour',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -503,7 +527,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Laâyoune'
+                'ville' => 'Laâyoune',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -520,7 +545,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Guelmim'
+                'ville' => 'Guelmim',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -537,7 +563,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Dakhla'
+                'ville' => 'Dakhla',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -554,7 +581,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Tantan'
+                'ville' => 'Tantan',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -571,7 +599,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Laâyoune'
+                'ville' => 'Laâyoune',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -588,7 +617,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Famille',
-                'ville' => 'Boujdour'
+                'ville' => 'Boujdour',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -605,7 +635,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Famille',
-                'ville' => 'Boujdour'
+                'ville' => 'Boujdour',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -622,7 +653,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Famille',
-                'ville' => 'Laayoun'
+                'ville' => 'Laayoun',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -639,7 +671,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Famille',
-                'ville' => 'Tantan'
+                'ville' => 'Tantan',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -656,7 +689,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Famille',
-                'ville' => 'Dhakla'
+                'ville' => 'Dhakla',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -673,7 +707,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Famille',
-                'ville' => 'Glemim'
+                'ville' => 'Glemim',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -690,7 +725,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Famille',
-                'ville' => 'Boujdour'
+                'ville' => 'Boujdour',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -707,7 +743,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Famille',
-                'ville' => 'Laayoun'
+                'ville' => 'Laayoun',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -724,7 +761,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Célibataire',
-                'ville' => 'Tantan'
+                'ville' => 'Tantan',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -741,7 +779,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Célibataire',
-                'ville' => 'Dhakla'
+                'ville' => 'Dhakla',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -758,7 +797,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Célibataire',
-                'ville' => 'Glemim'
+                'ville' => 'Glemim',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -775,7 +815,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Famille',
-                'ville' => 'Boujdour'
+                'ville' => 'Boujdour',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -792,7 +833,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Famille',
-                'ville' => 'Laâyoune'
+                'ville' => 'Laâyoune',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -809,7 +851,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Famille',
-                'ville' => 'Boujdour'
+                'ville' => 'Boujdour',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -826,7 +869,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Famille',
-                'ville' => 'Dakhla'
+                'ville' => 'Dakhla',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -843,7 +887,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Famille',
-                'ville' => 'Guelmim'
+                'ville' => 'Guelmim',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -860,7 +905,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Famille',
-                'ville' => 'Tantan'
+                'ville' => 'Tantan',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -877,7 +923,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Famille',
-                'ville' => 'Laâyoune'
+                'ville' => 'Laâyoune',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -894,7 +941,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Famille',
-                'ville' => 'Boujdour'
+                'ville' => 'Boujdour',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -911,7 +959,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Boujdour'
+                'ville' => 'Boujdour',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -928,7 +977,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Tantan'
+                'ville' => 'Tantan',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -945,7 +995,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Laâyoune'
+                'ville' => 'Laâyoune',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -962,7 +1013,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Tantan'
+                'ville' => 'Tantan',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -979,7 +1031,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Laâyoune'
+                'ville' => 'Laâyoune',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -996,7 +1049,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Boujdour'
+                'ville' => 'Boujdour',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -1013,7 +1067,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Dakhla'
+                'ville' => 'Dakhla',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -1030,7 +1085,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Tantan'
+                'ville' => 'Tantan',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -1047,7 +1103,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Boujdour'
+                'ville' => 'Boujdour',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -1064,7 +1121,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Laâyoune'
+                'ville' => 'Laâyoune',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -1081,7 +1139,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Tantan'
+                'ville' => 'Tantan',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -1098,7 +1157,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Guelmim'
+                'ville' => 'Guelmim',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -1115,7 +1175,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Dakhla'
+                'ville' => 'Dakhla',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -1132,7 +1193,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Boujdour'
+                'ville' => 'Boujdour',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -1149,7 +1211,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Laâyoune'
+                'ville' => 'Laâyoune',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -1166,7 +1229,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Laâyoune'
+                'ville' => 'Laâyoune',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -1183,7 +1247,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Guelmim'
+                'ville' => 'Guelmim',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -1191,7 +1256,7 @@ class PropreiteSeeder extends Seeder
                 'localisation' => 'Boujdour',
                 'prixParMois' => 3200,
                 'imgs' => json_encode($this->getRandomImages('Boutique')),
-                'description' => 'Local commercial de 30 m² idéal pour salon de coiffure ou petite épicerie.',
+                'description' => 'Local Magasin de 30 m² idéal pour salon de coiffure ou petite épicerie.',
                 'disponibilite' => true,
                 'type' => 'Boutique',
                 'regles' => $this->getRandomRegles(),
@@ -1200,7 +1265,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Boujdour'
+                'ville' => 'Boujdour',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -1217,11 +1283,12 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Laâyoune'
+                'ville' => 'Laâyoune',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
-                'titre' => 'Local commercial à Tantan, Hay Al Massira',
+                'titre' => 'Local Magasin à Tantan, Hay Al Massira',
                 'localisation' => 'Tantan',
                 'prixParMois' => 2700,
                 'imgs' => json_encode($this->getRandomImages('Boutique')),
@@ -1234,7 +1301,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Tantan'
+                'ville' => 'Tantan',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -1242,7 +1310,7 @@ class PropreiteSeeder extends Seeder
                 'localisation' => 'Dakhla',
                 'prixParMois' => 4500,
                 'imgs' => json_encode($this->getRandomImages('Boutique')),
-                'description' => 'Espace commercial rénové avec vitrine, sol carrelé, parfait pour agence.',
+                'description' => 'Espace Magasin rénové avec vitrine, sol carrelé, parfait pour agence.',
                 'disponibilite' => true,
                 'type' => 'Boutique',
                 'regles' => $this->getRandomRegles(),
@@ -1251,7 +1319,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Dakhla'
+                'ville' => 'Dakhla',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -1268,7 +1337,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Guelmim'
+                'ville' => 'Guelmim',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -1285,11 +1355,12 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Boujdour'
+                'ville' => 'Boujdour',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
-                'titre' => 'Local à usage commercial à Laâyoune, Hay Moulay Rachid',
+                'titre' => 'Local à usage Magasin à Laâyoune, Hay Moulay Rachid',
                 'localisation' => 'Laâyoune',
                 'prixParMois' => 4300,
                 'imgs' => json_encode($this->getRandomImages('Boutique')),
@@ -1297,63 +1368,15 @@ class PropreiteSeeder extends Seeder
                 'disponibilite' => true,
                 'type' => 'Boutique',
                 'regles' => $this->getRandomRegles(),
-                'adresse' => 'Laâyoune, Hay Moulay Rachid',
-                'admin_id' => 7,
-                'surface' => rand(40, 300),
-                'nbrChambre' => rand(1, 6),
-                'typesLocaires' => 'Tout',
-                'ville' => 'Laâyoune'
-            ],
-            [
-                'loueur_id' => rand(1, 25),
-                'titre' => 'Boutique fonctionnelle à Guelmim, Quartier Tantan Road',
-                'localisation' => 'Guelmim',
-                'prixParMois' => 3600,
-                'imgs' => json_encode($this->getRandomImages('Boutique')),
-                'description' => 'Boutique de coin avec double façade, bon éclairage naturel.',
-                'disponibilite' => true,
-                'type' => 'Boutique',
-                'regles' => $this->getRandomRegles(),
-                'adresse' => 'Guelmim, Quartier Tantan Road',
-                'admin_id' => 8,
-                'surface' => rand(40, 300),
-                'nbrChambre' => rand(1, 6),
-                'typesLocaires' => 'Tout',
-                'ville' => 'Guelmim'
-            ],
-            [
-                'loueur_id' => rand(1, 25),
-                'titre' => 'Dépôt sécurisé à Boujdour, Zone Industrielle',
-                'localisation' => 'Boujdour',
-                'prixParMois' => 6500,
-                'imgs' => json_encode($this->getRandomImages('Depot')),
-                'description' => 'Dépôt de 120 m² avec grande porte métallique et accès camion.',
-                'disponibilite' => true,
-                'type' => 'Dépôt',
-                'regles' => $this->getRandomRegles(),
-                'adresse' => 'Boujdour, Zone Industrielle',
-                'admin_id' => 3,
-                'surface' => rand(40, 300),
-                'nbrChambre' => rand(1, 6),
-                'typesLocaires' => 'Tout',
-                'ville' => 'Boujdour'
-            ],
-            [
-                'loueur_id' => rand(1, 25),
-                'titre' => 'Grand dépôt à Laâyoune, Route de Smara',
-                'localisation' => 'Laâyoune',
-                'prixParMois' => 8500,
-                'imgs' => json_encode($this->getRandomImages('Depot')),
-                'description' => 'Surface de 200 m² avec électricité industrielle et sol renforcé.',
-                'disponibilite' => true,
-                'type' => 'Dépôt',
+                'adresse' => 'La',
                 'regles' => $this->getRandomRegles(),
                 'adresse' => 'Laâyoune, Route de Smara',
                 'admin_id' => 4,
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Laâyoune'
+                'ville' => 'Laâyoune',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -1370,7 +1393,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Tantan'
+                'ville' => 'Tantan',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -1387,7 +1411,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Dakhla'
+                'ville' => 'Dakhla',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -1404,7 +1429,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Guelmim'
+                'ville' => 'Guelmim',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -1421,7 +1447,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Boujdour'
+                'ville' => 'Boujdour',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -1438,7 +1465,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Laâyoune'
+                'ville' => 'Laâyoune',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -1455,7 +1483,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Guelmim'
+                'ville' => 'Guelmim',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -1472,7 +1501,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Rabat'
+                'ville' => 'Rabat',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -1489,7 +1519,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Rabat'
+                'ville' => 'Rabat',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -1506,7 +1537,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Rabat'
+                'ville' => 'Rabat',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -1523,7 +1555,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Rabat'
+                'ville' => 'Rabat',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -1540,7 +1573,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Marrakech'
+                'ville' => 'Marrakech',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -1557,7 +1591,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Marrakech'
+                'ville' => 'Marrakech',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -1574,7 +1609,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Marrakech'
+                'ville' => 'Marrakech',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -1591,7 +1627,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Marrakech'
+                'ville' => 'Marrakech',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -1608,7 +1645,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Casablanca'
+                'ville' => 'Casablanca',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -1625,7 +1663,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Casablanca'
+                'ville' => 'Casablanca',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -1642,7 +1681,8 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Casablanca'
+                'ville' => 'Casablanca',
+                'status' => 'approved'
             ],
             [
                 'loueur_id' => rand(1, 25),
@@ -1659,8 +1699,587 @@ class PropreiteSeeder extends Seeder
                 'surface' => rand(40, 300),
                 'nbrChambre' => rand(1, 6),
                 'typesLocaires' => 'Tout',
-                'ville' => 'Casablanca'
+                'ville' => 'Casablanca',
+                'status' => 'approved'
             ]
+            ,
+    [
+        'loueur_id' => rand(1, 25),
+        'titre' => 'Entrepôt sécurisé à Rabat, Agdal',
+        'localisation' => 'Rabat',
+        'prixParMois' => 12500,
+        'imgs' => json_encode($this->getRandomImages('Depot')),
+        'description' => 'Entrepôt de 200 m² avec système de sécurité avancé',
+        'disponibilite' => true,
+        'type' => 'Dépôt',
+        'regles' => $this->getRandomRegles(),
+        'adresse' => 'Rabat, Agdal',
+        'admin_id' => 7,
+        'surface' => 200,
+        'nbrChambre' => 1,
+        'typesLocaires' => 'Fonctionnaire',
+        'ville' => 'Rabat',
+        'status' => ['pending', 'rejected', 'expired'][rand(0,2)]
+    ],
+    [
+        'loueur_id' => rand(1, 25),
+        'titre' => 'Appartement moderne à Marrakech, Guéliz',
+        'localisation' => 'Marrakech',
+        'prixParMois' => 6500,
+        'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')),
+        'description' => 'Appartement 3 chambres, meublé, proche de la place Jemaa el-Fna',
+        'disponibilite' => true,
+        'type' => 'Appartement',
+        'regles' => $this->getRandomRegles(),
+        'adresse' => 'Marrakech, Guéliz',
+        'admin_id' => 7,
+        'surface' => 120,
+        'nbrChambre' => 3,
+        'typesLocaires' => 'Famille',
+        'ville' => 'Marrakech',
+        'status' => ['pending', 'rejected', 'expired'][rand(0,2)]
+    ],
+    [
+        'loueur_id' => rand(1, 25),
+        'titre' => 'Villa avec piscine à Tanger',
+        'localisation' => 'Tanger',
+        'prixParMois' => 18000,
+        'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')),
+        'description' => 'Magnifique villa 4 chambres avec vue sur mer',
+        'disponibilite' => true,
+        'type' => 'Villa',
+        'regles' => $this->getRandomRegles(),
+        'adresse' => 'Tanger, Californie',
+        'admin_id' => 7,
+        'surface' => 250,
+        'nbrChambre' => 4,
+        'typesLocaires' => 'Famille',
+        'ville' => 'Tanger',
+        'status' => ['pending', 'rejected', 'expired'][rand(0,2)]
+    ],
+    [
+        'loueur_id' => rand(1, 25),
+        'titre' => 'Studio étudiant à Fès, Ville Nouvelle',
+        'localisation' => 'Fès',
+        'prixParMois' => 2200,
+        'imgs' => json_encode($this->getRandomImages('Studio')),
+        'description' => 'Studio meublé idéal pour Étudiant, proche université',
+        'disponibilite' => true,
+        'type' => 'Studio',
+        'regles' => $this->getRandomRegles(),
+        'adresse' => 'Fès, Ville Nouvelle',
+        'admin_id' => 7,
+        'surface' => 35,
+        'nbrChambre' => 1,
+        'typesLocaires' => 'Étudiant',
+        'ville' => 'Fès',
+        'status' => ['pending', 'rejected', 'expired'][rand(0,2)]
+    ],
+    [
+        'loueur_id' => rand(1, 25),
+        'titre' => 'Bureau à Casablanca, Maarif',
+        'localisation' => 'Casablanca',
+        'prixParMois' => 8500,
+        'imgs' => json_encode($this->getRandomImages('Bureau')),
+        'description' => 'Espace bureau moderne 80 m², climatisation',
+        'disponibilite' => true,
+        'type' => 'Bureau',
+        'regles' => $this->getRandomRegles(),
+        'adresse' => 'Casablanca, Maarif',
+        'admin_id' => 7,
+        'surface' => 80,
+        'nbrChambre' => 2,
+        'typesLocaires' => 'Fonctionnaire',
+        'ville' => 'Casablanca',
+        'status' => ['pending', 'rejected', 'expired'][rand(0,2)]
+    ],
+    [
+        'loueur_id' => rand(1, 25),
+        'titre' => 'Local Magasin à Agadir, Talborjt',
+        'localisation' => 'Agadir',
+        'prixParMois' => 6000,
+        'imgs' => json_encode($this->getRandomImages('Magasin')),
+        'description' => 'Local Magasin 60 m² en plein centre ville',
+        'disponibilite' => true,
+        'type' => 'Magasin',
+        'regles' => $this->getRandomRegles(),
+        'adresse' => 'Agadir, Talborjt',
+        'admin_id' => 7,
+        'surface' => 60,
+        'nbrChambre' => 1,
+        'typesLocaires' => 'Famille',
+        'ville' => 'Agadir',
+        'status' => ['pending', 'rejected', 'expired'][rand(0,2)]
+    ],
+    [
+        'loueur_id' => rand(1, 25),
+        'titre' => 'Maison traditionnelle à Chefchaouen',
+        'localisation' => 'Chefchaouen',
+        'prixParMois' => 4500,
+        'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')),
+        'description' => 'Maison bleue typique 2 chambres dans la médina',
+        'disponibilite' => true,
+        'type' => 'Maison',
+        'regles' => $this->getRandomRegles(),
+        'adresse' => 'Chefchaouen Médina',
+        'admin_id' => 7,
+        'surface' => 90,
+        'nbrChambre' => 2,
+        'typesLocaires' => 'Célibataire',
+        'ville' => 'Chefchaouen',
+        'status' => ['pending', 'rejected', 'expired'][rand(0,2)]
+    ],
+    [
+        'loueur_id' => rand(1, 25),
+        'titre' => 'Hangar logistique à Bouskoura',
+        'localisation' => 'Bouskoura',
+        'prixParMois' => 11000,
+        'imgs' => json_encode($this->getRandomImages('Depot')),
+        'description' => 'Hangar 300 m² avec quai de chargement',
+        'disponibilite' => true,
+        'type' => 'Dépôt',
+        'regles' => $this->getRandomRegles(),
+        'adresse' => 'Bouskoura, Zone Industrielle',
+        'admin_id' => 7,
+        'surface' => 300,
+        'nbrChambre' => 1,
+        'typesLocaires' => 'Fonctionnaire',
+        'ville' => 'Bouskoura',
+        'status' => ['pending', 'rejected', 'expired'][rand(0,2)]
+    ],
+    [
+        'loueur_id' => rand(1, 25),
+        'titre' => 'Appartement de luxe à Casablanca, Anfa',
+        'localisation' => 'Casablanca',
+        'prixParMois' => 20000,
+        'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')),
+        'description' => 'Appartement haut standing avec vue sur mer',
+        'disponibilite' => true,
+        'type' => 'Appartement',
+        'regles' => $this->getRandomRegles(),
+        'adresse' => 'Casablanca, Anfa',
+        'admin_id' => 7,
+        'surface' => 180,
+        'nbrChambre' => 4,
+        'typesLocaires' => 'Étudiant',
+        'ville' => 'Casablanca',
+        'status' => ['pending', 'rejected', 'expired'][rand(0,2)]
+    ],
+    [
+        'loueur_id' => rand(1, 25),
+        'titre' => 'Espace coworking à Rabat, Hay Riad',
+        'localisation' => 'Rabat',
+        'prixParMois' => 3500,
+        'imgs' => json_encode($this->getRandomImages('Bureau')),
+        'description' => 'Postes de travail dans espace partagé avec services inclus',
+        'disponibilite' => true,
+        'type' => 'Bureau',
+        'regles' => $this->getRandomRegles(),
+        'adresse' => 'Rabat, Hay Riad',
+        'admin_id' => 7,
+        'surface' => 150,
+        'nbrChambre' => 0,
+        'typesLocaires' => 'Célibataire',
+        'ville' => 'Rabat',
+        'status' => ['pending', 'rejected', 'expired'][rand(0,2)]
+    ],
+    [
+        'loueur_id' => rand(1, 25),
+        'titre' => 'Boutique à Marrakech, Médina',
+        'localisation' => 'Marrakech',
+        'prixParMois' => 7500,
+        'imgs' => json_encode($this->getRandomImages('Magasin')),
+        'description' => 'Boutique 40 m² dans souk très fréquenté',
+        'disponibilite' => true,
+        'type' => 'Magasin',
+        'regles' => $this->getRandomRegles(),
+        'adresse' => 'Marrakech Médina',
+        'admin_id' => 7,
+        'surface' => 40,
+        'nbrChambre' => 0,
+        'typesLocaires' => 'Famille',
+        'ville' => 'Marrakech',
+        'status' => ['pending', 'rejected', 'expired'][rand(0,2)]
+    ],
+    [
+        'loueur_id' => rand(1, 25),
+        'titre' => 'Chambre chez l\'habitant à Essaouira',
+        'localisation' => 'Essaouira',
+        'prixParMois' => 1800,
+        'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')),
+        'description' => 'Chambre privée dans maison familiale proche plage',
+        'disponibilite' => true,
+        'type' => 'Appartement',
+        'regles' => $this->getRandomRegles(),
+        'adresse' => 'Essaouira, Médina',
+        'admin_id' => 7,
+        'surface' => 25,
+        'nbrChambre' => 1,
+        'typesLocaires' => 'Tout',
+        'ville' => 'Essaouira',
+        'status' => ['pending', 'rejected', 'expired'][rand(0,2)]
+    ],
+    [
+        'loueur_id' => rand(1, 25),
+        'titre' => 'Loft artistique à Tétouan',
+        'localisation' => 'Tétouan',
+        'prixParMois' => 3800,
+        'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')),
+        'description' => 'Espace ouvert lumineux idéal pour Fonctionnaire',
+        'disponibilite' => true,
+        'type' => 'Appartement',
+        'regles' => $this->getRandomRegles(),
+        'adresse' => 'Tétouan, Centre Ville',
+        'admin_id' => 7,
+        'surface' => 70,
+        'nbrChambre' => 1,
+        'typesLocaires' => 'Fonctionnaire',
+        'ville' => 'Tétouan',
+        'status' => ['pending', 'rejected', 'expired'][rand(0,2)]
+    ],
+    [
+        'loueur_id' => rand(1, 25),
+        'titre' => 'Garage à Oujda',
+        'localisation' => 'Oujda',
+        'prixParMois' => 1200,
+        'imgs' => json_encode($this->getRandomImages('Garage')),
+        'description' => 'Garage sécurisé 20 m² en centre ville',
+        'disponibilite' => true,
+        'type' => 'Garage',
+        'regles' => $this->getRandomRegles(),
+        'adresse' => 'Oujda, Avenue Mohammed V',
+        'admin_id' => 7,
+        'surface' => 20,
+        'nbrChambre' => 0,
+        'typesLocaires' => 'Étudiant',
+        'ville' => 'Oujda',
+        'status' => ['pending', 'rejected', 'expired'][rand(0,2)]
+    ],
+    [
+        'loueur_id' => rand(1, 25),
+        'titre' => 'Appartement meublé à Meknès',
+        'localisation' => 'Meknès',
+        'prixParMois' => 2800,
+        'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')),
+        'description' => 'Appartement 2 chambres tout équipé',
+        'disponibilite' => true,
+        'type' => 'Appartement',
+        'regles' => $this->getRandomRegles(),
+        'adresse' => 'Meknès, Ville Impériale',
+        'admin_id' => 7,
+        'surface' => 65,
+        'nbrChambre' => 2,
+        'typesLocaires' => 'Famille',
+        'ville' => 'Meknès',
+        'status' => ['pending', 'rejected', 'expired'][rand(0,2)]
+    ],
+    [
+        'loueur_id' => rand(1, 25),
+        'titre' => 'Espace événementiel à Rabat',
+        'localisation' => 'Rabat',
+        'prixParMois' => 15000,
+        'imgs' => json_encode($this->getRandomImages('Magasin')),
+        'description' => ' Magasin polyvalente 150 m² pour événements',
+        'disponibilite' => true,
+        'type' => 'Magasin',
+        'regles' => $this->getRandomRegles(),
+        'adresse' => 'Rabat, Agdal',
+        'admin_id' => 7,
+        'surface' => 150,
+        'nbrChambre' => 0,
+        'typesLocaires' => 'Fonctionnaire',
+        'ville' => 'Rabat',
+        'status' => ['pending', 'rejected', 'expired'][rand(0,2)]
+    ],
+    [
+        'loueur_id' => rand(1, 25),
+        'titre' => 'Riad traditionnel à Fès',
+        'localisation' => 'Fès',
+        'prixParMois' => 9000,
+        'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')),
+        'description' => 'Riad 5 chambres avec patio central',
+        'disponibilite' => true,
+        'type' => 'Villa',
+        'regles' => $this->getRandomRegles(),
+        'adresse' => 'Fès Médina',
+        'admin_id' => 7,
+        'surface' => 220,
+        'nbrChambre' => 5,
+        'typesLocaires' => 'Célibataire',
+        'ville' => 'Fès',
+        'status' => ['pending', 'rejected', 'expired'][rand(0,2)]
+    ],
+    [
+        'loueur_id' => rand(1, 25),
+        'titre' => 'Local atelier à Casablanca, Sidi Maarouf',
+        'localisation' => 'Casablanca',
+        'prixParMois' => 5000,
+        'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')),
+        'description' => 'Espace 50 m² idéal pour artisan ou petit atelier',
+        'disponibilite' => true,
+        'type' => 'Maison',
+        'regles' => $this->getRandomRegles(),
+        'adresse' => 'Casablanca, Sidi Maarouf',
+        'admin_id' => 7,
+        'surface' => 50,
+        'nbrChambre' => 0,
+        'typesLocaires' => 'Tout',
+        'ville' => 'Casablanca',
+        'status' => ['pending', 'rejected', 'expired'][rand(0,2)]
+    ],
+    [
+        'loueur_id' => rand(1, 25),
+        'titre' => 'Appartement étudiant à Kenitra',
+        'localisation' => 'Kenitra',
+        'prixParMois' => 1900,
+        'imgs' => json_encode($this->getRandomImages('Studio')),
+        'description' => 'Studio proche université Ibn Tofail',
+        'disponibilite' => true,
+        'type' => 'Studio',
+        'regles' => $this->getRandomRegles(),
+        'adresse' => 'Kenitra, Centre Ville',
+        'admin_id' => 7,
+        'surface' => 30,
+        'nbrChambre' => 1,
+        'typesLocaires' => 'Étudiant',
+        'ville' => 'Kenitra',
+        'status' => ['pending', 'rejected', 'expired'][rand(0,2)]
+    ],
+    [
+        'loueur_id' => rand(1, 25),
+        'titre' => 'Entrepôt frigorifique à Mohammedia',
+        'localisation' => 'Mohammedia',
+        'prixParMois' => 13500,
+        'imgs' => json_encode($this->getRandomImages('Depot')),
+        'description' => 'Entrepôt 180 m² avec chambre froide',
+        'disponibilite' => true,
+        'type' => 'Dépôt',
+        'regles' => $this->getRandomRegles(),
+        'adresse' => 'Mohammedia, Zone Industrielle',
+        'admin_id' => 7,
+        'surface' => 180,
+        'nbrChambre' => 1,
+        'typesLocaires' => 'Fonctionnaire',
+        'ville' => 'Mohammedia',
+        'status' => ['pending', 'rejected', 'expired'][rand(0,2)]
+    ],
+    [
+        'loueur_id' => rand(1, 25),
+        'titre' => 'Appartement vue mer à El Jadida',
+        'localisation' => 'El Jadida',
+        'prixParMois' => 4200,
+        'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')),
+        'description' => 'Appartement 2 chambres avec terrasse vue océan',
+        'disponibilite' => true,
+        'type' => 'Appartement',
+        'regles' => $this->getRandomRegles(),
+        'adresse' => 'El Jadida, Corniche',
+        'admin_id' => 7,
+        'surface' => 75,
+        'nbrChambre' => 2,
+        'typesLocaires' => 'Famille',
+        'ville' => 'El Jadida',
+        'status' => ['pending', 'rejected', 'expired'][rand(0,2)]
+    ],
+    [
+        'loueur_id' => rand(1, 25),
+        'titre' => 'Bureau partagé à Tanger',
+        'localisation' => 'Tanger',
+        'prixParMois' => 3000,
+        'imgs' => json_encode($this->getRandomImages('Bureau')),
+        'description' => 'Espace de coworking avec bureaux partagés',
+        'disponibilite' => true,
+        'type' => 'Bureau',
+        'regles' => $this->getRandomRegles(),
+        'adresse' => 'Tanger, Centre Ville',
+        'admin_id' => 7,
+        'surface' => 100,
+        'nbrChambre' => 0,
+        'typesLocaires' => 'Célibataire',
+        'ville' => 'Tanger',
+        'status' => ['pending', 'rejected', 'expired'][rand(0,2)]
+    ],
+    [
+        'loueur_id' => rand(1, 25),
+        'titre' => 'Maison d\'hôte à Asilah',
+        'localisation' => 'Asilah',
+        'prixParMois' => 6000,
+        'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')),
+        'description' => 'Maison d\'hôte 3 chambres près de la médina',
+        'disponibilite' => true,
+        'type' => 'Maison',
+        'regles' => $this->getRandomRegles(),
+        'adresse' => 'Asilah Médina',
+        'admin_id' => 7,
+        'surface' => 110,
+        'nbrChambre' => 3,
+        'typesLocaires' => 'Célibataire',
+        'ville' => 'Asilah',
+        'status' => ['pending', 'rejected', 'expired'][rand(0,2)]
+    ],
+    [
+        'loueur_id' => rand(1, 25),
+        'titre' => 'Local boutique à Rabat, Souissi',
+        'localisation' => 'Rabat',
+        'prixParMois' => 7000,
+        'imgs' => json_encode($this->getRandomImages('Magasin')),
+        'description' => 'Local Magasin 45 m² dans quartier résidentiel',
+        'disponibilite' => true,
+        'type' => 'Magasin',
+        'regles' => $this->getRandomRegles(),
+        'adresse' => 'Rabat, Souissi',
+        'admin_id' => 7,
+        'surface' => 45,
+        'nbrChambre' => 0,
+        'typesLocaires' => 'Famille',
+        'ville' => 'Rabat',
+        'status' => ['pending', 'rejected', 'expired'][rand(0,2)]
+    ],
+    [
+        'loueur_id' => rand(1, 25),
+        'titre' => 'Appartement moderne à Salé',
+        'localisation' => 'Salé',
+        'prixParMois' => 3200,
+        'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')),
+        'description' => 'Appartement neuf 2 chambres proche corniche',
+        'disponibilite' => true,
+        'type' => 'Appartement',
+        'regles' => $this->getRandomRegles(),
+        'adresse' => 'Salé, Tabriquet',
+        'admin_id' => 7,
+        'surface' => 70,
+        'nbrChambre' => 2,
+        'typesLocaires' => 'Famille',
+        'ville' => 'Salé',
+        'status' => ['pending', 'rejected', 'expired'][rand(0,2)]
+    ],
+    [
+        'loueur_id' => rand(1, 25),
+        'titre' => 'Villa avec jardin à Beni Mellal',
+        'localisation' => 'Beni Mellal',
+        'prixParMois' => 5500,
+        'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')),
+        'description' => 'Villa 3 chambres avec grand jardin arboré',
+        'disponibilite' => true,
+        'type' => 'Villa',
+        'regles' => $this->getRandomRegles(),
+        'adresse' => 'Beni Mellal, Quartier Résidentiel',
+        'admin_id' => 7,
+        'surface' => 160,
+        'nbrChambre' => 3,
+        'typesLocaires' => 'Famille',
+        'ville' => 'Beni Mellal',
+        'status' => ['pending', 'rejected', 'expired'][rand(0,2)]
+    ],
+    [
+        'loueur_id' => rand(1, 25),
+        'titre' => 'Studio meublé à Témara',
+        'localisation' => 'Témara',
+        'prixParMois' => 2100,
+        'imgs' => json_encode($this->getRandomImages('Studio')),
+        'description' => 'Studio tout équipé proche plage',
+        'disponibilite' => true,
+        'type' => 'Studio',
+        'regles' => $this->getRandomRegles(),
+        'adresse' => 'Témara, Plage',
+        'admin_id' => 7,
+        'surface' => 28,
+        'nbrChambre' => 1,
+        'typesLocaires' => 'Étudiant',
+        'ville' => 'Témara',
+        'status' => ['pending', 'rejected', 'expired'][rand(0,2)]
+    ],
+    [
+        'loueur_id' => rand(1, 25),
+        'titre' => 'Espace bureau à Settat',
+        'localisation' => 'Settat',
+        'prixParMois' => 3800,
+        'imgs' => json_encode($this->getRandomImages('Bureau')),
+        'description' => 'Bureau 60 m² en centre ville',
+        'disponibilite' => true,
+        'type' => 'Bureau',
+        'regles' => $this->getRandomRegles(),
+        'adresse' => 'Settat, Avenue Hassan II',
+        'admin_id' => 7,
+        'surface' => 60,
+        'nbrChambre' => 1,
+        'typesLocaires' => 'Fonctionnaire',
+        'ville' => 'Settat',
+        'status' => ['pending', 'rejected', 'expired'][rand(0,2)]
+    ],
+    [
+        'loueur_id' => rand(1, 25),
+        'titre' => 'Appartement familial à Khouribga',
+        'localisation' => 'Khouribga',
+        'prixParMois' => 2500,
+        'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')),
+        'description' => 'Appartement spacieux 3 chambres',
+        'disponibilite' => true,
+        'type' => 'Appartement',
+        'regles' => $this->getRandomRegles(),
+        'adresse' => 'Khouribga, Quartier Administratif',
+        'admin_id' => 7,
+        'surface' => 85,
+        'nbrChambre' => 3,
+        'typesLocaires' => 'Famille',
+        'ville' => 'Khouribga',
+        'status' => ['pending', 'rejected', 'expired'][rand(0,2)]
+    ],
+    [
+        'loueur_id' => rand(1, 25),
+        'titre' => 'Local atelier à Nador',
+        'localisation' => 'Nador',
+        'prixParMois' => 2900,
+        'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')),
+        'description' => 'Local 40 m² pour artisan ou petit commerce',
+        'disponibilite' => true,
+        'type' => 'Maison',
+        'regles' => $this->getRandomRegles(),
+        'adresse' => 'Nador, Quartier Magasin',
+        'admin_id' => 7,
+        'surface' => 40,
+        'nbrChambre' => 0,
+        'typesLocaires' => 'Tout',
+        'ville' => 'Nador',
+        'status' => ['pending', 'rejected', 'expired'][rand(0,2)]
+    ],
+    [
+        'loueur_id' => rand(1, 25),
+        'titre' => 'Chambre d\'hôte à Ifrane',
+        'localisation' => 'Ifrane',
+        'prixParMois' => 3500,
+        'imgs' => json_encode($this->getRandomImages('Appartement--Villa--Maison')),
+        'description' => 'Chambre dans maison typique style alpin',
+        'disponibilite' => true,
+        'type' => 'Appartement',
+        'regles' => $this->getRandomRegles(),
+        'adresse' => 'Ifrane, Centre Ville',
+        'admin_id' => 7,
+        'surface' => 30,
+        'nbrChambre' => 1,
+        'typesLocaires' => 'Célibataire',
+        'ville' => 'Ifrane',
+        'status' => ['pending', 'rejected', 'expired'][rand(0,2)]
+    ],
+    [
+        'loueur_id' => rand(1, 25),
+        'titre' => 'Entrepôt à Berrechid',
+        'localisation' => 'Berrechid',
+        'prixParMois' => 8000,
+        'imgs' => json_encode($this->getRandomImages('Depot')),
+        'description' => 'Entrepôt 150 m² avec bureau attenant',
+        'disponibilite' => true,
+        'type' => 'Dépôt',
+        'regles' => $this->getRandomRegles(),
+        'adresse' => 'Berrechid, Zone Industrielle',
+        'admin_id' => 7,
+        'surface' => 150,
+        'nbrChambre' => 1,
+        'typesLocaires' => 'Fonctionnaire',
+        'ville' => 'Berrechid',
+        'status' => ['pending', 'rejected', 'expired'][rand(0,2)]
+    ]
+
         ];
 
         foreach ($posts as $post) {

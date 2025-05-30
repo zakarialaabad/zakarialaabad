@@ -237,33 +237,12 @@ export default function AdminLayout({
             </button>
             <div className="hidden lg:flex items-center">
               <Logo className="h-8 w-auto" />
-              <span className="ml-2 text-lg font-semibold text-gray-900">Admin</span>
             </div>
           </div>
 
-          <div className="flex-1 px-4 lg:px-8">
-            <div className="relative max-w-md mx-auto lg:mx-0 lg:max-w-lg">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <Input
-                placeholder="Rechercher..."
-                className="pl-10 bg-gray-50 border-gray-200 focus-visible:ring-primary"
-              />
-            </div>
-          </div>
+       
 
-          <div className="flex items-center gap-4">
-            <button className="text-gray-500 hover:text-gray-700">
-              <Bell size={20} />
-            </button>
-            <button className="text-gray-500 hover:text-gray-700">
-              <HelpCircle size={20} />
-            </button>
-            <div className="relative">
-              <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden border border-gray-200">
-                <img src="/thoughtful-moroccan-man.png" alt="Admin" width={36} height={36} className="object-cover" />
-              </div>
-            </div>
-          </div>
+        
         </div>
       </header>
 
@@ -301,25 +280,12 @@ export default function AdminLayout({
                 label="Réservations"
                 active={pathname.startsWith("/admin/bookings")}
               />
-              {/*
-              <NavItem
-                href="/admin/messages"
-                icon={<MessageSquare size={20} />}
-                label="Messages"
-                active={pathname.startsWith("/admin/messages")}
-              />
-              */}
+              
               <NavItem
                 href="/admin/payments"
                 icon={<CreditCard size={20} />}
                 label="Paiements"
                 active={pathname.startsWith("/admin/payments")}
-              />
-              <NavItem
-                href="/admin/notifications"
-                icon={<Bell size={20} />}
-                label="Notifications"
-                active={pathname.startsWith("/admin/notifications")}
               />
             </nav>
           </div>
@@ -358,158 +324,7 @@ export default function AdminLayout({
               <AdminNotifications />
             </div>
 
-            {/* User Admin Quick Access */}
-            {pathname?.startsWith("/admin/users") && (
-              <div className="mb-6 bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
-                  <div>
-                    <h2 className="text-lg font-medium text-gray-900">Gestion des utilisateurs</h2>
-                    <p className="text-sm text-gray-500">
-                      Accès rapide aux fonctionnalités de gestion des utilisateurs
-                    </p>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    <Button size="sm" variant="outline" onClick={() => router.visit("/admin/users?filter=new")}>
-                      <Users className="h-4 w-4 mr-2" />
-                      Nouveaux utilisateurs
-                    </Button>
-                    <Button size="sm" variant="outline" onClick={() => router.visit("/admin/users?filter=pending")}>
-                      <AlertCircle className="h-4 w-4 mr-2" />
-                      En attente de vérification
-                    </Button>
-                    <Button size="sm" className="bg-primary" onClick={() => router.visit("/admin/users/create")}>
-                      <Plus className="h-4 w-4 mr-2" />
-                      Nouvel utilisateur
-                    </Button>
-                  </div>
-                </div>
-
-                {/* User Stats */}
-                {pathname === "/admin/users" && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div className="bg-blue-50 rounded-md p-3 border border-blue-100">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-sm text-blue-600 font-medium">Total Utilisateurs</p>
-                          <p className="text-2xl font-bold text-blue-700">1,248</p>
-                        </div>
-                        <div className="bg-blue-100 p-2 rounded-full">
-                          <Users className="h-5 w-5 text-blue-600" />
-                        </div>
-                      </div>
-                      <div className="text-xs text-blue-600 mt-2">
-                        <span className="font-medium">+12%</span> depuis le mois dernier
-                      </div>
-                    </div>
-
-                    <div className="bg-green-50 rounded-md p-3 border border-green-100">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-sm text-green-600 font-medium">Propriétaires</p>
-                          <p className="text-2xl font-bold text-green-700">543</p>
-                        </div>
-                        <div className="bg-green-100 p-2 rounded-full">
-                          <Home className="h-5 w-5 text-green-600" />
-                        </div>
-                      </div>
-                      <div className="text-xs text-green-600 mt-2">
-                        <span className="font-medium">+8%</span> depuis le mois dernier
-                      </div>
-                    </div>
-
-                    <div className="bg-amber-50 rounded-md p-3 border border-amber-100">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-sm text-amber-600 font-medium">Locataires</p>
-                          <p className="text-2xl font-bold text-amber-700">705</p>
-                        </div>
-                        <div className="bg-amber-100 p-2 rounded-full">
-                          <Calendar className="h-5 w-5 text-amber-600" />
-                        </div>
-                      </div>
-                      <div className="text-xs text-amber-600 mt-2">
-                        <span className="font-medium">+15%</span> depuis le mois dernier
-                      </div>
-                    </div>
-
-                    <div className="bg-red-50 rounded-md p-3 border border-red-100">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-sm text-red-600 font-medium">Comptes bloqués</p>
-                          <p className="text-2xl font-bold text-red-700">24</p>
-                        </div>
-                        <div className="bg-red-100 p-2 rounded-full">
-                          <XCircle className="h-5 w-5 text-red-600" />
-                        </div>
-                      </div>
-                      <div className="text-xs text-red-600 mt-2">
-                        <span className="font-medium">-3%</span> depuis le mois dernier
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Recent User Activity */}
-                {pathname === "/admin/users" && (
-                  <div className="mt-4 border-t border-gray-200 pt-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="text-sm font-medium text-gray-700">Activité récente</h3>
-                      <Button variant="link" size="sm" className="text-primary h-auto p-0">
-                        Voir tout
-                      </Button>
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex items-center text-sm">
-                        <div className="h-8 w-8 rounded-full overflow-hidden mr-3 bg-gray-100 flex-shrink-0">
-                          <img
-                            src="/thoughtful-moroccan-man.png"
-                            alt="User"
-                            width={32}
-                            height={32}
-                            className="object-cover"
-                          />
-                        </div>
-                        <div className="flex-1">
-                          <p className="text-gray-800">
-                            <span className="font-medium">Ahmed Benjelloun</span> a ajouté une nouvelle propriété
-                          </p>
-                          <p className="text-xs text-gray-500">Il y a 23 minutes</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center text-sm">
-                        <div className="h-8 w-8 rounded-full overflow-hidden mr-3 bg-gray-100 flex-shrink-0">
-                          <img src="/veiled-beauty.png" alt="User" width={32} height={32} className="object-cover" />
-                        </div>
-                        <div className="flex-1">
-                          <p className="text-gray-800">
-                            <span className="font-medium">Fatima Zahra</span> s'est inscrite sur la plateforme
-                          </p>
-                          <p className="text-xs text-gray-500">Il y a 1 heure</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center text-sm">
-                        <div className="h-8 w-8 rounded-full overflow-hidden mr-3 bg-gray-100 flex-shrink-0">
-                          <img
-                            src="/confident-moroccan-executive.png"
-                            alt="User"
-                            width={32}
-                            height={32}
-                            className="object-cover"
-                          />
-                        </div>
-                        <div className="flex-1">
-                          <p className="text-gray-800">
-                            <span className="font-medium">Karim Alami</span> a mis à jour son profil
-                          </p>
-                          <p className="text-xs text-gray-500">Il y a 3 heures</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-
+          
             {/* Content with error boundary and loading states */}
             <ErrorBoundary fallback={<AdminErrorDisplay />}>
               <Suspense fallback={<AdminLoadingState />}>{children}</Suspense>
@@ -527,7 +342,6 @@ interface NavItemProps {
   label: string
   active?: boolean
 }
-
 function NavItem({ href, icon, label, active }: NavItemProps) {
   return (
     <Link

@@ -1,5 +1,5 @@
 import { NotificationsProvider } from "@/contexts/notifications-context";
-import {AdminProperties} from "./listPorpreites";
+import {Adminproprietes} from "./listPorpreites";
 import { ReactNode } from "react";
 import { AuthProvider } from "@/contexts/auth-context";
 import AdminLayout from "@/layouts/layoutAdmin";
@@ -9,7 +9,7 @@ import AdminLayout from "@/layouts/layoutAdmin";
         <AuthProvider>
 
         <NotificationsProvider>
-            <AdminProperties/>
+            <Adminproprietes/>
         </NotificationsProvider>     
         </AuthProvider>
        

@@ -506,9 +506,9 @@ export function DirectFormWithPreview() {
                       className={`w-8 h-8 flex items-center justify-center rounded-full z-10
                         ${
                           isCompleted
-                            ? "bg-primary text-white"
+                            ? "bg-[#465baa] text-white"
                             : isCurrent
-                            ? "bg-primary text-white"
+                            ? "bg-[#465baa] text-white"
                             : "bg-gray-200 text-gray-500"
                         }`}
                     >
@@ -516,7 +516,7 @@ export function DirectFormWithPreview() {
                     </div>
                     <span
                       className={`text-xs mt-1 font-medium ${
-                        isCurrent ? "text-primary" : "text-gray-500"
+                        isCurrent ? "text-[#465baa]" : "text-gray-500"
                       }`}
                     >
                       {getStepName(stepNumber).split(" ")[0]}
@@ -527,7 +527,7 @@ export function DirectFormWithPreview() {
 
               <div className="absolute top-4 left-0 right-0 h-0.5 bg-gray-200 -z-10"></div>
               <div
-                className="absolute top-4 left-0 h-0.5 bg-primary -z-10 transition-all duration-300 ease-in-out"
+                className="absolute top-4 left-0 h-0.5 bg-[#465baa] -z-10 transition-all duration-300 ease-in-out"
                 style={{
                   width: `${((currentStep - 1) / (totalSteps - 1)) * 100}%`,
                 }}
@@ -1863,7 +1863,7 @@ export function DirectFormWithPreview() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl p-6 max-w-md w-full">
             <div className="text-center mb-4">
-              <div className="bg-primary/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="bg-[#465baa]/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="32"
@@ -1874,7 +1874,7 @@ export function DirectFormWithPreview() {
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className="text-primary"
+                  className="text-[#465baa]"
                 >
                   <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
                   <polyline points="22 4 12 14.01 9 11.01"></polyline>
@@ -1899,7 +1899,7 @@ export function DirectFormWithPreview() {
               </button>
               <button
                 onClick={navigateToDashboard}
-                className="flex-1 px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors"
+                className="flex-1 px-4 py-2 bg-[#465baa] text-white rounded-md hover:bg-[#465baa]/90 transition-colors"
               >
                 Voir mon tableau de bord
               </button>

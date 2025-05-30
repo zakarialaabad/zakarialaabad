@@ -386,10 +386,6 @@ const bookings: AdminBooking[] = [
             <Download className="h-4 w-4 mr-2" />
             Exporter
           </Button>
-          <Button variant="outline" size="sm" className="hidden md:flex" onClick={refreshBookings}>
-            <RefreshCw className="h-4 w-4 mr-2" />
-            Actualiser
-          </Button>
         </div>
       </div>
 
@@ -431,11 +427,6 @@ const bookings: AdminBooking[] = [
                 <SelectItem value="refunded">Remboursée</SelectItem>
               </SelectContent>
             </Select>
-
-            <Button variant="outline" className="flex-shrink-0">
-              <Filter className="h-4 w-4 mr-2" />
-              Plus de filtres
-            </Button>
           </div>
         </div>
 

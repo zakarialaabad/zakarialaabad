@@ -3,6 +3,8 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\SocialiteController;
 use App\Http\Controllers\ProprieteContoller;
+use App\Http\Controllers\UserController;
+
 use App\Http\Controllers\FavoriteController ;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 Route::get("/favoris",[FavoriteController::class,"favoris"])->name("favoris");
@@ -38,9 +40,8 @@ Route::get('/admin/dashboard', function () {
 Route::get('/admin/properties', function () {
     return Inertia::render('app/admin/properties/page');
 });
-Route::get('/admin/users', function () {
-    return Inertia::render('app/admin/users/page');
-});Route::get('/admin/bookings', function () {
+Route::get('/admin/users',[UserController::class,"index"])->name("users.index");
+Route::get('/admin/bookings', function () {
     return Inertia::render('app/admin/bookings/page');
 });
 Route::get('/admin/payments', function () {
@@ -58,8 +59,11 @@ Route::get("/devenir-hote/verification",function(){
 Route::get("/devenir-hote/success",function(){
     return Inertia::render("app/devenir-hote/success/page");
 });
+Route::resource('Users',UserController::class)->except("index");
+
 Route::resource("Favorites",FavoriteController::class);
 Route::resource('Proprietes',ProprieteContoller::class)->except("index");
+
 Route::get("auth/google",[SocialiteController::class,"redirectToGoogle"]);
 Route::get("auth/google/callback",[SocialiteController::class,"handleGoogleCallback"]);
 

@@ -457,10 +457,6 @@ function AdminPayments() {
             <Download className="h-4 w-4 mr-2" />
             Exporter
           </Button>
-          <Button variant="outline" size="sm" className="hidden md:flex" onClick={handleRefresh}>
-            <RefreshCw className="h-4 w-4 mr-2" />
-            Actualiser
-          </Button>
         </div>
       </div>
 

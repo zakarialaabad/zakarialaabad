@@ -21,7 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
-import AdminLayout from "../layout";
+import AdminLayout from "@/layouts/layoutAdmin";
  function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
 
@@ -322,92 +322,6 @@ import AdminLayout from "../layout";
               color="rose"
             />
           </div>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-            <Card className="lg:col-span-4">
-              <CardHeader>
-                <CardTitle>Aperçu des activités</CardTitle>
-                <CardDescription>Activités récentes sur la plateforme</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <ActivityItem
-                    icon={<UserPlus className="h-4 w-4" />}
-                    title="Nouvel utilisateur inscrit"
-                    description="Ahmed Benjelloun s'est inscrit en tant que propriétaire"
-                    time="Il y a 5 minutes"
-                    iconColor="bg-green-100 text-green-700"
-                  />
-                  <ActivityItem
-                    icon={<Building className="h-4 w-4" />}
-                    title="Nouvelle propriété ajoutée"
-                    description="Appartement moderne à Casablanca a été ajouté"
-                    time="Il y a 15 minutes"
-                    iconColor="bg-blue-100 text-blue-700"
-                  />
-                  <ActivityItem
-                    icon={<Calendar className="h-4 w-4" />}
-                    title="Nouvelle réservation"
-                    description="Réservation #12458 confirmée pour Riad à Marrakech"
-                    time="Il y a 32 minutes"
-                    iconColor="bg-amber-100 text-amber-700"
-                  />
-                  <ActivityItem
-                    icon={<CheckCircle className="h-4 w-4" />}
-                    title="Propriété validée"
-                    description="Villa avec piscine à Agadir a été validée"
-                    time="Il y a 1 heure"
-                    iconColor="bg-green-100 text-green-700"
-                  />
-                  <ActivityItem
-                    icon={<MessageSquare className="h-4 w-4" />}
-                    title="Nouveau message"
-                    description="5 nouveaux messages nécessitent une attention"
-                    time="Il y a 2 heures"
-                    iconColor="bg-purple-100 text-purple-700"
-                  />
-                </div>
-                <Button variant="ghost" className="mt-4 w-full" size="sm">
-                  Voir toutes les activités
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </CardContent>
-            </Card>
-            <Card className="lg:col-span-3">
-              <CardHeader>
-                <CardTitle>Propriétés en attente</CardTitle>
-                <CardDescription>Propriétés nécessitant une validation</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <PendingPropertyItem
-                    title="Appartement vue sur mer"
-                    location="Tanger, Maroc"
-                    owner="Karim Alami"
-                    time="Il y a 2 heures"
-                    image="/moroccan-ocean-balcony.png"
-                  />
-                  <PendingPropertyItem
-                    title="Riad traditionnel"
-                    location="Marrakech, Maroc"
-                    owner="Fatima Zahra"
-                    time="Il y a 5 heures"
-                    image="/riad-courtyard-oasis.png"
-                  />
-                  <PendingPropertyItem
-                    title="Studio moderne"
-                    location="Casablanca, Maroc"
-                    owner="Youssef Benjelloun"
-                    time="Il y a 8 heures"
-                    image="/warm-moroccan-retreat.png"
-                  />
-                </div>
-                <Button variant="ghost" className="mt-4 w-full" size="sm">
-                  Voir toutes les propriétés en attente
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <Card>
               <CardHeader className="pb-2">
@@ -437,39 +351,12 @@ import AdminLayout from "../layout";
                     color="bg-red-100 text-red-700"
                   />
                   <StatusItem
-                    label="Signalées"
-                    value={42}
-                    percentage={3.3}
-                    icon={<AlertTriangle className="h-4 w-4" />}
-                    color="bg-orange-100 text-orange-700"
-                  />
-                  <StatusItem
                     label="Expirées"
                     value={176}
                     percentage={13.7}
                     icon={<Calendar className="h-4 w-4" />}
                     color="bg-purple-100 text-purple-700"
                   />
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle>Types de propriétés</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <PropertyTypeItem
-                    type="Appartement"
-                    count={486}
-                    percentage={37.8}
-                    icon="/icons/filter-apartment.png"
-                  />
-                  <PropertyTypeItem type="Maison" count={312} percentage={24.3} icon="/icons/filter-house.png" />
-                  <PropertyTypeItem type="Riad" count={198} percentage={15.4} icon="/icons/filter-riad.png" />
-                  <PropertyTypeItem type="Villa" count={156} percentage={12.1} icon="/icons/filter-villa.png" />
-                  <PropertyTypeItem type="Studio" count={132} percentage={10.3} icon="/icons/filter-studio.png" />
                 </div>
               </CardContent>
             </Card>

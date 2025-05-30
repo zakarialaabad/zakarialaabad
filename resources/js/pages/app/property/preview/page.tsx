@@ -574,11 +574,10 @@ export default function PropertyPreviewDetails() {
               {/* Onglets d'information avec animation */}
               <motion.div variants={itemVariants}>
                 <Tabs defaultValue="description" className="mb-8">
-                  <TabsList className="grid w-full grid-cols-4">
+                  <TabsList className="grid w-full grid-cols-3">
                     <TabsTrigger value="description">Description</TabsTrigger>
                     <TabsTrigger value="amenities">Caractéristiques</TabsTrigger>
                     <TabsTrigger value="regles">Règles</TabsTrigger>
-                    <TabsTrigger value="localisation">Emplacement</TabsTrigger>
                   </TabsList>
                   <AnimatePresence>
                     <TabsContent value="description" className="mt-6">
@@ -728,16 +727,7 @@ export default function PropertyPreviewDetails() {
                         )}
                       </motion.div>
                     </TabsContent>
-                    <TabsContent value="localisation" className="mt-6">
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <PropertyMap location={property.localisation} />
-                      </motion.div>
-                    </TabsContent>
+
                   </AnimatePresence>
                 </Tabs>
               </motion.div>
