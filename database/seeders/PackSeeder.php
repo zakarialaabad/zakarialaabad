@@ -1,5 +1,6 @@
 <?php
 
+
 namespace Database\Seeders;
 
 use App\Models\caracteristique;
@@ -23,7 +24,6 @@ class PackSeeder extends Seeder
                 $cinqconstraint=Caracteristique::create(['constraint' => "Notre agence gère votre logement"]);
                 $sixconstraint=Caracteristique::create(['constraint' => 'Assurance E-JAR']);
                 // إنشاء الباقات وربطها بالقيود
-  
                 $premium = Pake::create(['name' => 'Pack Premium', 'prix' => 0]);
                 $basique = Pake::create(['name' => 'Pack Basique', 'prix' => 200]);
                 $standard = Pake::create(['name' => 'Pack Standard', 'prix' => 300]);
