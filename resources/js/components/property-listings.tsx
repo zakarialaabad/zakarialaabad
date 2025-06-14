@@ -52,7 +52,7 @@ export function PropertyListings({ proprietes = [] }: InertiaPageProps) {
   const [gridView, setGridView] = useState<"grid3" | "grid2">("grid3")
   const [isLoading, setIsLoading] = useState(false)
   const [isFilterSidebarOpen, setIsFilterSidebarOpen] = useState(false)
-  const [activeFilterTab, setActiveFilterTab] = useState<string>("localisation")
+  const [activeFilterTab, setActiveFilterTab] = useState<string>("ville")
   const [filters, setFilters] = useState<SearchFilters>({
     ville: "",
     prixParMois: 0,
@@ -65,6 +65,8 @@ export function PropertyListings({ proprietes = [] }: InertiaPageProps) {
     maxPrice: 3000,
     minArea: 20,
     maxArea: 150,
+    features:[],
+
   })
   const [searchQuery, setSearchQuery] = useState("")
   const [searchCriteria, setSearchCriteria] = useState<any>(null)
@@ -116,8 +118,8 @@ export function PropertyListings({ proprietes = [] }: InertiaPageProps) {
           }
         }
         // Appliquer les filtres de ville et de quartier
-        if (filters.localisation) {
-          filtered = filtered.filter((p) => p.localisation === filters.localisation.toLowerCase())
+        if (filters.ville) {
+          filtered = filtered.filter((p) => p.ville === filters.ville)
 
           // Si un quartier spécifique est sélectionné, filtrer davantage
           if (filters.adresse) {
@@ -168,8 +170,8 @@ export function PropertyListings({ proprietes = [] }: InertiaPageProps) {
         filtered = filtered.filter((p) => p.ville === filters.ville.toLowerCase())
         // Si un quartier spécifique est sélectionné, filtrer davantage
         if (filters.adresse) {
-          filtered = filtered.filter((p) => p.ville === filters.ville)
-        }
+  filtered = filtered.filter((p) => p.adresse === filters.adresse)
+}
         // Sinon, tous les logements de la ville sont déjà filtrés
       }
       if (filters.type && filters.type !== "tout") {
@@ -187,7 +189,6 @@ export function PropertyListings({ proprietes = [] }: InertiaPageProps) {
           filtered = filtered.filter((p) => p.nbrchambre === filters.nbrchambre)
         }
       }
-
       if (filters.minPrice > 500) {
         filtered = filtered.filter((p) => p.prixParMois >= filters.minPrice)
       }
@@ -220,9 +221,9 @@ export function PropertyListings({ proprietes = [] }: InertiaPageProps) {
         matches = matches && typeMatch
       }
       // Filtrer par emplacement
-      if (searchCriteria.localisation) {
-        const locationMatch = property.localisation.toLowerCase().includes(searchCriteria.location.toLowerCase())
-        matches = matches && locationMatch
+      if (searchCriteria.ville) {
+        const villeMatch = property.ville.toLowerCase().includes(searchCriteria.ville.toLowerCase())
+        matches = matches && villeMatch
       }
       // Filtrer par prix
       if (searchCriteria.minPrice) {
@@ -242,7 +243,7 @@ export function PropertyListings({ proprietes = [] }: InertiaPageProps) {
         const hasFeature = searchCriteria.features.some(
           (feature: string) =>
             property.titre.toLowerCase().includes(feature.toLowerCase()) ||
-            property.localisation.toLowerCase().includes(feature.toLowerCase()),
+            property.ville.toLowerCase().includes(feature.toLowerCase()),
         )
         matches = matches && hasFeature
       }
@@ -252,7 +253,7 @@ export function PropertyListings({ proprietes = [] }: InertiaPageProps) {
         const hasKeyword = searchCriteria.keywords.some(
           (keyword: string) =>
             property.titre.toLowerCase().includes(keyword.toLowerCase()) ||
-            property.localisation.toLowerCase().includes(keyword.toLowerCase()) ||
+            property.ville.toLowerCase().includes(keyword.toLowerCase()) ||
             property.type.toLowerCase().includes(keyword.toLowerCase()),
         )
         matches = matches && hasKeyword
@@ -358,7 +359,7 @@ export function PropertyListings({ proprietes = [] }: InertiaPageProps) {
       let filtered = [...proprietes]
   
       if (newFilters.ville) {
-        filtered = filtered.filter((p) => p.ville === newFilters.ville.toLowerCase())
+        filtered = filtered.filter((p) => p.ville === newFilters.ville)
   
         if (newFilters.adresse) {
           filtered = filtered.filter((p) => p.adresse === newFilters.adresse)
@@ -373,9 +374,7 @@ export function PropertyListings({ proprietes = [] }: InertiaPageProps) {
         filtered = filtered.filter((p) => p.typesLocaires === newFilters.typesLocaires)
       }
   
-      if (newFilters.localisation && newFilters.localisation !== "tous") {
-        filtered = filtered.filter((p) => p.localisation === newFilters.localisation)
-      }
+     
   
       if (newFilters.nbrchambre > 0) {
         if (newFilters.nbrchambre === 5) {
@@ -490,7 +489,7 @@ export function PropertyListings({ proprietes = [] }: InertiaPageProps) {
               <div className="flex items-center">
                 <div
                   className="flex items-center py-3 md:py-3 px-5 md:px-6 flex-1 cursor-pointer hover:bg-black/5 transition-colors border-r"
-                  onClick={() => handleOpenFilters("localisation")}
+                  onClick={() => handleOpenFilters("ville")}
                 >
                   <div className="w-8 md:w-8 h-8 md:h-8 flex-shrink-0 mr-3">
                     <img
@@ -686,6 +685,8 @@ export function PropertyListings({ proprietes = [] }: InertiaPageProps) {
                     maxPrice: 3000,
                     minArea: 20,
                     maxArea: 150,
+                     features:[],
+
                   })
                   handleFilterChange("all")
                 }}

@@ -174,12 +174,12 @@ export function PropertyReservationForm({ price, priceUnit, maxGuests, owner }: 
       </div>
 
       <Dialog open={isAppointmentModalOpen} onOpenChange={setIsAppointmentModalOpen}>
-        <DialogContent className="rounded-xl border bg-white p-6 shadow-lg sm:max-w-[500px]">
-          <DialogHeader className="mb-4">
+        <DialogContent className="rounded-lg border bg-white p-4 shadow-lg sm:max-w-[450px]">
+          <DialogHeader className="mb-2">
             <DialogTitle className="text-xl font-bold text-gray-900">Réserver un rendez-vous</DialogTitle>
           </DialogHeader>
-          <div className="space-y-4 py-2">
-            <div className="space-y-1.5">
+          <div className="space-y-2">
+            <div className="space-y-1">
               <label htmlFor="appointment-date" className="block text-sm font-medium text-gray-700">
                 Date <span className="text-red-500">*</span>
               </label>
@@ -194,7 +194,7 @@ export function PropertyReservationForm({ price, priceUnit, maxGuests, owner }: 
               />
             </div>
 
-            <div className="space-y-1.5">
+            <div className="space-y-1">
               <label className="block text-sm font-medium text-gray-700">
                 Heure <span className="text-red-500">*</span>
               </label>
@@ -203,7 +203,7 @@ export function PropertyReservationForm({ price, priceUnit, maxGuests, owner }: 
               </div>
             </div>
 
-            <div className="space-y-1.5">
+            <div className="space-y-1">
               <label htmlFor="appointment-phone" className="block text-sm font-medium text-gray-700">
                 Téléphone <span className="text-red-500">*</span>
               </label>

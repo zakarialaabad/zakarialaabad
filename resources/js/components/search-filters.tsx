@@ -18,6 +18,8 @@ export interface SearchFilters {
   maxPrice: number
   minArea?: number; // تعيينه كـ number | undefined
   maxArea?: number;
+  features?:string[],
+
 }
 
 interface SearchFiltersProps {
@@ -29,7 +31,12 @@ interface SearchFiltersProps {
 
 export function SearchFilters({ isOpen, onClose, onApply, initialFilters }: SearchFiltersProps) {
   const [filters, setFilters] = useState<SearchFilters>(initialFilters)
-
+const handleAddressChange = (value: string) => {
+    setFilters((prev) => ({
+      ...prev,
+      adresse: value,
+    }));
+    };
   const handleBedroomsChange = (action: "increment" | "decrement") => {
     setFilters((prev) => ({
       ...prev,
@@ -81,8 +88,7 @@ export function SearchFilters({ isOpen, onClose, onApply, initialFilters }: Sear
             <label className="font-medium text-sm">Quartier</label>
             <Select
               value={filters.adresse}
-              onValueChange={(value) => setFilters((prev) => ({ ...prev, district: value }))}
-            >
+                onValueChange={handleAddressChange}            >
               <SelectTrigger>
                 <SelectValue placeholder="Sélectionner un quartier" />
               </SelectTrigger>

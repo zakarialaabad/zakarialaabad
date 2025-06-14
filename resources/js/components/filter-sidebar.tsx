@@ -119,6 +119,7 @@ const defaultFilters: SearchFiltersType = {
   type: "tout",
   typesLocaires: "tous",
   nbrchambre: 0,
+  prixParMois: 0,
   minPrice: 500,
   maxPrice: 3000,
   minArea: 20,
@@ -226,7 +227,7 @@ export function FilterSidebar({
         ],
       },
       {
-        value: "casablanca",
+        value: "Casablanca",
         label: "Casablanca",
         image: "/images/cities/casablanca.png",
         adresses: [
@@ -841,7 +842,7 @@ export function FilterSidebar({
                         "relative overflow-hidden rounded-lg cursor-pointer transition-all h-32",
                         filters.ville === ville.value ? "ring-2 ring-[#4153a4]" : "",
                       )}
-                      onClick={() => setFilters((prev) => ({ ...prev, ville: ville.value, adresse: "" }))}
+                      onClick={() => setFilters((prev) => ({ ...prev, ville: ville.value }))}
                     >
                       <div className="absolute inset-0 bg-gray-200">
                         <img
